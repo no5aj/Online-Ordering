@@ -43,7 +43,7 @@ define(["products_view"], function(products_view) {
             return App.Views.GeneratorView.create('Product', {
                 mod: 'ListItem',
                 model: options.model
-            }, options.model.get("compositeId"));
+            });
         }
     });
 
