@@ -299,6 +299,7 @@ define(["backbone", "facebook", "js_cookie", "page_visibility", "giftcard", "ord
                 addresses = data.addresses;
             delete data.rewardCards;
             delete data.addresses;
+            delete data.pastOrder;
             this.set(data);
             var rewardCardsCol = new App.Collections.RewardCards,
                 addressesCol = new App.Collections.CustomerAddresses;
