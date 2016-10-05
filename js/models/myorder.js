@@ -2402,7 +2402,7 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
                 successValidation,
                 req;
 
-            if (validationOnly || payment_type != PAYMENT_TYPE.CREDIT || !App.Data.customer.isAuthorized() || (!doPayWithToken && !card.rememberCard && (!payment.credit_card_dialog || card.cardNumber))) {
+            if (validationOnly || payment_type != PAYMENT_TYPE.CREDIT || !App.Data.customer.isAuthorized() || !App.Data.customer.payments || (!doPayWithToken && !card.rememberCard && (!payment.credit_card_dialog || card.cardNumber))) {
                 req = $.ajax({
                     type: "POST",
                     url: App.Data.settings.get("host") + "/weborders/" + (validationOnly ? "pre_validate/" : "create_order_and_pay_v1/"),
