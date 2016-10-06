@@ -463,6 +463,10 @@ App.Views.CoreProfileView.CoreProfileAddressCreateView = App.Views.FactoryView.e
         name: 'profile',
         mod: 'addresses',
         itemView: App.Views.CoreProfileView.CoreProfileAddressView,
+        initialize: function() {
+            App.Views.FactoryView.prototype.initialize.apply(this, arguments);
+            this.listenTo(this.appData.customer, 'onUserAddressCreated', this.toggleNewAddress, this);
+        },
         bindings: {
             '.addresses-list': 'collection: $collection',
             '.addresses__add': 'toggle: not(addingNewAddress)',
