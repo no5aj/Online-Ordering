@@ -921,7 +921,9 @@ function loadSpinner(logo, anim_params, cb) {
         if(hash in App.Data.images) {
             if (App.Data.images[hash].attr('src') == defImage)
                 parent.addClass('no-photo');
-            logo.replaceWith(App.Data.images[hash].clone());
+            var clone = App.Data.images[hash].clone();
+            logo.replaceWith(clone);
+            s = clone;
             return;
         }
         spinner = $('<div class="img-spinner"></div>');
