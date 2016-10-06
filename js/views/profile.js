@@ -268,9 +268,9 @@ define(["factory"], function() {
         },
         bindings: {
             '.remove-btn': 'classes: {hide: not(id)}',
-            '.address__title-text': 'text: select(id, _loc.PROFILE_ADDRESS_DETAILS.replace("%s", modelIndex), _loc.PROFILE_NEW_ADDRESS)',
+            '.address__title-text': 'text: select(id, _loc.PROFILE_ADDRESS_DETAILS.replace("%s", modelIndex), _loc.PROFILE_ADD_NEW_ADDRESS)',
             '.expand': 'toggle: id, classes: {folded: ui_collapsed, expanded: not(ui_collapsed)}',
-            '.address__header': 'classes: {collapsed: ui_collapsed}',
+            '.address__header': 'classes: {collapsed: ui_collapsed, "primary-text": all(not(id), ui_collapsed), link: not(id)}',
             '.address__fields': 'css: {display: select(not(ui_collapsed), "", "none")}',
             '.address__default-checkbox': 'css: {display: select(id, "", "none")}',
             '.address__default': 'checked: is_primary',
