@@ -40,10 +40,22 @@ define(["products_view"], function(products_view) {
             '.loading': 'toggle: equal(status, "pending")'
         },
         createItemView: function(options) {
-            return App.Views.GeneratorView.create('Product', {
+            var view = App.Views.GeneratorView.create('Product', {
                 mod: 'ListItem',
                 model: options.model
             }, options.model.get("compositeId"));
+
+            // Bug #51296
+            // Essentially, when we call .reset(models) Epoxy Collection handler calls .remove()
+            // (for each view associated with the collection) which removes the element from the DOM,
+            // as well as, all associated events from the event hash that were bound to the element.
+            // Backbone's View element still contains the ".el", but upon re-inserting in the DOM,
+            // the jQuery element has lost all of its bound listeners.
+            // .delegateEvents() takes "events: {...}" declaration for the view instances,
+            // and binds the specified events to the specified DOM elements.
+            view.delegateEvents();
+
+            return view;
         }
     });
 
