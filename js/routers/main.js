@@ -1006,6 +1006,12 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
                 stores.reset(_stores);
                 stores.request.resolve();
             }
+        },
+        /**
+         * Navigates to previous page or #index in case when current page is start page.
+         */
+        goToBack: function() {
+            this.initialized ? window.history.back() : this.navigate('index', true);
         }
     });
 

@@ -114,7 +114,7 @@ define(["store_info_view"], function(store_info_view) {
             e.stopPropagation();
         },
         onLogoClick: function() {
-            App.Data.router.navigate('gallery', { trigger: true, replace: true });
+            App.Data.router.navigate('gallery', true);
         },
         onAddressClick: function() {
             App.Data.router.navigate('location', true);
@@ -160,7 +160,7 @@ define(["store_info_view"], function(store_info_view) {
             return this;
         },
         goBack: function() {
-            App.Data.router.navigate('about', { trigger: true, replace: true });
+            App.Data.router.goToBack();
         },
         imgClick: function(event) {
             event.stopPropagation();
