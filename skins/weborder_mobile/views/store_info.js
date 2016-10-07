@@ -160,7 +160,7 @@ define(["store_info_view"], function(store_info_view) {
             return this;
         },
         goBack: function() {
-            App.Data.router.navigate('about', true);
+            App.Data.router.goToBack();
         },
         imgClick: function(event) {
             event.stopPropagation();
