@@ -209,7 +209,7 @@ define(["backbone", "factory", "generator"], function(Backbone) {
                             width: "auto"
                         });
                         // button "Close" in popup window (hack for Android Default Browser) (begin)
-                        var block_with_popup_image = self.$("#mapBox > div > div > div > div > div > div > div > img").parent();
+                        var block_with_popup_image = self.$('.gm-style-iw').next('div');
                         block_with_popup_image.empty();
                         block_with_popup_image.append('<div style="position: absolute; background: url(\'https://maps.gstatic.com/mapfiles/api-3/images/mapcnt3.png\') 13px 13px no-repeat; width: 59px; height: 492px; top: -348px; left: -13px;"> </div>');
                         // button "Close" in popup window (hack for Android Default Browser) (end)
