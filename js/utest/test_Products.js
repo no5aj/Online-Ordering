@@ -1333,6 +1333,7 @@ define(['products', 'js/utest/data/Products', 'js/utest/data/Timetable', 'catego
                     tax: 5,
                     price: 20
                 });
+
                 expect(model.reorder(true)).toEqual([]);
                 expect(model.get('price')).toBe(25);
             });
@@ -1355,6 +1356,52 @@ define(['products', 'js/utest/data/Products', 'js/utest/data/Timetable', 'catego
                     price: 20
                 });
                 expect(model.reorder()).toEqual(['price']);
+                expect(model.get('price')).toBe(25);
+            });
+
+            it('`price` changed, `ignorePriceChange` is false, `is_combo` is true', function() {
+                model.set({
+                    actual_data: {
+                        available: true,
+                        is_cold: false,
+                        is_gift: false,
+                        sold_by_weight: false,
+                        tax: 5,
+                        price: 25
+                    },
+                    available: true,
+                    is_cold: false,
+                    is_gift: false,
+                    sold_by_weight: false,
+                    tax: 5,
+                    price: 20,
+                    is_combo: true
+                });
+
+                expect(model.reorder(false)).toEqual([]);
+                expect(model.get('price')).toBe(25);
+            });
+
+            it('`price` changed, `ignorePriceChange` is false, `has_upsell` is true', function() {
+                model.set({
+                    actual_data: {
+                        available: true,
+                        is_cold: false,
+                        is_gift: false,
+                        sold_by_weight: false,
+                        tax: 5,
+                        price: 25
+                    },
+                    available: true,
+                    is_cold: false,
+                    is_gift: false,
+                    sold_by_weight: false,
+                    tax: 5,
+                    price: 20,
+                    has_upsell: true
+                });
+
+                expect(model.reorder(false)).toEqual([]);
                 expect(model.get('price')).toBe(25);
             });
         });

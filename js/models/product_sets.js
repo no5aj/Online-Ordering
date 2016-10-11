@@ -216,9 +216,9 @@ define(["backbone", 'products', 'collection_sort', 'myorder'], function(Backbone
                 return model.get('selected') == true;
             });
         },
-        /*
-        *
-        */
+        /**
+         *
+         */
         update_cur_qty_to_add: function() {
             var cur_qty = this.get_selected_qty(),
                 max_quantity = this.get('maximum_amount');
@@ -344,7 +344,7 @@ define(["backbone", 'products', 'collection_sort', 'myorder'], function(Backbone
                 });
             }
             return false;
-        },
+        }
     });
 
     /**

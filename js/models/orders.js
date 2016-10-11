@@ -114,9 +114,13 @@ define(["backbone"], function(Backbone) {
          * @returns {Array} Array of attributes changed from order placement.
          */
         reorder: function () {
-            var changes = [];
+            var changes = [],
+                items = this.models.slice();
 
-            this.each(function(orderItem) {
+            // do not use the collection as items resource
+            // because it can be modified during processing
+            // (for instance, first item was removed from collection as inactive and further values of orderItem will be incorrect)
+            items.forEach(function(orderItem) {
                 changes.push.apply(changes, orderItem.reorder());
             });
 
@@ -296,7 +300,7 @@ define(["backbone"], function(Backbone) {
             this.set('items', new App.Collections.OrderItems);
             if (_.isObject(opts) && Array.isArray(opts.items)) {
                 this.set('items_qty', opts.items.reduce(function(iter, item) {
-                    return _.isNumber(item.qty) && item.qty > 0 ? iter + item.qty : iter;
+                    return _.isNumber(item.qty) && item.qty > 0 && !item.combo_used ? iter + item.qty : iter;
                 }, 0));
             }
         },
@@ -327,7 +331,8 @@ define(["backbone"], function(Backbone) {
             if (!_.isObject(authorizationHeader)) {
                 return;
             }
-            var items = this.get('items');
+            var items = this.get('items'),
+                self = this;
             return Backbone.$.ajax({
                 url: '/weborders/v1/order/' + this.get('id') + '/orderitems/',
                 method: 'GET',
@@ -335,7 +340,7 @@ define(["backbone"], function(Backbone) {
                 contentType: 'application/json',
                 success: function(data) {
                     if (Array.isArray(data.data)) {
-                        items.reset(data.data);
+                        items.reset(self.processUpsellComboItems(data.data));
                     }
                 },
                 error: new Function()           // to override global ajax error handler
@@ -439,11 +444,109 @@ define(["backbone"], function(Backbone) {
 
                 // add items
                 items.each(function(orderItem) {
-                   myorder.add(orderItem);
+                    var product = orderItem.get_product(),
+                        type;
+                    if (product.is_combo || product.has_upsell) {
+                        if (product.has_upsell)
+                            type = 'MyorderUpsell';
+                        else
+                            type = 'MyorderCombo';
+                    } else {
+                        type = 'Myorder';
+                    }
+                   myorder.add(App.Models.create(type).set(orderItem.toJSON()));
                 });
 
                 self.trigger('onReorderCompleted', changes);
             }
+        },
+        /**
+         * Looks up combo child products and excludes them from `items`
+         * adding them to product sets of parent combo product.
+         *
+         * @return {Array} filtered order items.
+         */
+        processUpsellComboItems: function(items) {
+            var combo_sets = {},
+                upsell_sets = {},
+                upsell_fake_items = {}; // wrappers for upsell combo item created in backend
+
+            // determine upsell fake objects
+            _.where(items, {has_upsell: true}).forEach(function(upsell_root_item) {
+                upsell_fake_items[upsell_root_item.product.combo_used] = {};
+            });
+
+            // excludes child products and fake upsell items
+            items = items.filter(function(item) {
+                var combo_product = item.product.combo_used,
+                    combo_set_id = item.combo_product_set_id,
+                    upsell_set_id = item.dynamic_combo_slot_id;
+
+                if (typeof combo_set_id == 'number') {
+                    // this is combo set child item
+                    addSetItem(combo_sets, combo_product, combo_set_id, item);
+                    return false;
+
+                } else if (typeof upsell_set_id == 'number') {
+                    // this is upsell combo set child item
+                    addSetItem(upsell_sets, combo_product, upsell_set_id, item);
+                    return false;
+
+                } else if (item.is_combo && item.product.id in upsell_fake_items) {
+                    // this is fake upsell combo item
+                    upsell_fake_items[item.product.id] = item;
+                    return false;
+
+                } else {
+                    return true;
+                }
+            });
+
+            items.forEach(function(item) {
+                var product = item.product;
+                if (item.is_combo) {
+                    product.product_sets = _.map(combo_sets[product.id], function(value, key) {
+                        return {
+                            id: Number(key),
+                            order_products: value
+                        }
+                    });
+                } else if (item.has_upsell) {
+                    var upsell_data = upsell_fake_items[product.combo_used];
+                    if (upsell_data) {
+                        item.upcharge_name = upsell_data.product.name;
+                        item.upcharge_price = _.reduce(upsell_sets[product.combo_used], function(memo, pset) {
+                            return _.reduce(pset, function(memo, item) {
+                                return memo - item.quantity * (item.product.price + item.product.upcharge_price);
+                            }, memo);
+                        }, upsell_data.product.price - item.quantity * (product.price + product.upcharge_price));
+                    }
+
+                    product.combo_price = upsell_data.product.price;
+                    product.product_sets = _.map(upsell_sets[product.combo_used], function(value, key) {
+                        return {
+                            id: Number(key),
+                            order_products: value
+                        }
+                    });
+                }
+            });
+
+            function addSetItem(sets, product_id, set_id, item) {
+                if (!(product_id in sets)) {
+                    sets[product_id] = {};
+                }
+
+                if (!(set_id in sets[product_id])) {
+                    sets[product_id][set_id] = [];
+                }
+
+                item.is_child_product = true;
+                item.selected = true;
+                sets[product_id][set_id].push(item);
+            }
+
+            return items;
         }
     });
 
