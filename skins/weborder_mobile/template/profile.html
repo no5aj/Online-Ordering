@@ -110,7 +110,9 @@
         <ul class="profile-items font-size1 primary-text">
             <li class="profile-link private-btn list-separator"><%= _lp.PROFILE_EDIT_TITLE %></li>
             <li class="payments-link private-btn list-separator"><%= _lp.PAYMENT_METHODS %></li>
-            <li class="past-orders private-btn list-separator"><%= _lp.PROFILE_PAST_ORDERS %></li>
+            <li class="past-orders private-btn list-separator narrow-row">
+                <%= _lp.PROFILE_PAST_ORDERS %><span class="description regular-text"><%= _lp.PROFILE_REORDER_FAVORITE %></span>
+            </li>
             <li class="settings-link private-btn list-separator"><%= _lp.SETTINGS %></li>
             <li class="login-row list-separator">
                 <span class="login-link"><%= _lp.PROFILE_LOG_IN %></span>
