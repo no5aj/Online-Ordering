@@ -454,7 +454,9 @@ define(["backbone"], function(Backbone) {
                     } else {
                         type = 'Myorder';
                     }
-                   myorder.add(App.Models.create(type).set(orderItem.toJSON()));
+                    if (orderItem.get('product').get('name') != 'Shipping and Handling') {
+                        myorder.add(App.Models.create(type).set(orderItem.toJSON()));
+                    }
                 });
 
                 self.trigger('onReorderCompleted', changes);

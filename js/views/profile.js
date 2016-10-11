@@ -1331,7 +1331,6 @@ App.Views.CoreProfileView.CoreProfileAddressCreateView = App.Views.FactoryView.e
     App.Views.CoreProfileView.CoreProfileOrdersView = App.Views.FactoryView.extend({
         name: 'profile',
         mod: 'orders',
-        itemView: App.Views.CoreProfileView.CoreProfileOrderItemView,
         bindings: {
             '.orders-empty': 'toggle: noOrders',
             '.orders-list': 'collection: $collection, itemView: "itemView"'

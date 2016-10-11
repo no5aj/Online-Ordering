@@ -1858,6 +1858,8 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
          * @param {boolean} params.update_shipping_options - If it's `true` need to update available shipping services.
          */
         update_cart_totals: function(params) {
+            var self = this;
+            this.last_cart_totals_params = params;
             if (!this.getDiscountsTimeout) { // it's to reduce the number of requests to the server
                 /**
                  * Indicates that cart totals is being calculated now. This property is deleted after calculation.
@@ -1869,7 +1871,10 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
                  * Delayed cart totals update. Timeout is 500 msec.
                  * @type {Function}
                  */
-                this.getDiscountsTimeout = setTimeout(this.get_cart_totals.bind(this, params), 500);
+                this.getDiscountsTimeout = setTimeout(function() {
+                    self.get_cart_totals(self.last_cart_totals_params); //update_cart_totals func can be called several times with different params during 500 ms interval.
+                                                                        //The latest params should be used for get_cart_totals() result call.
+                }, 500);
             }
         },
         /**
