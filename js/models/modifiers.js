@@ -147,7 +147,7 @@ define(["backbone"], function(Backbone) {
          * @returns {App.Models.Modifier} The model.
          */
         addJSON: function(data) {
-            if (data.qty) {
+            if (data.qty && typeof data.quantity == 'undefined') {
                 data.quantity = data.qty;
                 delete data.qty;
             }
