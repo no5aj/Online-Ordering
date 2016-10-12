@@ -538,6 +538,10 @@
     padding: 16px 10px;
 }
 
+.profile-orders .names {
+    max-width: 190px;
+}
+
 .profile-orders .subtotal-title {
     margin-right: 100px;
 }
