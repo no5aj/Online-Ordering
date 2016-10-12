@@ -20,7 +20,7 @@
  * If not, see <http://www.gnu.org/licenses/>.
  */
 
-define(["profile_view", "giftcard_view", "./myorder"], function(profile_view) {
+define(["profile_view", "giftcard_view", "myorder_view"], function(profile_view) {
     'use strict';
 
     var ProfilePaymentSelectionView = App.Views.CoreProfileView.CoreProfilePaymentSelectionView.extend({
@@ -215,15 +215,35 @@ define(["profile_view", "giftcard_view", "./myorder"], function(profile_view) {
         },
         events: {
             'click .btn-reorder': 'reorder'
+        },
+        itemView: function(opts) {
+            var mod = 'OrderItem';
+
+            if (opts.model.get('is_combo')) {
+                mod = 'OrderItemCombo';
+            } else if (opts.model.get('has_upsell')) {
+                mod = 'OrderItemUpsell';
+            }
+
+            return App.Views.GeneratorView.create('Profile', _.extend(opts, {
+                mod: mod,
+                order: opts.collectionView.model
+            }), opts.model.get('id'));
         }
     });
 
-    var ProfileOrderItemView = App.Views.MyOrderView.MyOrderItemView.extend({
-        name: 'profile',
-        mod: 'order_item',
-        tagName: 'li',
-        className: 'order-item'
-    });
+    var ProfileOrderItemView = App.Views.CoreMyOrderView.CoreMyOrderItemView.extend(OrderItemOpts()),
+        ProfileOrderItemComboView = App.Views.CoreMyOrderView.CoreMyOrderItemComboView.extend(OrderItemOpts()),
+        ProfileOrderItemUpsellView = App.Views.CoreMyOrderView.CoreMyOrderItemUpsellView.extend(OrderItemOpts());
+
+    function OrderItemOpts() {
+        return {
+            name: 'profile',
+            mod: 'order_item',
+            tagName: 'li',
+            className: 'order-item'
+        };
+    }
 
     var ProfilePastOrderView = App.Views.FactoryView.extend({
         name: 'profile',
@@ -313,6 +333,8 @@ define(["profile_view", "giftcard_view", "./myorder"], function(profile_view) {
         App.Views.ProfileView.ProfileAddressesView = ProfileAddressesView;
         App.Views.ProfileView.ProfileOrdersItemView = ProfileOrdersItemView;
         App.Views.ProfileView.ProfileOrderItemView = ProfileOrderItemView;
+        App.Views.ProfileView.ProfileOrderItemComboView = ProfileOrderItemComboView;
+        App.Views.ProfileView.ProfileOrderItemUpsellView = ProfileOrderItemUpsellView;
         App.Views.ProfileView.ProfilePastOrderView = ProfilePastOrderView;
         App.Views.ProfileView.ProfilePastOrderContainerView = ProfilePastOrderContainerView;
     });

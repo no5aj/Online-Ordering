@@ -57,6 +57,7 @@ define(["backbone"], function(Backbone) {
                     initial_price: this.get_initial_price(),
                     sum: this.get_modelsum()
                 });
+                this.update_mdf_sum();
             }
         },
         /**

@@ -575,6 +575,26 @@
     padding: 0.7em 0 0;
 }
 
+.profile-orders .order-item {
+    margin-bottom: 2em;
+}
+
+.profile-orders .combo_products_place {
+    padding-left: 1em;
+}
+
+.profile-orders .combo_products_place .font-size1 {
+    font-size: 2.5em;
+}
+
+.profile-orders .combo_products_place .qty {
+    margin-top: 0.17em;
+}
+
+.profile-orders .combo_products_place .item-sum {
+    display: none;
+}
+
 .profile-past-order .subtotal {
     margin-top: 0.5em;
 }
