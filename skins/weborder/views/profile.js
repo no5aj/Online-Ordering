@@ -214,7 +214,7 @@ define(["profile_view"], function(profile_view) {
 
                 function get_modifier_str(mdf) {
                     return mdf.get('quantity') + 'x' +
-                           (mdf.get('qty_type') > 0 ? MSG.HALF_PRICE_STR[mdf.get('qty_type')] : '') +
+                           (mdf.get('qty_type') > 0 ? (' (' + MSG.HALF_PRICE_STR[mdf.get('qty_type')] + ')') : '') +
                            ' ' + mdf.get('name');
                 }
                 return items.length ? '+' + items.join(', +') : '';

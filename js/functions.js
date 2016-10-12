@@ -2760,12 +2760,43 @@ function traceTriggers(filter, ignore) {
     }
     function traceIt() {
         var e = new Error,
-            type = this.getType ?  this.getType() : '';
+            type = this.getType ?  this.getType() : 'type_undefined';
         var regexp = new RegExp(filter, 'i');
         var ignoreRegExp = new RegExp(ignore, 'i');
         if (!type || (regexp.test(type) && !ignoreRegExp.test(type))) {
             console.log("TRIGGER EVENT:", type, arguments, e.stack);
         }
     }
+}
+
+/**
+*  Set aliases for debugging. This function is called only in dev=true mode.
+*/
+function dbgSetAliases() {
+    if (typeof window.SS != 'undefined' ||
+        typeof window.DS != 'undefined' ||
+        typeof window.D != 'undefined' ||
+        typeof window.View != 'undefined') {
+        console.error("dbgSetAliases: Namespace Error: some aliase names are already used.");
+        return;
+    }
+    window.D = App.Data;
+    window.SS = App.Settings;
+    window.DS = App.SettingsDirectory;
+    window.View = App.dbgView;
+
+    var m_pro = Backbone.Model.prototype,
+        col_pro = Backbone.Collection.prototype;
+
+    if (typeof m_pro.js != 'undefined' || typeof m_pro.t != 'undefined' ||
+        typeof col_pro.js != 'undefined' || typeof col_pro.t != 'undefined') {
+        console.error("dbgSetAliases: Namespace Error: some aliase Backbone names are already used.");
+        return;
+    }
+
+    Backbone.Model.prototype.js = Backbone.Model.prototype.toJSON;
+    Backbone.Collection.prototype.js = Backbone.Collection.prototype.toJSON;
+    Backbone.Model.prototype.t = Backbone.Model.prototype.getType;
+    Backbone.Collection.prototype.t = Backbone.Collection.prototype.getType;
 }
 
