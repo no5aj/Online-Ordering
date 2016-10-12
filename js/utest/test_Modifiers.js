@@ -221,13 +221,18 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
 
             it('`actual_data` is an object, price changed', function() {
                 var old_price = 10,
-                    new_price = 11;
+                    new_price = 11,
+                    onSelected = false;
                 model.set({
                     price: old_price,
                     actual_data: {price: new_price}
                 });
+                model.once('change:selected', function() {
+                    onSelected = true;
+                })
                 expect(model.reorder()).toEqual(['price']);
                 expect(model.get('price')).toBe(new_price);
+                expect(onSelected).toBe(true);
             });
 
             it('`actual_data` is an object, modifier is inactive', function() {
