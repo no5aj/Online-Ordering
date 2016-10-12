@@ -678,7 +678,10 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
                         giftcard && giftcard.reset();                  // clear Gift card data
                         stanfordCard && stanfordCard.clearData();      // clear Stanford card data
                         // add order to past orders list
-                        customer && customer.isAuthorized() && customer.getOrder(myorder.paymentResponse.orderId);
+                        customer && customer.isAuthorized() && customer.getOrder(myorder.paymentResponse.orderId).done(function() {
+                            // set this order as past order
+                            customer.set('pastOrder', customer.orders.get(myorder.paymentResponse.orderId));
+                        });
                         break;
                     case 'error':
                         card && card.clearData(); // removal of information about credit card
