@@ -278,6 +278,7 @@ define(["backbone"], function(Backbone) {
             // check price
             if (this.get('price') !== actual_data.price) {
                 this.set('price', actual_data.price);
+                this.trigger('change:selected', this, this.get('selected')); // emulates modifier selection with new price
                 changes.push('price');
             }
 
