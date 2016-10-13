@@ -86,6 +86,7 @@ define(["main_router"], function(main_router) {
         use_google_captcha: true, //force to load google captcha library on startup
         lastHash: null,
         rewardsPageReferrerHash: null,
+        payHandlerCompleteHash : 'done',
         initialize: function() {
             App.Data.get_parameters = parse_get_params(); // get GET-parameters from address line
             var self = this;
@@ -338,15 +339,6 @@ define(["main_router"], function(main_router) {
             // onStanfordCardError event occurs when user submit invalid Stanford Card
             App.Data.stanfordCard && this.listenTo(App.Data.stanfordCard, 'onStanfordCardError', function(msg) {
                 msg && App.Data.errors.alert(msg);
-            });
-        },
-        /**
-         * Navigate on #done when payment is completed.
-         */
-        onPayHandler: function(capturePhase) {
-            this.navigate('done',  {
-                trigger: true,
-                replace: capturePhase
             });
         },
         /**

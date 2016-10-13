@@ -2019,6 +2019,7 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
      * This is parent router for Weborder, Weborder Mobile, Retail apps.
      */
     App.Routers.RevelOrderingRouter = App.Routers.MobileRouter.extend({
+        payHandlerCompleteHash : 'confirm',
         triggerInitializedEvent: function() {
             var myorder = App.Data.myorder;
 
@@ -2069,7 +2070,7 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
         },
         onPayHandler: function(capturePhase, myorderClone) {
             this.recentOrder = myorderClone;
-            this.navigate('confirm',  {
+            this.navigate(this.payHandlerCompleteHash,  {
                 trigger: true,
                 replace: capturePhase
             });
