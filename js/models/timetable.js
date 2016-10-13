@@ -572,7 +572,7 @@ define(["backbone"], function(Backbone) {
                 cur_day = cur_date.getDate(),
                 month, day;
 
-            for (var i in holidays) {
+            for (var i = 0, len = holidays.length; i < len; i++) {
                 month = /^[^,]{3}/.exec(holidays[i].date);
                 month = month[0];
                 day = /^[^\d]+(\d{1,2})/.exec(holidays[i].date);
