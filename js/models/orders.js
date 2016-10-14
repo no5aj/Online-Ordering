@@ -301,7 +301,9 @@ define(["backbone"], function(Backbone) {
             this.set('items', new App.Collections.OrderItems);
             if (_.isObject(opts) && Array.isArray(opts.items)) {
                 this.set('items_qty', opts.items.reduce(function(iter, item) {
-                    return _.isNumber(item.qty) && item.qty > 0 && !item.combo_used ? iter + item.qty : iter;
+                    return _.isNumber(item.qty) && item.qty > 0 && !item.combo_used && !item.is_combo && !item.has_upsell
+                        ? iter + item.qty
+                        : iter;
                 }, 0));
             }
         },
@@ -535,6 +537,12 @@ define(["backbone"], function(Backbone) {
                 }
             });
 
+            // defect Bug 51992 - Weborder: Order History > Reorder Combo > Unable to edit Combo product
+            // need to exclude combo/upsell items
+            items = items.filter(function(item) {
+                return !item.has_upsell && !item.is_combo;
+            });
+
             function addSetItem(sets, product_id, set_id, item) {
                 if (!(product_id in sets)) {
                     sets[product_id] = {};
@@ -630,7 +638,13 @@ define(["backbone"], function(Backbone) {
                 },
                 success: function(data) {
                     if (Array.isArray(data.data)) {
-                        self.add(data.data);
+                        // need to exclude orders with only combo/upsell items
+                        var filtered = data.data.filter(function(order) {
+                            return order.items.some(function(item) {
+                                return !item.combo_used && !item.has_upsell && !item.is_combo;
+                            });
+                        });
+                        self.add(filtered);
                     }
                 },
                 error: new Function()           // to override global ajax error handler
