@@ -134,6 +134,7 @@
         'PROMOTIONS': 'Promotions',
         'PROMOTIONS_ALL': 'See all promotions for this establishment',
         'PROMOTIONS_AVAILABLE': 'Available Promotions',
+        'PROMOTIONS_AVAILABLE_2': 'Promotions Available',
         'PROMOTIONS_AVAILABLE_DESC': 'Selected promotions will be applied to your next order',
         'PROMOTIONS_AVAILABLE_NO': 'Your order doesn\'t qualify to apply any promotions.',
         'PROMOTIONS_OTHER': 'Other Promotions',

@@ -297,6 +297,19 @@ define(["factory"], function() {
         }
     });
 
+    var HeaderOrderView = App.Views.FactoryView.extend({
+        name: 'header',
+        mod: 'order',
+        bindings: {
+           '.title': 'text:page_title',
+           '.btn-back': 'toggle: back',
+           '.btn-back-title': 'text: back_title'
+        },
+        events: {
+            'click .btn-back': setCallback('back')
+        }
+    });
+
     var HeaderMaintenanceView = App.Views.FactoryView.extend({
         name: 'header',
         mod: 'maintenance'
@@ -317,6 +330,7 @@ define(["factory"], function() {
         App.Views.HeaderView.HeaderModifiersView = HeaderModifiersView;
         App.Views.HeaderView.HeaderComboProductView = HeaderComboProductView;
         App.Views.HeaderView.HeaderCartView = HeaderCartView;
+        App.Views.HeaderView.HeaderOrderView = HeaderOrderView;
         App.Views.HeaderView.HeaderPromotionView = HeaderPromotionView;
         App.Views.HeaderView.HeaderPromotionsView = HeaderPromotionsView;
         App.Views.HeaderView.HeaderMaintenanceView = HeaderMaintenanceView;

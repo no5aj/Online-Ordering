@@ -127,6 +127,11 @@
         },
         "past_orders": {
             "templates": ["myorder"]
+        },
+        "order": {
+            "css": ["myorder", "promotions"],
+            "views": ["myorder"],
+            "templates": ["myorder"]
         }
     }
 }

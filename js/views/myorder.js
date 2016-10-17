@@ -368,6 +368,16 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
             this.listenTo(this.model, 'change', this.update);
             this.listenTo(this.model.get_product(), 'change', this.update);
         },
+        bindings: {
+            '.edit': 'toggle: !ui_disallowEdit'
+        },
+        bindingSources: {
+            ui: function() {
+                return new Backbone.Model({
+                    disallowEdit: false
+                });
+            }
+        },
         start: function() {
             this.listenTo(this.model, 'change', this.update);
             this.listenTo(this.model.get_product(), 'change', this.update);
@@ -403,6 +413,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
 
             this.$el.html(this.template(this.getData()));
 
+            this.setBinding('ui_disallowEdit', Boolean(this.options.disallow_edit));
             this.renderModifiers();
 
             view = App.Views.GeneratorView.create('MyOrder', {
@@ -617,7 +628,8 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
                 model: model,
                 el: $('<li></li>'),
                 collection: this.collection,
-                no_qty_arrows: this.options.no_qty_arrows
+                no_qty_arrows: this.options.no_qty_arrows,
+                disallow_edit: this.options.disallow_edit
             });
 
             if (model.isServiceFee()) {
