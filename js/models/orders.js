@@ -638,13 +638,7 @@ define(["backbone"], function(Backbone) {
                 },
                 success: function(data) {
                     if (Array.isArray(data.data)) {
-                        // need to exclude orders with only combo/upsell items
-                        var filtered = data.data.filter(function(order) {
-                            return order.items.some(function(item) {
-                                return !item.combo_used && !item.has_upsell && !item.is_combo;
-                            });
-                        });
-                        self.add(filtered);
+                        self.add(self.processOrders(data.data));
                     }
                 },
                 error: new Function()           // to override global ajax error handler
@@ -692,7 +686,7 @@ define(["backbone"], function(Backbone) {
                 },
                 success: function(data) {
                     if (Array.isArray(data.data)) {
-                        self.add(data.data);
+                        self.add(self.processOrders(data.data));
                     }
                 },
                 error: new Function()           // to override global ajax error handler
@@ -729,6 +723,21 @@ define(["backbone"], function(Backbone) {
                 var itemsReq = order.reorder(authorizationHeader);
                 itemsReq.done(dfd.resolve.bind(dfd));
                 itemsReq.fail(dfd.reject.bind(dfd));
+            }
+        },
+        /**
+         * Filters `orders`. Need to exclude orders containing only combo/upsell items.
+         *
+         * @param {Array} orders - arrays of orders.
+         * @returns {Array} Filtered orders.
+         */
+        processOrders: function(orders) {
+            if (Array.isArray(orders)) {
+                return orders.filter(function(order) {
+                    return order.items.some(function(item) {
+                        return !item.combo_used && !item.has_upsell && !item.is_combo;
+                    });
+                });
             }
         }
     });
