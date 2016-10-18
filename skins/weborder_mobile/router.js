@@ -1018,23 +1018,20 @@ define(["main_router"], function(main_router) {
                         {
                             modelName: 'MyOrder',
                             mod: 'Details',
-                            model: orderModel,
-                            cacheId: true
+                            model: orderModel
                         },
                         {
                             modelName: 'MyOrder',
                             mod: 'List',
                             className: 'myorderList',
                             collection: orderCollection,
-                            disallow_edit: true,
-                            cacheId: true
+                            disallow_edit: true
                         },
                         {
                             modelName: 'MyOrder',
                             mod: 'Note',
                             className: 'myorderNote',
-                            model: orderCollection.checkout,
-                            cacheId: true
+                            model: orderCollection.checkout
                         }
                     ]
                 });
