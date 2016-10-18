@@ -200,7 +200,7 @@ define(["profile_view", "giftcard_view", "myorder_view"], function(profile_view)
     });
 
     var ProfileAddressesView = App.Views.CoreProfileView.CoreProfileAddressesView.extend({
-        itemView: ProfileAddressView,
+        itemView: ProfileAddressView
     });
 
     var ProfileOrdersItemView = App.Views.CoreProfileView.CoreProfileOrdersItemView.extend({
