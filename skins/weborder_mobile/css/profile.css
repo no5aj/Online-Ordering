@@ -173,9 +173,22 @@
 }
 
 .profile-items > li {
+    position: relative;
     border-bottom-width: 1px;
     border-bottom-style: solid;
     padding: 0.7em 0.5em;
+}
+
+.profile-items .narrow-row {
+    padding-top: .3em;
+    padding-bottom: 1.1em;
+}
+
+.profile-items > li .description {
+    display: block;
+    position: absolute;
+    line-height: 1;
+    font-size: .75em;
 }
 
 .profile-items .login-row {

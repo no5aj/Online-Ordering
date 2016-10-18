@@ -666,6 +666,7 @@
         "PROFILE_PAST_ORDERS_SUBTITLE": "Reorder a favorite",
         "PROFILE_ORDER_NUMBER": "Order #",
         "PROFILE_REORDER": "Reorder",
+        "PROFILE_REORDER_FAVORITE": "Reorder a favorite",
         "PROFILE_ORDER_NOT_FOUND": "Order #%s is not found",
         "PROFILE_PLEASE_LOG_IN": "Please log in to make a reorder",
         "ORDER_CHANGED": "Modifications have been made to the previous order. Please review your items before checking out.",
