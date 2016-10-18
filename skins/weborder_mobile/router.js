@@ -1073,9 +1073,13 @@ define(["main_router"], function(main_router) {
                     var ordersReq = customer.ordersRequest;
 
                     ordersReq.done(function() {
-                        var order = customer.orders.get(order_id),
-                            itemsReq = customer.getOrderItems(order);
+                        var order = customer.orders.get(order_id);
+                        if (!order) {
+                            errors.alert(_loc.PROFILE_ORDER_NOT_FOUND.replace(/%s/, order_id));
+                            return dfd.reject();
+                        }
 
+                        var itemsReq = customer.getOrderItems(order);
                         itemsReq.done(function() {
                             orderModel.set(order.attributes);
                             order.get('items').each(function(orderItem) {
@@ -1085,12 +1089,7 @@ define(["main_router"], function(main_router) {
                         itemsReq.always(dfd.resolve.bind(dfd));
                     });
 
-                    ordersReq.fail(function(jqXHR) {
-                        if (jqXHR.status == 403) {
-                            customer.onForbidden();
-                        }
-                        dfd.reject();
-                    });
+                    ordersReq.fail(dfd.reject.bind(dfd));
                 }
                 else {
                     errors.alert(_loc.PROFILE_PLEASE_LOG_IN);
