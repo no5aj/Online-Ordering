@@ -51,7 +51,7 @@ define(["main_router"], function(main_router) {
             "modifiers/:id_category(/:id_product)": "modifiers",
             "combo_product/:id_category(/:id_product)": "combo_product",
             "upsell_product/:id_category(/:id_product)": "upsell_product",
-            "cart(/:order_id)": "cart",
+            "cart": "cart",
             "checkout" : "checkout",
             "confirm": "confirm",
             "payments": "payments",
@@ -917,20 +917,12 @@ define(["main_router"], function(main_router) {
                 }
             });
         },
-        cart: function(order_id) {
-            order_id = Number(order_id);
-
-            var isReorderNotStartPage = order_id && this.initialized;
-
+        cart: function() {
             App.Data.header.set({
-                page_title: order_id ? _loc.PROFILE_ORDER_NUMBER + order_id : _loc.HEADER_MYORDER_PT,
-                back_title: isReorderNotStartPage ? _loc.BACK : _loc.MENU,
-                back: isReorderNotStartPage ? window.history.back.bind(window.history) : this.navigate.bind(this, 'index', true)
+                page_title: _loc.HEADER_MYORDER_PT,
+                back_title: _loc.MENU,
+                back: this.navigate.bind(this, 'index', true),
             });
-
-            if (order_id > 0) {
-                var reorderReq = this.reorder(order_id);
-            }
 
             this.prepare('cart', function() {
                 var isAuthorized = App.Data.customer.isAuthorized(),
@@ -946,7 +938,6 @@ define(["main_router"], function(main_router) {
                     footer:  {
                             total: App.Data.myorder.total,
                             mod: 'Cart',
-                            isReorder: Boolean(order_id),
                             className: 'footer'
                         },
                     contentClass: '',
@@ -968,11 +959,7 @@ define(["main_router"], function(main_router) {
                     ]
                 });
 
-                if (reorderReq) {
-                    reorderReq.always(this.change_page.bind(this));
-                } else {
-                    this.change_page();
-                }
+                this.change_page();
 
                 function setAction(cb) {
                     return function() {
@@ -1031,20 +1018,23 @@ define(["main_router"], function(main_router) {
                         {
                             modelName: 'MyOrder',
                             mod: 'Details',
-                            model: orderModel
+                            model: orderModel,
+                            cacheId: true
                         },
                         {
                             modelName: 'MyOrder',
                             mod: 'List',
                             className: 'myorderList',
                             collection: orderCollection,
-                            disallow_edit: true
+                            disallow_edit: true,
+                            cacheId: true
                         },
                         {
                             modelName: 'MyOrder',
                             mod: 'Note',
                             className: 'myorderNote',
-                            model: orderCollection.checkout
+                            model: orderCollection.checkout,
+                            cacheId: true
                         }
                     ]
                 });

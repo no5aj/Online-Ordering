@@ -2432,50 +2432,6 @@ define(["backbone", "facebook", "js_cookie", "page_visibility", "giftcard", "ord
             return dfd;
         },
         /**
-         * Get Order.
-         *
-         * @param {number} order_id - order id
-         * @returns {Object} jQuery Deffered object.
-         */
-        // get_order: function(order_id) {
-        //     var self = this,
-        //         dfd = Backbone.$.Deferred();
-
-        //     if (this.ordersRequest) {
-        //         this.ordersRequest.done(function() {
-        //             var order = self.orders.get(order_id);
-        //             if (!order) {
-        //                 return dfd.reject();
-        //             }
-
-        //             var items = order.get('items'),
-        //                 itemsReq;
-                    
-        //             if (!items.length) {
-        //                 itemsReq = self.getOrderItems(order);
-        //                 itemsReq.done(function() {
-        //                     dfd.resolve(order);
-        //                 });
-        //                 itemsReq.fail(dfd.reject.bind(dfd));
-        //             }
-        //             else {
-        //                 dfd.resolve(order);
-        //             }
-        //         });
-        //         this.ordersRequest.fail(function(jqXHR) {
-        //             if (jqXHR.status == 403) {
-        //                 self.onForbidden();
-        //             }
-        //             dfd.reject();
-        //         });
-        //     }
-        //     else {
-        //         dfd.reject();
-        //     }
-
-        //     return dfd;
-        // },
-        /**
          * If {@link App.Models.Customer#ordersRequest ordersRequest} exists then the method aborts and deletes it.
          * Resets customer {@link App.Models.Customer#ordersRequest orders}.
          */
