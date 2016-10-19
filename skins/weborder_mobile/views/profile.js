@@ -178,6 +178,27 @@ define(["profile_view", "giftcard_view", "myorder_view"], function(profile_view)
         }
     });
 
+    var ProfileAddressView = App.Views.CoreProfileView.CoreProfileAddressView.extend({
+        removeAddress: function() {
+            var self = this;
+
+            App.Data.errors.alert(
+                _loc.PROFILE_ADDRESS_DELETE,
+                false,
+                true,
+                {
+                    isConfirm: true,
+                    callback: function(confirmed) {
+                        if (confirmed) {
+                            self.model.collection.remove(self.model);
+                            App.Data.customer.deleteAddress(self.model);
+                        }
+                    }
+                }
+            );
+        }
+    });
+
     var ProfileAddressesView = App.Views.CoreProfileView.CoreProfileAddressesView.extend({
         itemView: ProfileAddressView
     });
