@@ -35,6 +35,7 @@ define(["main_router"], function(main_router) {
         headerModes.ComboProduct = {mod: 'ComboProduct', className: 'modifiers'};
         headerModes.Promotions = {mod: 'Promotions'},
         headerModes.Cart = {mod: 'Cart'};
+        headerModes.Order = {mod: 'Order'};
         headerModes.None = null;
         footerModes.Main = {mod: 'Main'};
         footerModes.Promo = {modelName: 'PromoMessage', mod: 'Main', className: 'promo-message-container navigation-bar'};
@@ -50,7 +51,7 @@ define(["main_router"], function(main_router) {
             "modifiers/:id_category(/:id_product)": "modifiers",
             "combo_product/:id_category(/:id_product)": "combo_product",
             "upsell_product/:id_category(/:id_product)": "upsell_product",
-            "cart(/:order_id)": "cart",
+            "cart": "cart",
             "checkout" : "checkout",
             "confirm": "confirm",
             "payments": "payments",
@@ -80,6 +81,7 @@ define(["main_router"], function(main_router) {
             "profile_payments": "profile_payments",
             "past_orders": "past_orders",
             "loyalty_program": "loyalty_program",
+            "order/:order_id": "order",
             "establishment": "establishment",
             "*other": "index"
         },
@@ -142,7 +144,7 @@ define(["main_router"], function(main_router) {
 
             // 'onReorder' event emits when user click on 'Reorder' button or 'Previous Order'
             this.listenTo(App.Data.customer, 'onReorder', function(order_id) {
-                this.navigate('cart/' + order_id, true);
+                this.navigate('order/' + order_id, true);
             });
         },
         paymentsHandlers: function() {
@@ -908,20 +910,12 @@ define(["main_router"], function(main_router) {
                 }
             });
         },
-        cart: function(order_id) {
-            order_id = Number(order_id);
-
-            var isReorderNotStartPage = order_id && this.initialized;
-
+        cart: function() {
             App.Data.header.set({
-                page_title: order_id ? _loc.PROFILE_ORDER_NUMBER + order_id : _loc.HEADER_MYORDER_PT,
-                back_title: isReorderNotStartPage ? _loc.BACK : _loc.MENU,
-                back: isReorderNotStartPage ? window.history.back.bind(window.history) : this.navigate.bind(this, 'index', true)
+                page_title: _loc.HEADER_MYORDER_PT,
+                back_title: _loc.MENU,
+                back: this.navigate.bind(this, 'index', true)
             });
-
-            if (order_id > 0) {
-                var reorderReq = this.reorder(order_id);
-            }
 
             this.prepare('cart', function() {
                 var isAuthorized = App.Data.customer.isAuthorized(),
@@ -937,7 +931,6 @@ define(["main_router"], function(main_router) {
                     footer:  {
                             total: App.Data.myorder.total,
                             mod: 'Cart',
-                            isReorder: Boolean(order_id),
                             className: 'footer'
                         },
                     contentClass: '',
@@ -959,11 +952,7 @@ define(["main_router"], function(main_router) {
                     ]
                 });
 
-                if (reorderReq) {
-                    reorderReq.always(this.change_page.bind(this));
-                } else {
-                    this.change_page();
-                }
+                this.change_page();
 
                 function setAction(cb) {
                     return function() {
@@ -975,6 +964,157 @@ define(["main_router"], function(main_router) {
                     }
                 }
             });
+        },
+        order: function(order_id) {
+            order_id = Number(order_id);
+
+            if (!order_id) {
+                this.navigate('index', true);
+            }
+
+            var isReorderNotStartPage = order_id && this.initialized,
+                customer = App.Data.customer,
+                myorder = App.Data.myorder;
+
+            App.Data.header.set({
+                page_title: _loc.PROFILE_ORDER_NUMBER + order_id,
+                back_title: isReorderNotStartPage ? _loc.BACK : _loc.MENU,
+                back: isReorderNotStartPage ? window.history.back.bind(window.history) : this.navigate.bind(this, 'index', true)
+            });
+
+            var orderCollection = new App.Collections.Myorders(),
+                orderModel = new App.Models.Order();
+
+            if (order_id > 0) {
+                var orderReq = check_order();
+            }
+
+            this.prepare('order', function() {
+                var isAuthorized = App.Data.customer.isAuthorized(),
+                    cb = isAuthorized ? this.navigate.bind(this, 'confirm', true) : this.navigate.bind(this, 'checkout', true),
+                    self = this;
+
+                App.Data.footer.set({
+                    action: setAction(cb)
+                });
+
+                App.Data.mainModel.set({
+                    header: headerModes.Order,
+                    footer:  {
+                        mod: 'Cart',
+                        className: 'footer',
+                        isReorder: Boolean(order_id),
+                        total: orderCollection.total
+                    },
+                    contentClass: '',
+                    content: [
+                        {
+                            modelName: 'MyOrder',
+                            mod: 'Details',
+                            model: orderModel
+                        },
+                        {
+                            modelName: 'MyOrder',
+                            mod: 'List',
+                            className: 'myorderList',
+                            collection: orderCollection,
+                            disallow_edit: true
+                        },
+                        {
+                            modelName: 'MyOrder',
+                            mod: 'Note',
+                            className: 'myorderNote',
+                            model: orderCollection.checkout
+                        }
+                    ]
+                });
+
+                if (orderReq) {
+                    orderReq.always(this.change_page.bind(this));
+                }
+                else {
+                    this.change_page();
+                }
+
+                function setAction(cb) {
+                    return function() {
+                        var reorderReq = customer.reorder(order_id);
+                        reorderReq.always(cb);
+                    }
+                }
+            });
+
+            function get_order() {
+                var dfd = Backbone.$.Deferred(),
+                    orders = customer.orders,
+                    order = orders.get(order_id),
+                    errors = App.Data.errors,
+                    req;
+
+                if (!order) {
+                    req = customer.getOrder(order_id);
+
+                    req.done(function() {
+                        order = orders.get(order_id);
+                        if (order) {
+                            return dfd.resolve(order);
+                        }
+                        dfd.reject();
+                    });
+
+                    req.fail(function() {
+                        dfd.reject();
+                    });
+                }
+                else {
+                    dfd.resolve(order);
+                }
+
+                return dfd;
+            }
+
+            function update_data(order) {
+                orderModel.set(order.attributes);
+                order.get('items').each(function(orderItem) {
+                    orderCollection.add(orderItem);
+                });
+            }
+
+            function check_order() {
+                var dfd = Backbone.$.Deferred(),
+                    errors = App.Data.errors;
+
+                if (customer.isAuthorized()) {
+                    var ordersReq = customer.ordersRequest;
+
+                    ordersReq.done(function() {
+                        var orderReq = get_order();
+
+                        orderReq.done(function(order) {
+                            var itemsReq = customer.getOrderItems(order);
+
+                            itemsReq.done(function() {
+                                update_data(order);
+                            });
+
+                            itemsReq.always(dfd.resolve.bind(dfd));
+                        });
+
+                        orderReq.fail(function() {
+                            errors.alert(_loc.PROFILE_ORDER_NOT_FOUND.replace(/%s/, order_id));
+                            return dfd.reject();
+                        });
+                    });
+
+                    ordersReq.fail(dfd.reject.bind(dfd));
+                }
+                else {
+                    errors.alert(_loc.PROFILE_PLEASE_LOG_IN);
+                    dfd.resolve();
+                }
+
+                return dfd;
+            }
         },
         checkout: function() {
             var self = this;

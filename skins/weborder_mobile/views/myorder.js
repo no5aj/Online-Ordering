@@ -150,6 +150,57 @@ define(["myorder_view"], function(myorder_view) {
         update: new Function()
     });
 
+    var MyOrderDetailsView = App.Views.FactoryView.extend({
+        name: 'myorder',
+        mod: 'details',
+        className: 'myorder-details list-separator',
+        bindings: {
+            '.store-logo': 'attr: {src: _system_settings_logo_img}',
+            '.store-type': 'text: storeType',
+            '.store-name': 'text: _system_settings_business_name',
+            '.order-time-block': 'toggle: equal(dining_option, 2)',
+            '.order-time': 'text: pickup_time',
+            '.order-address-block': 'toggle: equal(dining_option, 2)',
+            '.order-address': 'text: deliveryAddress',
+            '.promotions-link': 'toggle: _system_settings_has_campaigns'
+        },
+        computeds: {
+            deliveryAddress: {
+                deps: ['delivery_address'],
+                get: function(address) {
+                    if (!address) {
+                        return '';
+                    }
+
+                    var addressLine = address.street_1;
+                    if (address.street_2) {
+                        addressLine += ' ' + address.street_2;
+                    }
+                    addressLine += ', ' + address.city;
+                    addressLine += ' ' + address.zipcode;
+
+                    return addressLine;
+                }
+            },
+            storeType: {
+                deps: ['_system_settings_type_of_service'],
+                get: function(type) {
+                    var service = (_.invert(ServiceType))[type],
+                        result = _loc['FILTERS']['STORE_TYPE_RESTAURANT'];
+
+                    if (service === 'RETAIL') {
+                        result = _loc['FILTERS']['STORE_TYPE_RETAIL'];
+                    }
+                    if(service === 'GROCERY') {
+                        result = _loc['FILTERS']['STORE_TYPE_GROCERY'];
+                    }
+
+                    return result;
+                }
+            }
+        }
+    });
+
     return new (require('factory'))(myorder_view.initViews.bind(myorder_view), function() {
         App.Views.MyOrderView.MyOrderListView = MyOrderListView;
         App.Views.MyOrderView.MyOrderMatrixView = MyOrderMatrixView;
@@ -158,5 +209,6 @@ define(["myorder_view"], function(myorder_view) {
         App.Views.MyOrderView.MyOrderItemComboView = MyOrderItemComboView;
         App.Views.MyOrderView.MyOrderItemUpsellView = MyOrderItemUpsellView;
         App.Views.MyOrderView.MyOrderStanfordItemView = MyOrderStanfordItemView;
+        App.Views.MyOrderView.MyOrderDetailsView = MyOrderDetailsView;
     });
 });

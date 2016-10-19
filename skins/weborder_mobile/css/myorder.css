@@ -78,4 +78,55 @@
     display: none;
 }
 
+.myorder-details {
+    padding: 2em 0;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
 
+.myorder-details .details-left {
+    float: left;
+    margin-right: 2em;
+}
+
+.myorder-details .logo-block {
+    height: 15em;
+    width: 100%;
+}
+
+.myorder-details .logo-wrapper {
+    height: 100%;
+    width: 100%;
+    -webkit-mask-size: 18em 15em;
+    -webkit-mask-position: 50% 100%;
+    -moz-mask-size: 18em 15em;
+    -moz-mask-position: 50% 100%;
+    -ms-mask-size: 18em 15em;
+    -ms-mask-position: 50% 100%;
+    mask-size: 18em 15em;
+    mask-position: 50% 100%;
+    position: relative;
+}
+
+.myorder-details .logo-wrapper img {
+    max-width: 100%;
+    max-height: 100%;
+    vertical-align: middle;
+}
+
+.myorder-details .store-type {
+    line-height: 2;
+    font-weight: bold;
+}
+
+.myorder-details .store-name {
+    font-weight: 500;
+}
+
+.myorder-details .item {
+    margin-bottom: .5em;
+}
+
+.myorder-details .promotions-link {
+    margin-top: .75em;
+}
