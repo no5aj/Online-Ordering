@@ -734,7 +734,7 @@ define(["backbone"], function(Backbone) {
         processOrders: function(orders) {
             if (Array.isArray(orders)) {
                 return orders.filter(function(order) {
-                    return order.items.some(function(item) {
+                    return order.items.every(function(item) {
                         return !item.combo_used && !item.has_upsell && !item.is_combo;
                     });
                 });
