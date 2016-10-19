@@ -1294,10 +1294,13 @@ App.Views.CoreProfileView.CoreProfileAddressCreateView = App.Views.FactoryView.e
         showItems: function() {
             var ui = this.getBinding('$ui');
             ui.set('collapse', !ui.get('collapse'));
-            this.options.customer.getOrderItems(this.model);
+            this.getItems();
         },
         reorder: function() {
             this.options.customer.trigger('onReorder', this.model.get('id'));
+        },
+        getItems: function() {
+            this.options.customer.getOrderItems(this.model);
         }
     });
 
