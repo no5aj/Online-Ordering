@@ -26,7 +26,8 @@ body,
 
 /* [optional_text] optional text (additional info, modifier class instruction), input label */
 .optional-text[class],
-#alert .icon {
+#alert .icon,
+#popup_content.info::before {
     .resolve-color(@optional_text);
 }
 
@@ -138,7 +139,8 @@ body,
 
 /* [shadow_background] background behind popup window */
 .shadow-bg[class],
-#alert {
+#alert,
+#popup_alert {
     .resolve-background-alpha(@shadow_background, 60%);
 }
 
@@ -169,6 +171,11 @@ body,
 .card-bg[class],
 .stanford-plans-box .stanford-plan {
     .resolve-background-alpha(@card_background, 20%);
+}
+
+/* [card_background_gradient] stanford card plan background, card balance background */
+.card-gradient-bg {
+    .resolve-background-alpha(@card_background_gradient, 20%);
 }
 
 /* [input_border] input border color */

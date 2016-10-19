@@ -34,6 +34,8 @@
         'CHECKOUT_DISCOUNT_CODE': 'Discount Code',
         'CHECKOUT_DISC_CODE_APPLY': 'Apply',
         'CHECKOUT_DISC_CODE_APPLIED': 'Applied',
+        'CHECKOUT_CHANGE_ADDRESS': 'Change Address',
+        'CHECKOUT_SAVE_PROFILE': 'Save to Profile',
         'CONFIRM_REVIEW_ORDER': 'Review your Order',
         'CONFIRM_DELIVERY_TIME': 'Delivery Time',
         'CONFIRM_ARRIVAL_TIME': 'Arrival Time',
@@ -214,7 +216,7 @@
         'CHECKOUT_PAYMENT_METHOD_CREDIT_CARD': 'Credit Card',
         'CHECKOUT_PAYMENT_METHOD_GIFT_CARD': 'Gift Card',
         'CHECKOUT_PAYMENT_METHOD_STANFORD_CARD': 'Stanford Card',
-        'CHECKOUT_CHOOSE_ADDRESS': 'Choose Address',
+        'CHECKOUT_CHOOSE_ADDRESS': 'Address',
         'CHECKOUT_CHOOSE_CARD': 'Choose Card',
         'CHECKOUT_ENTER_NEW_CARD': 'Enter New Card',
         'CARD_PROFILE_ADDRESS': 'Profile Address',
@@ -233,6 +235,7 @@
         'PAST_ORDERS_QUANTITY_TITLE': 'Quantity',
         'PAST_ORDERS_TOTAL_TITLE': 'Total',
         'VIEW_PAST_ORDERS': 'View Past Orders',
-        'PAST_ORDER': 'Past Order'
+        'PAST_ORDER': 'Past Order',
+        'PROFILE_LOYALTY_NUMBER': 'Loyalty Number'
     } // end of locale
 }); // end of module

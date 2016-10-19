@@ -2,19 +2,21 @@
     <div class="personal">
         <div class="item">
             <div class="label required optional-text"><%= _lp.PROFILE_FIRST_NAME %></div>
-            <input type="text" class="firstName input ios-safari-caret size1">
+            <input type="text" class="firstName input ios-safari-caret size2">
         </div>
         <div class="item">
             <div class="label required optional-text"><%= _lp.PROFILE_LAST_NAME %></div>
-            <input type="text" class="lastName input ios-safari-caret size1">
+            <input type="text" class="lastName input ios-safari-caret size2">
+        </div>
+    </div>
+    <div class="personal">
+        <div class="item">
+            <div class="label required optional-text"><%= _lp.PROFILE_EMAIL_ADDRESS %></div>
+            <input type="email" class="email input ios-safari-caret size3" autocorrect="off" autocapitalize="none">
         </div>
         <div class="item">
             <div class="label required optional-text"><%= _lp.PROFILE_PHONE %></div>
             <input type="tel" id="phone" class="phone input ios-safari-caret size1">
-        </div>
-        <div class="item">
-            <div class="label required optional-text"><%= _lp.PROFILE_EMAIL_ADDRESS %></div>
-            <input type="email" class="email input ios-safari-caret size2" autocorrect="off" autocapitalize="none">
         </div>
     </div>
 
@@ -43,63 +45,69 @@
 </script>
 
 <script type="text/template" id="checkout_address-template">
-    <div class="address-selection item fl-left"></div>
+    <div class="address-selection item"></div>
 
-    <div class="address-edit fl-left item">
-        <div class="label required optional-text"><%= _lp.CHECKOUT_ADDRESS %></div>
-        <input type="text" name="street_1" class="input ios-safari-caret size2">
-    </div>
-    <div class="address-edit fl-left item">
-        <div class="label optional-text"><%= _lp.CHECKOUT_APT %></div>
-        <input type="text" name="street_2" class="input ios-safari-caret size3">
-    </div>
-    <div class="address-edit fl-left item">
-        <div class="label required optional-text"><%= _lp.PROFILE_CITY %></div>
-        <input type="text" name="city" class="input ios-safari-caret size1">
-    </div>
-    <% if(isShippingServices) { %>
-    <div class="address-edit fl-left item">
-        <div class="label required optional-text"><%= _lp.PROFILE_COUNTRY %>:</div>
-        <div class="select-wrapper">
-            <select class="country size2">
-            <% for (var i in countries) { %>
-                <option value="<%= i %>" <% if(i.toLowerCase() == country.toLowerCase()) { %>selected="selected"<% } %>><%= countries[i] %></option>
-            <% } %>
-            </select>
+    <div class="address-edit">
+        <div class="item">
+            <div class="label required optional-text"><%= _lp.CHECKOUT_ADDRESS %></div>
+            <input type="text" name="street_1" class="input ios-safari-caret size3">
+        </div>
+        <div class="item">
+            <div class="label optional-text"><%= _lp.CHECKOUT_APT %></div>
+            <input type="text" name="street_2" class="input ios-safari-caret size1">
         </div>
     </div>
-    <% } %>
-    <% if(country == 'US' && state && states instanceof Object && Object.keys(states).length > 0) { %>
-    <div class="states-box address-edit fl-left item">
-        <div class="label required optional-text"><%= _lp.PROFILE_STATE %></div>
-        <div class="select-wrapper">
-            <select class="states" id="states">
-            <% for(var i in states) { %>
-                <option value="<%= i %>" <% if(i.toLowerCase() == state.toLowerCase()) { %>selected="selected"<% } %>><%= states[i] %></option>
-            <% } %>
-            </select>
-        </div>
-    </div>
-    <% } %>
-    <% if(typeof province == 'string') { %>
-    <div class="province-box address-edit fl-left item">
-        <div class="label required optional-text"><%= _lp.PROFILE_PROVINCE %></div>
-        <input type="text" name="province" class="input ios-safari-caret size1">
-    </div>
-    <% } %>
-    <div class="address-edit fl-left item">
-        <div class="label required optional-text"><% if(country == 'US') {print(_lp.PROFILE_ZIP_CODE);} else {print(_lp.PROFILE_POSTAL_CODE);} %></div>
-        <input type="text" name="zipcode" class="input ios-safari-caret size4">
-    </div>
 
-    <% if(isShippingServices) { %>
-    <div class="fl-left item">
-        <div class="label required optional-text"><%= _lp.CHECKOUT_SHIPPING_HANDLING %></div>
-        <div class="inline-block">
+    <div class="address-edit">
+        <div class="item">
+            <div class="label required optional-text"><%= _lp.PROFILE_CITY %></div>
+            <input type="text" name="city" class="input ios-safari-caret size1">
+        </div>
+        <% if(country == 'US' && state && states instanceof Object && Object.keys(states).length > 0) { %>
+        <div class="states-box item">
+            <div class="label required optional-text"><%= _lp.PROFILE_STATE %></div>
             <div class="select-wrapper">
-                <select class="shipping-select select"></select>
+                <select class="states" id="states">
+                <% for(var i in states) { %>
+                    <option value="<%= i %>" <% if(i.toLowerCase() == state.toLowerCase()) { %>selected="selected"<% } %>><%= states[i] %></option>
+                <% } %>
+                </select>
             </div>
-            <div class="shipping-status fl-right"></div>
+        </div>
+        <% } %>
+        <% if(typeof province == 'string') { %>
+        <div class="province-box item">
+            <div class="label required optional-text"><%= _lp.PROFILE_PROVINCE %></div>
+            <input type="text" name="province" class="input ios-safari-caret size1">
+        </div>
+        <% } %>
+        <div class="item">
+            <div class="label required optional-text"><% if(country == 'US') {print(_lp.PROFILE_ZIP_CODE);} else {print(_lp.PROFILE_POSTAL_CODE);} %></div>
+            <input type="text" name="zipcode" class="input ios-safari-caret size4">
+        </div>
+    </div>
+
+    <% if(isShippingServices) { %>
+    <div class="address-edit">
+        <div class="item">
+            <div class="label required optional-text"><%= _lp.PROFILE_COUNTRY %>:</div>
+            <div class="select-wrapper">
+                <select class="country size2">
+                <% for (var i in countries) { %>
+                    <option value="<%= i %>" <% if(i.toLowerCase() == country.toLowerCase()) { %>selected="selected"<% } %>><%= countries[i] %></option>
+                <% } %>
+                </select>
+            </div>
+        </div>
+
+        <div class="item">
+            <div class="label required optional-text"><%= _lp.CHECKOUT_SHIPPING_HANDLING %></div>
+            <div class="inline-block">
+                <div class="select-wrapper">
+                    <select class="shipping-select select"></select>
+                </div>
+                <div class="shipping-status fl-right"></div>
+            </div>
         </div>
     </div>
     <% } %>

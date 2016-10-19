@@ -364,7 +364,8 @@ ul.reward-selection > li,
 /* [checkbox] checked checkbox background */
 .modifier input:checked + .input,
 .combo_item .input[checked=checked],
-.input.checkbox[checked=checked] {
+.input.checkbox[checked=checked],
+.input.checkbox.checked {
     .resolve-background(@checkbox);
     .resolve-border-color(@checkbox);
 }
@@ -378,7 +379,8 @@ ul.reward-selection > li,
 
 /* [checkbox_unchecked] border of unchecked checkbox */
 .modifier .input,
-.combo_item .input {
+.combo_item .input,
+.input.checkbox {
     .resolve-border-color(@checkbox_unchecked);
 }
 

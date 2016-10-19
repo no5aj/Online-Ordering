@@ -490,11 +490,13 @@ input[type="radio"]:checked + .radio::before,
 .popup-full-height #popup_message,
 .popup-full-height #popup_container {
     position: relative;
+    margin: 0;
 }
 
-.popup-full-height #popup_message {
+.popup-full-height #popup_message[id] {
     height: 100%;
     overflow-y: auto;
+    margin: 0
 }
 
 .popup-full-height #popup_container {
@@ -638,6 +640,8 @@ input[type="radio"]:checked + .radio::before,
 }
 
 #popup_container[id] {
+    min-width: 400px;
+    max-width: 600px;
     border: none;
     border-radius: 0;
     font-family: inherit;
@@ -648,6 +652,22 @@ input[type="radio"]:checked + .radio::before,
 #popup_message[id],
 #popup_content[id] {
     padding: 0;
+}
+
+#popup_message[id] {
+    margin: 35px 20px 75px;
+}
+
+#popup_content.info[class] {
+    background: none;
+}
+
+#popup_content.info::before {
+    content: '\f05A';
+    display: inline-block;
+    padding: 30px 0 10px;
+    font-family: 'FontAwesome';
+    font-size: 25px;
 }
 
 #popup_panel[id] {

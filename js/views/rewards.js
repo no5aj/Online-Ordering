@@ -30,7 +30,9 @@
         mod: 'item',
         el: '<li class="reward-selection__item"></li>',
         bindings: {
-            ':el': 'classes: {"reward-selection__item_selected": selected}',
+            ':el': 'classes: {disabled: disabled, animation: true}',
+            '.checkbox': 'classes: {checked: selected}',
+            '.points': 'classes: {"optional-text": not(selected), "attention-text": selected, selected: selected}',
             '.reward__name': 'text: name',
             '.reward__discount-amount': 'text: discountAmount(amount, type)',
             '.reward__discount-text': 'text: discount_text',
@@ -93,6 +95,24 @@
             // toggle selection
             this.model.set('selected', !selected);
             this.options.collectionView.model.trigger('onSelectReward');
+        }
+    });
+
+    var ItemRewardsView = RewardsItemView.extend({
+        bindings: {
+            '.reward__redemption-text': 'text: redemptionText(points, _lp_REWARDS_ITEM_POINTS)'
+        }
+    });
+
+    var VisitRewardsView = RewardsItemView.extend({
+        bindings: {
+            '.reward__redemption-text': 'text: redemptionText(points, _lp_REWARDS_VISIT_POINTS)'
+        }
+    });
+
+    var PurchaseRewardsView = RewardsItemView.extend({
+        bindings: {
+            '.reward__redemption-text': 'text: redemptionText(points, _lp_REWARDS_PURCHASE_POINTS)'
         }
     });
 
@@ -183,7 +203,18 @@
 
     var RewardsCardProfileView = App.Views.CoreRewardsView.CoreRewardsCardView.extend({
         name: 'profile',
-        mod: 'rewardcard'
+        mod: 'rewardcard',
+        bindings: {
+            '.logo': 'attr: {style: showLogo(_system_settings_logo_img)}'
+        },
+        bindingFilters: {
+            showLogo: function(url) {
+                if (typeof url != 'string') {
+                    return '';
+                }
+                return 'background-image: url(%s);'.replace('%s', url);
+            }
+        }
     });
 
     var RewardsItemApplicationView = App.Views.FactoryView.extend({
@@ -208,44 +239,101 @@
             '.total-points': 'text: balance_points',
             '.total-visits': 'text: balance_visits',
             '.total-purchases': 'text: currencyFormat(balance_purchases)',
-            '.reward-selection': 'collection: rewards, itemView: "rewardItem"',
             '.rewards-unavailable': 'toggle: not(length(rewards))',
-            '.rewards-total__item_points': 'classes: {hide: isNull(balance_points)}',
-            '.rewards-total__item_visits': 'classes: {hide: isNull(balance_visits)}',
-            '.rewards-total__item_purchases': 'classes: {hide: isNull(balance_purchases)}',
-            '.apply-reward': 'classes: {disabled: select(length(discounts), false, true)}'
+            '.total-points-redemption': 'toggle: redemption_points',
+            '.total-points-redemption__value': 'text: redemption_points',
+            '.total-visits-redemption': 'toggle: redemption_visits',
+            '.total-visits-redemption__value': 'text: redemption_visits',
+            '.total-purchases-redemption': 'toggle: redemption_purchases',
+            '.total-purchases-redemption__value': 'text: redemption_purchases',
+            '.item-rewards-box': 'classes: {hide: not(length($itemRewards))}',
+            '.item-rewards': 'collection: $itemRewards, itemView: "itemRewards"',
+            '.visit-rewards-box': 'classes: {hide: not(length($visitRewards))}',
+            '.visit-rewards': 'collection: $visitRewards, itemView: "visitRewards"',
+            '.purchase-rewards-box': 'classes: {hide: not(length($purchaseRewards))}',
+            '.purchase-rewards': 'collection: $purchaseRewards, itemView: "purchaseRewards"',
+            '.rewards-unavailable': 'toggle: not(length(rewards))',
+            '.total-row-points': 'classes: {hide: isNull(balance_points)}',
+            '.total-row-visits': 'classes: {hide: isNull(balance_visits)}',
+            '.total-row-purchase': 'classes: {hide: isNull(balance_purchases)}',
+            '.apply-reward': 'classes: {disabled: not(length(discounts))}'
         },
-
         events: {
             'click .apply-reward': 'apply'
         },
-
+        onEnterListeners: {
+            '.apply-reward': 'apply'
+        },
+        bindingSources: {
+            itemRewards: function() {
+                return new Backbone.Collection();
+            },
+            visitRewards: function() {
+                return new Backbone.Collection();
+            },
+            purchaseRewards: function() {
+                return new Backbone.Collection();
+            },
+            redemption: function() {
+                return new Backbone.Model({
+                    points: 0,
+                    visits: 0,
+                    purchases: 0
+                });
+            }
+        },
         bindingFilters: {
             isNull: function(value) {
                 return value === null;
             }
         },
-
-        rewardItem: RewardsItemView,
-
+        itemRewards: ItemRewardsView,
+        visitRewards: VisitRewardsView,
+        purchaseRewards: PurchaseRewardsView,
         initialize: function() {
-            var self = this;
-            this.listenTo(this.model, 'onResetData', function() {
-                self.remove();
-            });
             App.Views.FactoryView.prototype.initialize.apply(this, arguments);
-        },
+            this.listenTo(this.model, 'onResetData', this.remove);
+            this.listenTo(this.model.get('rewards'), 'add remove', function() {
+                this.setItemRewards();
+                this.setVisitsRewards();
+                this.setPurchaseRewards();
+            });
+            this.setItemRewards();
+            this.setVisitsRewards();
+            this.setPurchaseRewards();
 
-        render: function() {
-            App.Views.FactoryView.prototype.render.apply(this, arguments);
-            typeof Backbone.$.fn.contentarrow == 'function' && this.$('.reward-selection').contentarrow();
-        },
+            var itemRewards = this.getBinding('$itemRewards'),
+                visitRewards = this.getBinding('$visitRewards'),
+                purchaseRewards = this.getBinding('$purchaseRewards');
 
-        remove: function() {
-            typeof Backbone.$.fn.contentarrow == 'function' && this.$('.reward-selection').contentarrow('destroy');
-            App.Views.FactoryView.prototype.remove.apply(this, arguments);
-        },
+            this.setBinding('redemption_points', this.countPointsToRedeem(itemRewards));
+            this.setBinding('redemption_visits', this.countPointsToRedeem(visitRewards));
+            this.setBinding('redemption_purchases', this.countPointsToRedeem(purchaseRewards));
 
+            this.listenTo(itemRewards, 'change:selected', function() {
+                this.setBinding('redemption_points', this.countPointsToRedeem(itemRewards));
+            });
+            this.listenTo(visitRewards, 'change:selected', function() {
+                this.setBinding('redemption_visits', this.countPointsToRedeem(visitRewards));
+            });
+            this.listenTo(purchaseRewards, 'change:selected', function() {
+                this.setBinding('redemption_purchases', this.countPointsToRedeem(purchaseRewards));
+            });
+        },
+        setItemRewards: function() {
+            this.getBinding('$itemRewards').reset(this.model.get('rewards').where({rewards_type: 1}));
+        },
+        setVisitsRewards: function() {
+            this.getBinding('$visitRewards').reset(this.model.get('rewards').where({rewards_type: 2}));
+        },
+        setPurchaseRewards: function() {
+            this.getBinding('$purchaseRewards').reset(this.model.get('rewards').where({rewards_type: 0}));
+        },
+        countPointsToRedeem: function(collection) {
+            return _.reduce(collection.where({selected: true}), function(memo, model) {
+                return memo + model.get('points');
+            }, 0);
+        },
         apply: function() {
             var rewardsCard = this.collection.rewardsCard;
             rewardsCard.update(this.model);

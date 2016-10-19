@@ -14,7 +14,7 @@
         <span class="font-size3 primary-text"><%= _lp.PROFILE_FORGOT_PASSWORD %></span>
     </div>
     <div class="login-btn btn primary-button font-size4 text-center"><%= _lp.PROFILE_LOG_IN %></div>
-    <div class="profile-separator text-center toolbar">
+    <div class="profile-separator text-center toolbar list-separator">
         <span class="primary-bg regular-text"><%= _lp.OR %></span>
     </div>
     <div class="login-fb-btn btn primary-button font-size4 text-center"><%= _lp.PROFILE_LOG_IN_FACEBOOK %></div>
@@ -109,6 +109,7 @@
         <div class="close alternate-button">&times;</div>
         <ul class="profile-items font-size1 primary-text">
             <li class="profile-link private-btn list-separator"><%= _lp.PROFILE_EDIT_TITLE %></li>
+            <li class="loyalty-program private-btn list-separator"><%= _lp.PROFILE_LOYALTY_PROGRAM %></li>
             <li class="payments-link private-btn list-separator"><%= _lp.PAYMENT_METHODS %></li>
             <li class="past-orders private-btn list-separator narrow-row">
                 <%= _lp.PROFILE_PAST_ORDERS %><span class="description regular-text"><%= _lp.PROFILE_REORDER_FAVORITE %></span>
@@ -337,28 +338,21 @@
 </script>
 
 <script type="text/template" id="profile_reward_card_edition-template">
-    <span class="card-number"></span>
-    <div class="remove-btn"></div>
+    <div class="loyalty-number-box input-control font-size3">
+        <input type="text" class="card-number input-colors" disabled="disabled">
+        <label class="ctrl-wrapper"><input type="button" class="ctrl"></label>
+    </div>
 </script>
 
 <script type="text/template" id="profile_reward_cards_edition-template">
-    <div class="reward-cards editgroup primary-text text-center primary-bg">
-        <span class="font-size1"><%= _lp.REWARD_CARDS %></span>
-    </div>
-    <div class="reward-cards-list-wrap">
-        <ul class="reward-cards-list"></ul>
-        <div class="add_reward_card_title_wrap">
-            <div class="add_reward_card_title primary-text"><span class="plus_sign"></span><%= _loc.PROFILE_ADD_NEW_REWARD_CARD %></div>
-        </div>
-        <div class="profile-form primary-text text-center">
-            <div class="new_reward_card"></div>
-        </div>
-    </div>
+    <div class="loyalty-program-info primary-text font-size3"><%= _lp.PROFILE_LOYALTY_PROGRAM_INFO %></div>
+    <div class="reward-cards-list"></div>
+    <div class="new-loyalty-number text-center"></div>
 </script>
 
 <script type="text/template" id="profile_rewardcard-template">
-    <label class="required font-size2">
-        <input type="text" placeholder="<%= _lp.GIFTCARD_NUMBER %>" class="rewards-input ios-safari-caret input-colors">
+    <label class="loyalty-number-box required font-size3">
+        <input type="text" placeholder="<%= _lp.REWARDS_NUMBER %>" class="rewards-input ios-safari-caret input-colors">
     </label>
     <div class="recaptcha_view"></div>
 </script>

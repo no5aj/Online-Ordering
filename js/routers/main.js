@@ -487,6 +487,9 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
                         customer.updateCustomer({coordinates: coordinates});
                     }
                 });
+                // if customer registered before email/push notifications were implemented
+                // need to ask whether he would like to receive these notifications.
+                !customer.get('accept_tou') && askAboutPromotionNotifications();
             });
 
             // 'onReorderCompleted' event emits when an order completes a reorder
@@ -538,6 +541,28 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
                 }
 
                 return messages.length ? messages.join(' ') : null;
+            }
+
+            function askAboutPromotionNotifications() {
+                App.Data.errors.alert(_loc.PROFILE_ACCEPT_TOU, false, true, {
+                        isConfirm: true,
+                        confirm: {
+                            ok: _loc.YES,
+                            cancel: _loc.NO_THANKS
+                        },
+                        callback: function(res) {
+                            res = Boolean(res);
+                            customer.set({
+                                email_notifications: res,
+                                push_notifications: res
+                            });
+                            customer.updateCustomer({
+                                accept_tou: true,
+                                email_notifications: res,
+                                push_notifications: res
+                            });
+                        }
+                    });
             }
         },
         /**
@@ -882,8 +907,8 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
             }
         },
         /**
-        * User notification.
-        */
+         * User notification.
+         */
         alertMessage: function() {
             var errors = App.Data.errors;
             App.Routers.MainRouter.prototype.prepare('errors', function() {
@@ -934,8 +959,7 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
             var customer = App.Data.customer,
                 promises = [],
                 paymentsDef = Backbone.$.Deferred(),
-                giftCardsDef = Backbone.$.Deferred(),
-                rewardCardsDef = Backbone.$.Deferred();
+                giftCardsDef = Backbone.$.Deferred();
 
             // payments are available
             if (customer.payments && customer.paymentsRequest) {
@@ -947,12 +971,6 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
             if (customer.giftCards && customer.giftCardsRequest) {
                 customer.giftCardsRequest.always(giftCardsDef.resolve.bind(giftCardsDef));
                 promises.push(giftCardsDef);
-            }
-
-            // gift cards are available
-            if (customer.get('rewardCards') && customer.rewardCardsRequest) {
-                customer.rewardCardsRequest.always(rewardCardsDef.resolve.bind(rewardCardsDef));
-                promises.push(rewardCardsDef);
             }
 
             return promises;
@@ -1042,6 +1060,7 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
                     payments_link: profilePayments,
                     profile_link: profileEdit,
                     orders_link: pastOrders,
+                    loyalty_link: loyaltyProgram,
                     my_promotions_link: myPromotions,
                     cacheId: true
                 }
@@ -1148,6 +1167,11 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
 
             function pastOrders() {
                 self.navigate('past_orders', true);
+                customer.trigger('hidePanel');
+            }
+
+            function loyaltyProgram() {
+                self.navigate('loyalty_program', true);
                 customer.trigger('hidePanel');
             }
         },
@@ -1317,7 +1341,6 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
                         ui: new Backbone.Model({show_response: false}),
                         removeToken: removeToken,
                         unlinkGiftCard: unlinkGiftCard,
-                        unlinkRewardCard: unlinkRewardCard,
                         myorder: App.Data.myorder,
                         className: 'profile-edit'
                     }
@@ -1353,28 +1376,33 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
             }
 
             function removeToken(token_id) {
-                var req = customer.removePayment(token_id);
-                if (req) {
-                    mainModel.trigger('loadStarted');
-                    req.always(mainModel.trigger.bind(mainModel, 'loadCompleted'));
-                }
+                App.Data.errors.alert(_loc.PROFILE_CREDIT_CARD_REMOVE, false, true, {
+                    isConfirm: true,
+                    callback: function(confirmed) {
+                        if (confirmed) {
+                            var req = customer.removePayment(token_id);
+                            if (req) {
+                                mainModel.trigger('loadStarted');
+                                req.always(mainModel.trigger.bind(mainModel, 'loadCompleted'));
+                            }
+                        }
+                    }
+                });
             }
 
             function unlinkGiftCard(giftCard) {
-                var req = customer.unlinkGiftCard(giftCard);
-
-                if (req) {
-                    mainModel.trigger('loadStarted');
-                    req.always(mainModel.trigger.bind(mainModel, 'loadCompleted'));
-                }
-            }
-
-            function unlinkRewardCard(rewardCard) {
-                var req = customer.unlinkRewardCard(rewardCard);
-                if (req) {
-                    mainModel.trigger('loadStarted');
-                    req.always(mainModel.trigger.bind(mainModel, 'loadCompleted'));
-                }
+                App.Data.errors.alert(_loc.PROFILE_GIFT_CARD_REMOVE, false, true, {
+                    isConfirm: true,
+                    callback: function(confirmed) {
+                        if (confirmed) {
+                            var req = customer.unlinkGiftCard(giftCard);
+                            if (req) {
+                                mainModel.trigger('loadStarted');
+                                req.always(mainModel.trigger.bind(mainModel, 'loadCompleted'));
+                            }
+                        }
+                    }
+                });
             }
         },
         setPastOrdersContent: function() {
@@ -1403,6 +1431,78 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
             function logout() {
                 self.navigate('index', true);
             }
+        },
+        setLoyaltyProgramContent: function() {
+            var customer = App.Data.customer,
+                mainModel = App.Data.mainModel,
+                req = customer.get('rewardCards') && customer.rewardCardsRequest,
+                self = this;
+
+            if (req) {
+                App.Data.mainModel.set({
+                    content: {
+                        modelName: 'Profile',
+                        mod: 'RewardCardsEdition',
+                        model: customer,
+                        collection: customer.get('rewardCards'),
+                        unlinkRewardCard: unlinkRewardCard,
+                        linkRewardCard: linkRewardCard,
+                        className: 'profile-edit'
+                    }
+                });
+
+                window.setTimeout(function() {
+                    self.listenTo(customer, 'onLogout', logout);
+                    self.listenToOnce(self, 'route', self.stopListening.bind(self, customer, 'onLogout', logout));
+                }, 0);
+            }
+
+            return req;
+
+            function logout() {
+                self.navigate('index', true);
+            }
+
+            function unlinkRewardCard(rewardCard) {
+                App.Data.errors.alert(_loc.PROFILE_LOYALTY_NUMBER_REMOVE, false, true, {
+                    isConfirm: true,
+                    callback: function(confirmed) {
+                        if (confirmed) {
+                            var req = customer.unlinkRewardCard(rewardCard);
+                            if (req) {
+                                mainModel.trigger('loadStarted');
+                                req.always(mainModel.trigger.bind(mainModel, 'loadCompleted'));
+                            }
+                        }
+                    }
+                });
+            }
+
+            function linkRewardCard(rewardCard) {
+                var req = customer.linkRewardCard(rewardCard);
+
+                self.listenToOnce(rewardCard, 'onLinkError', onError);
+
+                if (req) {
+                    mainModel.trigger('loadStarted');
+                    req.done(function(data){
+                        if (data && data.status == 'OK') {
+                            App.Data.myorder.rewardsCard.selectRewardCard(rewardCard);
+                        }
+                    });
+                    req.error(onError);
+                    req.always(mainModel.trigger.bind(mainModel, 'loadCompleted'));
+                    return req;
+                }
+
+                return req;
+
+                function onError(errorMsg) {
+                    if (errorMsg){
+                        App.Data.errors.alert(errorMsg);
+                    }
+                }
+            }
         }
     };
 
@@ -1423,6 +1523,7 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
                     payments_link: profile_payments,
                     profile_link: profile_edit,
                     orders_link: pastOrders,
+                    loyalty_link: loyaltyProgram,
                     my_promotions_link: myPromotions,
                     close_link: close,
                     cacheId: true
@@ -1462,6 +1563,11 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
 
             function pastOrders() {
                 self.navigate('past_orders', true);
+                close();
+            }
+
+            function loyaltyProgram() {
+                self.navigate('loyalty_program', true);
                 close();
             }
 
@@ -1738,7 +1844,7 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
             App.Data.header.set({
                 page_title: _loc.SETTINGS,
                 back_title: _loc.BACK,
-                back: window.history.back.bind(window.history),
+                back: this.goToBack.bind(this),
                 link: save,
                 link_title: _loc.SAVE
             });
@@ -1893,7 +1999,6 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
                 ui: new Backbone.Model({show_response: false}),
                 removeToken: removeToken,
                 unlinkGiftCard: unlinkGiftCard,
-                unlinkRewardCard: unlinkRewardCard,
                 className: 'profile-edit text-center',
                 myorder: App.Data.myorder
             });
@@ -1947,27 +2052,33 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
                 return req;
             }
             function removeToken(token_id) {
-                var req = customer.removePayment(token_id);
-                if (req) {
-                    mainModel.trigger('loadStarted');
-                    req.always(mainModel.trigger.bind(mainModel, 'loadCompleted'));
-                }
+                App.Data.errors.alert(_loc.PROFILE_CREDIT_CARD_REMOVE, false, true, {
+                    isConfirm: true,
+                    callback: function(confirmed) {
+                        if (confirmed) {
+                            var req = customer.removePayment(token_id);
+                            if (req) {
+                                mainModel.trigger('loadStarted');
+                                req.always(mainModel.trigger.bind(mainModel, 'loadCompleted'));
+                            }
+                        }
+                    }
+                });
             }
 
             function unlinkGiftCard(giftCard) {
-                var req = customer.unlinkGiftCard(giftCard);
-                if (req) {
-                    mainModel.trigger('loadStarted');
-                    req.always(mainModel.trigger.bind(mainModel, 'loadCompleted'));
-                }
-            }
-
-            function unlinkRewardCard(rewardCard) {
-                var req = customer.unlinkRewardCard(rewardCard);
-                if (req) {
-                    mainModel.trigger('loadStarted');
-                    req.always(mainModel.trigger.bind(mainModel, 'loadCompleted'));
-                }
+                App.Data.errors.alert(_loc.PROFILE_GIFT_CARD_REMOVE, false, true, {
+                    isConfirm: true,
+                    callback: function(confirmed) {
+                        if (confirmed) {
+                            var req = customer.unlinkGiftCard(giftCard);
+                            if (req) {
+                                mainModel.trigger('loadStarted');
+                                req.always(mainModel.trigger.bind(mainModel, 'loadCompleted'));
+                            }
+                        }
+                    }
+                });
             }
         },
         setPastOrdersContent: function() {
@@ -1979,7 +2090,7 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
                 App.Data.header.set({
                     page_title: _loc.PROFILE_PAST_ORDERS,
                     back_title: _loc.BACK,
-                    back: this.initialized ? window.history.back.bind(window.history) : this.navigate.bind(this, 'index')
+                    back: this.goToBack.bind(this)
                 });
 
                 content = {
@@ -1989,13 +2100,120 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
                     collection: customer.orders,
                     className: 'profile-orders',
                     cacheId: true
-                }
+                };
             }
 
             return {
                 req: req,
                 content: content
             };
+        },
+        setLoyaltyProgramContent: function() {
+            var customer = App.Data.customer,
+                mainModel = App.Data.mainModel,
+                header = App.Data.header,
+                req = customer.get('rewardCards') && customer.rewardCardsRequest,
+                self = this,
+                rewardCard = null, // changes every time when user change new reward card in view
+                rewardCards,
+                content;
+
+            if (req) {
+                rewardCards = customer.get('rewardCards');
+
+                header.set({
+                    page_title: _loc.PROFILE_LOYALTY_PROGRAM,
+                    back_title: _loc.BACK,
+                    back: this.goToBack.bind(this),
+                    link: linkRewardCard,
+                    link_title: _loc.SAVE,
+                    enableLink: false
+                });
+
+                content = {
+                    modelName: 'Profile',
+                    mod: 'RewardCardsEdition',
+                    model: customer,
+                    collection: rewardCards,
+                    unlinkRewardCard: unlinkRewardCard,
+                    onRewardCardChanged: onRewardCardChanged,
+                    className: 'profile-edit text-center',
+                    cacheId: true
+                };
+
+                // enable header's link once user leaves a current page
+                window.setTimeout(function() {
+                    self.listenTo(customer, 'onLogout', logout);
+                    self.listenToOnce(self, 'route', header.set.bind(header, 'enableLink', true));
+                    self.listenToOnce(self, 'route', self.stopListening.bind(self, customer, 'onLogout', logout));
+                }, 0);
+            }
+
+            return {
+                req: req,
+                content: content
+            };
+
+            function logout() {
+                self.navigate('index', true);
+            }
+
+            // `newRewardCard` is new RewardCard model created in view.
+            function onRewardCardChanged(newRewardCard) {
+                if (newRewardCard.check().status == 'OK') {
+                    header.set('enableLink', true);
+                    rewardCard = newRewardCard.clone();
+                } else {
+                    header.set('enableLink', false);
+                    rewardCard = null;
+                }
+            }
+
+            function unlinkRewardCard(rewardCard) {
+                App.Data.errors.alert(_loc.PROFILE_LOYALTY_NUMBER_REMOVE, false, true, {
+                    isConfirm: true,
+                    callback: function(confirmed) {
+                        if (confirmed) {
+                            var req = customer.unlinkRewardCard(rewardCard);
+                            if (req) {
+                                mainModel.trigger('loadStarted');
+                                req.always(mainModel.trigger.bind(mainModel, 'loadCompleted'));
+                            }
+                        }
+                    }
+                });
+            }
+
+            function linkRewardCard() {
+                if (!rewardCard) {
+                    return;
+                }
+
+                var req = customer.linkRewardCard(rewardCard);
+
+                self.listenToOnce(rewardCard, 'onLinkError', onError);
+
+                if (req) {
+                    mainModel.trigger('loadStarted');
+                    req.done(function(data){
+                        if (data && data.status == 'OK') {
+                            App.Data.myorder.rewardsCard.selectRewardCard(rewardCard);
+                            header.set('enableLink', false);
+                        }
+                    });
+                    req.error(onError);
+                    req.always(mainModel.trigger.bind(mainModel, 'loadCompleted'));
+                    return req;
+                }
+
+                return req;
+
+                function onError(errorMsg) {
+                    if (errorMsg){
+                        App.Data.errors.alert(errorMsg);
+                    }
+                }
+            }
         }
     };
 

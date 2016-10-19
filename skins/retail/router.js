@@ -51,6 +51,7 @@ define(["main_router"], function(main_router) {
             "profile_payments": "profile_payments",
             "past_orders": "past_orders",
             "maintenance": "maintenance",
+            "loyalty_program": "loyalty_program",
             "establishment": "establishment",
             "*other": "index"
         },
@@ -1227,6 +1228,22 @@ define(["main_router"], function(main_router) {
             ];
 
             App.Data.sortItems = new App.Collections.SortItems(sortItems);
+        },
+        loyalty_program: function() {
+            App.Data.header.set('menu_index', null);
+            App.Data.mainModel.set({
+                mod: 'Main',
+                header: headers.main,
+                cart: carts.main
+            });
+
+            var req = this.setLoyaltyProgramContent();
+
+            if (!req || !App.Settings.enable_reward_cards_collecting) {
+                this.navigate('index', true);
+            } else {
+                req.always(this.change_page.bind(this));
+            }
         },
         establishment: function() {
             App.Data.establishments.trigger('loadStoresList');

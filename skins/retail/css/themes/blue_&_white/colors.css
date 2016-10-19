@@ -3,6 +3,9 @@ body,
 .regular-text[class] {
   color: #5F6266;
 }
+.categories-tree .name.active {
+  background: #5F6266;
+}
 /* [alternate_text] primary button text */
 .alternate-text[class],
 .btn,
@@ -19,7 +22,8 @@ body,
 }
 /* [optional_text] optional text (additional info), input label */
 .optional-text[class],
-#alert .icon {
+#alert .icon,
+#popup_content.info::before {
   color: #9B9D9F;
 }
 /* [attention_text] attention text */
@@ -31,7 +35,6 @@ body,
 }
 /* [primary_text] active category, links */
 .primary-text[class],
-.categories-tree .name.active,
 .payment-method.primary-button,
 .payment-method:hover {
   color: #00A3E0;
@@ -80,6 +83,9 @@ body,
 .checkout-page .step-2.active::before,
 .checkout-page .step-3.active::before {
   border-left-color: #FFFFFF;
+}
+.categories-tree .name.active {
+  color: #FFFFFF;
 }
 /* [primary_border] primary border */
 .primary-border[class],

@@ -49,6 +49,7 @@ define(["main_router"], function(main_router) {
             "profile_edit": "profile_edit",
             "profile_payments": "profile_payments",
             "past_orders": "past_orders",
+            "loyalty_program": "loyalty_program",
             "establishment": "establishment",
             "*other": "index"
         },
@@ -815,6 +816,22 @@ define(["main_router"], function(main_router) {
             var req = this.setPastOrdersContent();
 
             if (!req) {
+                this.navigate('index', true);
+            } else {
+                req.always(this.change_page.bind(this));
+            }
+        },
+        loyalty_program: function() {
+            App.Data.header.set('tab_index', null);
+            App.Data.mainModel.set({
+                mod: 'Main',
+                header: headers.main,
+                cart: carts.main
+            });
+
+            var req = this.setLoyaltyProgramContent();
+
+            if (!req || !App.Settings.enable_reward_cards_collecting) {
                 this.navigate('index', true);
             } else {
                 req.always(this.change_page.bind(this));

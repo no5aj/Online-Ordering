@@ -421,11 +421,35 @@
     margin-bottom: 0.1em;
 }
 
+.profile-edit .loyalty-program-info {
+    padding: 1.5em 1.7em;
+}
+
+.profile-edit .loyalty-number-box {
+    display: block;
+    margin: 0 2em;
+}
+
+.profile-edit .new-loyalty-number {
+    margin: 0 -1.8em;
+}
+
+.profile-edit .new-loyalty-number .rewards-input {
+    width: 100%;
+}
+
+.profile-edit .new-loyalty-number .captcha_container {
+    display: inline-block;
+    margin-top: 2em;
+}
+
 .profile-separator {
     position: relative;
-    height: 2px;
+    height: 0;
     margin: 1.4rem;
     font-size: 0;
+    border-width: 1px;
+    border-style: solid;
 }
 
 .profile-separator span {

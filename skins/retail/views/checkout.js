@@ -38,7 +38,7 @@ define(["checkout_view"], function(checkout_view) {
             '.order-notes': 'toggle: _system_settings_order_notes_allow',
             '.notes': 'value: checkout_notes, events: ["input"]',
             '.payment-methods-box': 'updateContent: paymentMethodsView, classes: {hide: not(hasGrandTotal(total_grandTotal))}',
-            '.choose-cc-box': 'updateContent: chooseCreditCardView, classes: {hide: any(not(equal(paymentMethods_selected, "credit_card_button")), not(length($tokens)), not(hasGrandTotal(total_grandTotal))), "inline-block": not(paymentMethods_credit_card_dialog)}',            
+            '.choose-cc-box': 'updateContent: chooseCreditCardView, classes: {hide: any(not(equal(paymentMethods_selected, "credit_card_button")), not(length($tokens)), not(hasGrandTotal(total_grandTotal))), "inline-block": not(paymentMethods_credit_card_dialog)}',
             '.cc-box': 'updateContent: creditCardView, classes: {hide: any(not(equal(paymentMethods_selected, "credit_card_button")), select(length($tokens), token_selected, false), not(hasGrandTotal(total_grandTotal))), "inline-block": not(paymentMethods_credit_card_dialog)}',
             '.billing-address-box': 'updateContent: billingAddressView, classes: {hide: any(not(equal(paymentMethods_selected, "credit_card_button")), select(length($tokens), token_selected, false), not(hasGrandTotal(total_grandTotal)))}',
             '.choose-gift-card-box': 'updateContent: chooseGiftCardView, classes: {hide: any(not(equal(paymentMethods_selected, "gift_card")), not(length($giftCards)), not(hasGrandTotal(total_grandTotal)))}',

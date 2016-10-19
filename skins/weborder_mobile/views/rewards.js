@@ -23,21 +23,12 @@
  define(["rewards_view"], function(rewards_view) {
     'use strict';
 
-    var CoreRewardsInfoView = App.Views.RewardsView.RewardsInfoView,
-        RewardsInfoView;
-
-    RewardsInfoView = CoreRewardsInfoView.extend({
-        bindings: _.extend(CoreRewardsInfoView.prototype.bindings, {
-            '.info': 'toggle: length(rewards)',
-            '.rewards-available': 'classes: {"no-bottom-padding": length(rewards)}'
-        }),
-        initialize: function() {
-            CoreRewardsInfoView.prototype.initialize.apply(this, arguments);
-            this.listenTo(this.model, 'beforeRedemptionApplied', this.setOriginalRedemptionCode, this);
+    var RewardsInfoView = App.Views.RewardsView.RewardsInfoView.extend({
+        events: {
+            'click .skip': 'skip'
         },
-        removeFromDOMTree: function() {
-            this.model.set('redemption_code', this.originalRedemptionCode);
-            CoreRewardsInfoView.prototype.removeFromDOMTree.apply(this, arguments);
+        skip: function() {
+            typeof this.options.skip == 'function' &&  this.options.skip();
         }
     });
 

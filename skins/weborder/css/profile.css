@@ -414,6 +414,53 @@
     width: 100%;
 }
 
+.profile-edit .add-loyalty-number::before {
+    content: '\f055';
+    font-family: 'FontAwesome';
+    font-size: 18px;
+}
+
+.profile-edit .remove-loyalty-number::before {
+    content: '\f057';
+    font-family: 'FontAwesome';
+    font-size: 18px;
+}
+
+.profile-edit .save-loyalty-number {
+    text-transform: none;
+}
+
+.profile-edit .new-loyalty-number .rewards-input {
+    width: 270px;
+    position: absolute;
+    top: 96px;
+    left: 10px;
+}
+
+.profile-edit .new-loyalty-number .captcha_container {
+    padding-left: 0;
+}
+
+.profile-edit .card-box .logo {
+    width: 50px;
+    height: 50px;
+    margin-left: -25px;
+    height: 50px;
+    position: absolute;
+    top: 28px;
+    left: 50%;
+    background-size: 100%;
+    background-position: 50% 0;
+    background-repeat: no-repeat;
+}
+
+.profile-edit .card-box .card-number {
+    display: inline-block;
+    padding-top: 96px;
+    font-size: 28px;
+    letter-spacing: 0.4px;
+}
+
 .profile-orders .orders {
     padding: 0 25px;
 }

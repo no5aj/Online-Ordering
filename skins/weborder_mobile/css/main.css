@@ -436,6 +436,35 @@ select::-ms-expand { /*Removes default IE style*/
     background: transparent !important;
 }
 
+.input.checkbox {
+    vertical-align: middle;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    border-radius: 0.2em;
+    border-width: 1px;
+    border-style: solid;
+    text-align: center;
+    line-height: 0.9em;
+    margin-right: 0.3em;
+}
+
+.input.checkbox[checked]::before,
+.input.checkbox.checked::before {
+    content: '\f00c';
+    font-family: 'FontAwesome';
+    font-size: 0.8em;
+}
+
+.input.checkbox::before {
+    display: none;
+}
+
+.input.checkbox[checked]::before,
+.input.checkbox.checked::before {
+    display: inline-block;
+}
+
 .required {
     position: relative;
 }

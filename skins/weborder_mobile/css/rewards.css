@@ -42,9 +42,6 @@
 }
 
 .reward-selection__item {
-    border-width: 1px;
-    border-style: solid;
-    padding: 2em 0.2em;
     margin: 2em 0;
     position: relative;
 }
@@ -57,6 +54,10 @@
     top: .2em;
     right: .4em;
     font-size: 3.5em;
+}
+
+.reward-selection__item > * {
+    vertical-align: middle;
 }
 
 .reward__redemption {
@@ -74,4 +75,64 @@
 
 .rewards-info .quantity {
     border: none;
+}
+
+.rewards-info .rewards-info-header {
+    margin: 0 -1.8em;
+    padding: 2em 1.8em;
+}
+
+.rewards-info .rewards-info-title {
+    font-weight: normal;
+    padding-bottom: 0.33em;
+}
+
+.rewards-info .rewards-info-points {
+    padding: 2em 0;
+}
+
+.rewards-info .rewards-info-points .rewards-total {
+    width: 13em;
+    margin: 0;
+}
+
+.rewards-info .rewards-total .total-row {
+    margin-bottom: 0.5em;
+}
+
+.rewards-info .rewards-box {
+    position: absolute;
+    top: 27em;
+    bottom: 10em;
+    left: 1.8em;
+    right: 1.8em;
+    overflow: auto;
+}
+
+.rewards-info .rewards-box .rewards-unavailable {
+    padding-top: 3em;
+}
+
+.rewards-info .skip-box {
+    padding: 3em;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.rewards-info .skip {
+    text-decoration: underline;
+}
+
+.rewards-info .list-title {
+    border-top-width: 1px;
+    border-top-style: solid;
+    font-weight: normal;
+    letter-spacing: 0.5px;
+}
+
+.rewards-info .points.selected::before {
+    content: '−';
+    padding-right: 5px;
 }

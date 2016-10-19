@@ -213,6 +213,7 @@
         'PAST_ORDERS_QUANTITY_TITLE': 'Quantity',
         'PAST_ORDERS_TOTAL_TITLE': 'Total',
         'VIEW_PAST_ORDERS': 'View Past Orders',
-        'PAST_ORDER': 'Past Order'
+        'PAST_ORDER': 'Past Order',
+        'PROFILE_LOYALTY_NUMBER': 'Loyalty Number'
     } // end of locale
 }); // end of module

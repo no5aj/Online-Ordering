@@ -162,7 +162,6 @@ define(['backbone', 'factory'], function(Backbone) {
         },
         updateAddress: function() {
             var customer = this.options.customer,
-                shipping_address = customer.get('shipping_address'),
                 addresses = customer.get('addresses'),
                 model = this.model.toJSON(),
                 updatedAddressObj,
@@ -174,7 +173,7 @@ define(['backbone', 'factory'], function(Backbone) {
                 return;
             }
 
-            // if shipping_address isn't selected
+            // if address isn't initialized (TBD: bad place for init, remove to model/collection)
             if (!selectedAddress) {
                 var dining_option = this.options.checkout.get('dining_option');
                 selectedAddress = addresses.get(dining_option);
@@ -195,7 +194,6 @@ define(['backbone', 'factory'], function(Backbone) {
                 country: model.country
             };
             updatedAddressObj.address = selectedAddress.toString(updatedAddressObj);
-
             selectedAddress.set(updatedAddressObj);
         }
     });
@@ -248,6 +246,7 @@ define(['backbone', 'factory'], function(Backbone) {
                         var address = addr.toJSON();
                         return addr.isProfileAddress() && address.street_1 && address.city && address.country && address.zipcode
                             && (checkout_dining_option == 'DINING_OPTION_DELIVERY' ? address.country == App.Settings.address.country : true)
+                            && (checkout_dining_option == 'DINING_OPTION_CATERING' ? address.country == App.Settings.address.country : true)
                             && (address.country == 'US' ? address.state : true) && (address.country == 'CA' ? address.province : true);
                     }).length;
                 }
@@ -438,7 +437,7 @@ define(['backbone', 'factory'], function(Backbone) {
                         return address && address.street_1 && address.city && address.country && address.zipcode
                             && (dining_option == 'DINING_OPTION_DELIVERY' ? address.country == App.Settings.address.country : true)
                             && (address.country == 'US' ? address.state : true) && (address.country == 'CA' ? address.province : true)
-                            ? {label: address.street_1, value: address.id} : undefined;
+                            ? {label: address.address, value: address.id} : undefined;
                     }
                     else {
                         return undefined;
@@ -451,6 +450,7 @@ define(['backbone', 'factory'], function(Backbone) {
                 optionsStr = _.reduce(options, function(memo, option) {
                     return memo + '<option value="' + option.value + '">' + option.label + '</option>';
                 }, '');
+
                 optionsStr += '<option value="-1">' + _loc.ENTER_NEW_ADDRESS + '</option>';
 
                 this.$('#addresses').html(optionsStr);

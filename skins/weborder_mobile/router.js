@@ -79,6 +79,7 @@ define(["main_router"], function(main_router) {
             "promotion/:id_promotion": "promotion_details",
             "profile_payments": "profile_payments",
             "past_orders": "past_orders",
+            "loyalty_program": "loyalty_program",
             "establishment": "establishment",
             "*other": "index"
         },
@@ -1854,10 +1855,9 @@ define(["main_router"], function(main_router) {
             });
 
             App.Data.footer.set({
-                btn_title: _loc.CHECKOUT_APPLY,
+                btn_title: _loc.REWARDS_APPLY,
                 action: function() {
                     rewardsCard.update(clone);
-                    rewardsCard.trigger('beforeRedemptionApplied');
                     rewardsCard.trigger('onRedemptionApplied');
                 }
             });
@@ -1869,10 +1869,11 @@ define(["main_router"], function(main_router) {
                         modelName: 'Rewards',
                         mod: 'Info',
                         model: clone,
-                        className: 'rewards-info',
+                        className: 'rewards-info regular-text',
                         balance: clone.get('balance'),
                         rewards: clone.get('rewards'),
-                        discounts: clone.get('discounts')
+                        discounts: clone.get('discounts'),
+                        skip: this.goToBack.bind(this)
                     }]
                 });
 
@@ -2212,7 +2213,22 @@ define(["main_router"], function(main_router) {
                 });
                 data.req.always(this.change_page.bind(this));
             });
+        },
+        loyalty_program: function() {
+            var data = this.setLoyaltyProgramContent();
 
+            if (!data.req || !App.Settings.enable_reward_cards_collecting) {
+                return this.navigate('index', true);
+            }
+
+            App.Data.mainModel.set({
+                header: headerModes.Modifiers,
+                footer: footerModes.None,
+                contentClass: 'primary-bg',
+                content: data.content
+            });
+
+            data.req.always(this.change_page.bind(this));
         },
         showIsStudentQuestion: function(cancelCb) {
             var self = this,

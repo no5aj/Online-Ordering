@@ -215,7 +215,8 @@ define(["factory"], function() {
             '.logout-link': 'toggle: access_token',
             '.logged-as': 'toggle: access_token, html: loggedAs(first_name)',
             '.private-btn': 'classes: {"primary-text": access_token, "regular-text": not(access_token), disabled: not(access_token)}',
-            '.payments-link': 'toggle: any(_settings_directory_saved_credit_cards, _settings_directory_saved_gift_cards)'
+            '.payments-link': 'toggle: any(_settings_directory_saved_credit_cards, _settings_directory_saved_gift_cards)',
+            '.loyalty-program': 'toggle: _system_settings_enable_reward_cards_collecting'
         },
         bindingFilters: {
             loggedAs: function(username) {
@@ -229,6 +230,7 @@ define(["factory"], function() {
             'click .payments-link:not(.disabled)': setCallback('payments_link'),
             'click .profile-link:not(.disabled)': setCallback('profile_link'),
             'click .past-orders:not(.disabled)': setCallback('orders_link'),
+            'click .loyalty-program:not(.disabled)': setCallback('loyalty_link'),
             'click .close': setCallback('close_link')
         },
         onEnterListeners: {
@@ -237,7 +239,8 @@ define(["factory"], function() {
             '.settings-link:not(.disabled)': setCallback('settings_link'),
             '.payments-link:not(.disabled)': setCallback('payments_link'),
             '.profile-link:not(.disabled)': setCallback('profile_link'),
-            '.past-orders:not(.disabled)': setCallback('orders_link')
+            '.past-orders:not(.disabled)': setCallback('orders_link'),
+            '.loyalty-program:not(.disabled)': setCallback('loyalty_link')
         }
     });
 
@@ -373,7 +376,7 @@ define(["factory"], function() {
             App.Data.errors.alert(
                 _loc.PROFILE_ADDRESS_DELETE,
                 false,
-                false,
+                true,
                 {
                     isConfirm: true,
                     callback: function(confirmed) {
@@ -984,67 +987,89 @@ App.Views.CoreProfileView.CoreProfileAddressCreateView = App.Views.FactoryView.e
     App.Views.CoreProfileView.CoreProfileRewardCardEditionView = App.Views.FactoryView.extend({
         name: 'profile',
         mod: 'reward_card_edition',
-        tagName: 'li',
         bindings: {
-            '.card-number': 'text: number'
+            '.card-number': 'text: number',
+            '.logo': 'attr: {style: showLogo(_system_settings_logo_img)}'
         },
-        events: {
-            'click .remove-btn': 'unlinkRewardCard',
-        },
-        unlinkRewardCard: function() {
-            this.options.collectionView.options.unlinkRewardCard(this.model);
+        bindingFilters: {
+            showLogo: function(url) {
+                if (typeof url != 'string') {
+                    return '';
+                }
+                return 'background-image: url(%s);'.replace('%s', url);
+            }
         }
     });
 
     App.Views.CoreProfileView.CoreProfileRewardCardsEditionView = App.Views.FactoryView.extend({
         name: 'profile',
         mod: 'reward_cards_edition',
-        initialize: function() {
-            var self = this;
-            App.Views.FactoryView.prototype.initialize.apply(this, arguments);
-            this.listenTo(this.options.newCard, "change:captchaValue change:number", function() {
-                self.options.customer.trigger('change_cards', this.options.newCard.check());
-            });
-
-            this.listenTo(this.options.customer.get('rewardCards'), "add remove reset", function() {
-                self.options.customer.trigger('change:rewardCards');
-            });
-        },
         events: {
-            'click .add_reward_card_title': 'hide_show_NewRewardCard'
+            'click .add-loyalty-number': 'showNewLoyaltyNumber',
+            'click .remove-loyalty-number': 'unlinkRewardCard',
+            'click .save-loyalty-number': 'linkRewardCard'
+        },
+        onEnterListeners: {
+            '.add-loyalty-number': 'showNewLoyaltyNumber',
+            '.remove-loyalty-number': 'unlinkRewardCard',
+            '.save-loyalty-number': 'linkRewardCard'
         },
         bindings: {
             '.reward-cards-list': 'collection: $collection',
-            '.add_reward_card_title': 'toggle:add_reward_card_link',
-            '.add_reward_card_title .plus_sign': 'text:select(newCard_add_new_card,"- ","+ ")',
-            '.new_reward_card': "toggle:newCard_add_new_card"
+            '.add-loyalty-number': 'toggle: all(not(length($collection)), not(ui_showNewLoyaltyNumber))',
+            '.remove-loyalty-number': 'toggle: all(length($collection), not(ui_showNewLoyaltyNumber))',
+            '.save-loyalty-number': 'toggle: all(not(length($collection)), ui_showNewLoyaltyNumber), classes: {disabled: any(not(newRewardCard_number), not(newRewardCard_captchaValue))}',
+            '.new-loyalty-number': "updateContent: newRewardCardView, toggle: ui_showNewLoyaltyNumber"
+        },
+        bindingSources: {
+            newRewardCard: function() {
+                return new App.Models.RewardsCard();
+            },
+            ui: function() {
+                return new Backbone.Model({showNewLoyaltyNumber: false});
+            }
         },
         computeds: {
-            add_reward_card_link: function() {
-                return this.getBinding('customer_rewardCards').length == 0;
+            newRewardCardView: {
+                deps: ['$newRewardCard'],
+                get: function(newRewardCard) {
+                    if (newRewardCard) {
+                        return {
+                            name: 'Rewards',
+                            mod: 'CardProfile',
+                            el: this.$('.new-loyalty-number'),
+                            model: newRewardCard,
+                            customer: this.model,
+                            viewId: 'newLoyaltyNumber'
+                        }
+                    }
+                }
             }
         },
         itemView: App.Views.CoreProfileView.CoreProfileRewardCardEditionView,
-        hide_show_NewRewardCard: function() {
-            var card = this.options.newCard,
-                cur_add_new_card = !card.get('add_new_card');
-
-            card.set('add_new_card', cur_add_new_card);
-
-            if (cur_add_new_card) {
-                if (!this.newCardView) {
-                  this.newCardView = App.Views.GeneratorView.create('Rewards', {
-                    el: this.$('.new_reward_card'),
-                    model: this.options.newCard,
-                    mod: 'CardProfile',
-                    customer: this.options.customer,
-                    cacheId: true });
-                }
-                this.options.customer.trigger('change_cards', this.options.newCard.check());
+        showNewLoyaltyNumber: function() {
+            this.setBinding('ui_showNewLoyaltyNumber', true);
+        },
+        unlinkRewardCard: function() {
+            if (this.collection.length) {
+                this.options.unlinkRewardCard(this.collection.at(0));
+            }
+        },
+        linkRewardCard: function() {
+            var newRewardCard = this.getBinding('$newRewardCard'),
+                req = this.options.linkRewardCard(newRewardCard.clone()),
+                ui = this.getBinding('$ui');
+            if (req) {
+                req.done(function(data) {
+                    if (data && data.status == 'OK') {
+                        newRewardCard.set({number: ''});
+                        ui.set({showNewLoyaltyNumber: false});
+                    }
+                });
+                req.always(newRewardCard.trigger.bind(newRewardCard, 'updateCaptcha'));
             }
         }
     });
-
 
     App.Views.CoreProfileView.CoreProfilePaymentsView = App.Views.FactoryView.extend({
         name: 'profile',
@@ -1071,10 +1096,9 @@ App.Views.CoreProfileView.CoreProfileAddressCreateView = App.Views.FactoryView.e
                         collection = this.model.payments,
                         primaryPaymentsModel = collection ? collection.getPrimaryPayment() : undefined;
                     var ret1 = primaryPaymentsModel ? primaryPaymentsModel.checkAttributesDiff() : {status: 'ERROR'},
-                        ret2 = this.newGiftCard ? this.newGiftCard.check() : {status: 'ERROR'},
-                        ret3 = this.newRewardCard ? this.newRewardCard.check() : {status: 'ERROR'};
+                        ret2 = this.newGiftCard ? this.newGiftCard.check() : {status: 'ERROR'};
 
-                    return !(ret1.status == 'OK' || ret2.status == 'OK' || ret3.status == 'OK');
+                    return !(ret1.status == 'OK' || ret2.status == 'OK');
                 }
             }
         },
@@ -1113,23 +1137,11 @@ App.Views.CoreProfileView.CoreProfileAddressCreateView = App.Views.FactoryView.e
                 this.subViews.push(giftCardsEdition);
             }
 
-            if (this.model.get('rewardCards')) {
-                this.newRewardCard = new App.Models.RewardsCard({add_new_card: false});
-                var rewardCardsEdition = App.Views.GeneratorView.create('Profile', {
-                    el: this.$('.reward-cards-box'),
-                    mod: 'RewardCardsEdition',
-                    collection: this.model.get('rewardCards'),
-                    unlinkRewardCard: this.options.unlinkRewardCard,
-                    newCard: this.newRewardCard,
-                    customer: this.options.model
-                });
-                this.subViews.push(rewardCardsEdition);
-            }
             return this;
         },
         onUpdate: function() {
             // Saving Gift Cards data
-            var clone, req, reqRewards, self = this;
+            var clone, req, self = this;
             this.resetUpdateStatus();
             if (this.newGiftCard.get('cardNumber')) {
                 clone = this.newGiftCard.clone();
@@ -1143,17 +1155,6 @@ App.Views.CoreProfileView.CoreProfileAddressCreateView = App.Views.FactoryView.e
 
             // Saving Credit Cards data
             this.saveCreditCard();
-
-            // Saving Reward Cards data
-            if (this.newRewardCard.get('number')) {
-                clone = this.newRewardCard.clone();
-                reqRewards = this.saveRewardCard(clone);
-                if (reqRewards) {
-                    reqRewards.always(function(){
-                        self.newRewardCard.trigger("onResetData");
-                    });
-                }
-            }
         },
         saveCreditCard: function()
         {
@@ -1195,34 +1196,6 @@ App.Views.CoreProfileView.CoreProfileAddressCreateView = App.Views.FactoryView.e
 
                 }).always(mainModel.trigger.bind(mainModel, 'loadCompleted'));
                 return req;
-            }
-        },
-        saveRewardCard: function(rewardcard) {
-            var self = this,
-                mainModel = App.Data.mainModel,
-                req = this.model.linkRewardCard(rewardcard);
-            this.listenTo(rewardcard, 'onLinkError', onError);
-            if (req) {
-                this.incrementUpdateCounter();
-                mainModel.trigger('loadStarted');
-                req.done(function(data){
-                    if (data && data.status == 'OK') {
-                        self.checkUpdateStatus();
-                        self.options.myorder.rewardsCard.selectRewardCard(rewardcard);
-                        self.newRewardCard.set({ add_new_card: false, number: ''});
-                        self.newRewardCard.trigger('updateCaptcha');
-                    }
-
-                }).error(function(){
-                    onError();
-                }).always(mainModel.trigger.bind(mainModel, 'loadCompleted'));
-                return req;
-            }
-
-            function onError(errorMsg) {
-                if (errorMsg){
-                    App.Data.errors.alert(errorMsg);
-                }
             }
         },
         checkUpdateStatus: function() {

@@ -87,6 +87,7 @@
 <script type="text/template" id="profile_menu-template">
     <ul class="profile-items regular-text">
         <li class="profile-link profile-item" tabindex="0"><%= _lp.PROFILE_EDIT_TITLE %></li>
+        <li class="loyalty-program profile-item"><%= _lp.PROFILE_LOYALTY_PROGRAM %></li>
         <li class="payments-link profile-item" tabindex="0"><%= _lp.PAYMENT_METHODS %></li>
         <li class="past-orders profile-item" tabindex="0"><%= _lp.PROFILE_PAST_ORDERS %></li>
         <li class="logout-link profile-item" tabindex="0"><%= _lp.PROFILE_LOG_OUT %></li>
@@ -268,8 +269,6 @@
         <div class="col-right border-box fl-left">
             <h3 class="header-underline"><%= _lp.GIFT_CARDS %></h3>
             <div class="gift-cards-box"></div>
-            <h3 class="header-underline rewards-title"><%= _lp.REWARD_CARDS %></h3>
-            <div class="reward-cards-box"></div>
         </div>
     </div>
     <div class="update-btn btn text-center"><%= _lp.UPDATE %></div>
@@ -343,19 +342,33 @@
 </script>
 
 <script type="text/template" id="profile_reward_card_edition-template">
-    <span class="card-number"></span>
-    <div class="remove-btn cancel fl-right link"></div>
+    <div class="card-box card-gradient-bg primary-border text-center">
+        <div class="logo"></div>
+        <span class="card-number primary-text"></span>
+    </div>
 </script>
 
 <script type="text/template" id="profile_reward_cards_edition-template">
-    <ul class="reward-cards-list"></ul>
-    <div class="add_reward_card_title new-card primary-text link"><span class="plus_sign"></span><%= _lp.PROFILE_ADD_NEW_REWARD_CARD %></div>
-    <div class="new_reward_card"></div>
+    <h2 class="category-title primary-border category-bg"><%= _lp.PROFILE_LOYALTY_PROGRAM %></h2>
+    <div class="cols">
+        <div class="col-left border-box fl-left">
+            <h3 class="header-underline">
+                <%= _lp.PROFILE_LOYALTY_NUMBER %>
+                <span class="add-loyalty-number primary-text link fl-right" tabindex="0"></span>
+                <span class="remove-loyalty-number primary-text link fl-right" tabindex="0"></span>
+                <span class="save-loyalty-number primary-text link fl-right" tabindex="0"><%= _lp.SAVE %></span>
+            </h3>
+            <div class="new-loyalty-number"></div>
+            <div class="reward-cards-list"></div>
+        </div>
+    </div>
 </script>
 
 <script type="text/template" id="profile_rewardcard-template">
-    <div class="label required optional-text"><%= _lp.GIFTCARD_NUMBER %></div>
-    <input type="text" class="number number-input rewards-input input">
+    <div class="card-box card-gradient-bg primary-border">
+        <div class="logo"></div>
+        <input type="text" class="number number-input rewards-input input">
+    </div>
     <div class="recaptcha_view"></div>
 </script>
 
