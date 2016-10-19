@@ -921,7 +921,7 @@ define(["main_router"], function(main_router) {
             App.Data.header.set({
                 page_title: _loc.HEADER_MYORDER_PT,
                 back_title: _loc.MENU,
-                back: this.navigate.bind(this, 'index', true),
+                back: this.navigate.bind(this, 'index', true)
             });
 
             this.prepare('cart', function() {
@@ -975,7 +975,7 @@ define(["main_router"], function(main_router) {
         order: function(order_id) {
             order_id = Number(order_id);
 
-            if (order_id === 0) {
+            if (!order_id) {
                 this.navigate('index', true);
             }
 
@@ -993,7 +993,7 @@ define(["main_router"], function(main_router) {
                 orderModel = new App.Models.Order();
 
             if (order_id > 0) {
-                var orderReq = get_order();
+                var orderReq = check_order();
             }
 
             this.prepare('order', function() {
@@ -1053,27 +1053,61 @@ define(["main_router"], function(main_router) {
 
             function get_order() {
                 var dfd = Backbone.$.Deferred(),
+                    orders = customer.orders,
+                    order = orders.get(order_id),
                     errors = App.Data.errors,
-                    orderReq;
+                    req;
+
+                if (!order) {
+                    req = customer.getOrder(order_id);
+
+                    req.done(function() {
+                        order = orders.get(order_id);
+                        dfd.resolve(order);
+                    });
+
+                    req.fail(function() {
+                        dfd.reject();
+                    });
+                }
+                else {
+                    dfd.resolve(order);
+                }
+
+                return dfd;
+            }
+
+            function update_data(order) {
+                orderModel.set(order.attributes);
+                order.get('items').each(function(orderItem) {
+                    orderCollection.add(orderItem);
+                });
+            }
+
+            function check_order() {
+                var dfd = Backbone.$.Deferred(),
+                    errors = App.Data.errors;
 
                 if (customer.isAuthorized()) {
                     var ordersReq = customer.ordersRequest;
 
                     ordersReq.done(function() {
-                        var order = customer.orders.get(order_id);
-                        if (!order) {
+                        var orderReq = get_order();
+
+                        orderReq.done(function(order) {
+                            var itemsReq = customer.getOrderItems(order);
+
+                            itemsReq.done(function() {
+                                update_data(order);
+                            });
+
+                            itemsReq.always(dfd.resolve.bind(dfd));
+                        });
+
+                        orderReq.fail(function() {
                             errors.alert(_loc.PROFILE_ORDER_NOT_FOUND.replace(/%s/, order_id));
                             return dfd.reject();
-                        }
-
-                        var itemsReq = customer.getOrderItems(order);
-                        itemsReq.done(function() {
-                            orderModel.set(order.attributes);
-                            order.get('items').each(function(orderItem) {
-                                orderCollection.add(orderItem);
-                            });
                         });
-                        itemsReq.always(dfd.resolve.bind(dfd));
                     });
 
                     ordersReq.fail(dfd.reject.bind(dfd));
