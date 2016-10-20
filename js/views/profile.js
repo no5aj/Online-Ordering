@@ -1001,6 +1001,16 @@ App.Views.CoreProfileView.CoreProfileAddressCreateView = App.Views.FactoryView.e
         }
     });
 
+    App.Views.CoreProfileView.CoreProfileRewardCardBalanceView = App.Views.FactoryView.extend({
+        name: 'profile',
+        mod: 'reward_card_balance',
+        bindings: {
+            '.purchase-points': 'text: currencyFormat(balance_purchases)',
+            '.item-points': 'text: balance_points',
+            '.visit-points': 'text: balance_visits'
+        }
+    });
+
     App.Views.CoreProfileView.CoreProfileRewardCardsEditionView = App.Views.FactoryView.extend({
         name: 'profile',
         mod: 'reward_cards_edition',
@@ -1046,7 +1056,12 @@ App.Views.CoreProfileView.CoreProfileAddressCreateView = App.Views.FactoryView.e
                 }
             }
         },
-        itemView: App.Views.CoreProfileView.CoreProfileRewardCardEditionView,
+        itemView: function(opts) {
+            return App.Views.GeneratorView.create('Profile', _.extend(opts, {
+                mod: 'RewardCardEdition',
+                balance: opts.model.get('balance')
+            }));
+        },
         showNewLoyaltyNumber: function() {
             this.setBinding('ui_showNewLoyaltyNumber', true);
         },
@@ -1427,11 +1442,13 @@ App.Views.CoreProfileView.CoreProfileAddressCreateView = App.Views.FactoryView.e
         App.Views.ProfileView.ProfileGiftCardsEditionView = App.Views.CoreProfileView.CoreProfileGiftCardsEditionView;
         App.Views.ProfileView.ProfileRewardCardSelectionView = App.Views.CoreProfileView.CoreProfileRewardCardSelectionView;
         App.Views.ProfileView.ProfileRewardCardsSelectionView = App.Views.CoreProfileView.CoreProfileRewardCardsSelectionView;
+        App.Views.ProfileView.ProfileRewardCardEditionView = App.Views.CoreProfileView.CoreProfileRewardCardEditionView;
         App.Views.ProfileView.ProfileRewardCardsEditionView = App.Views.CoreProfileView.CoreProfileRewardCardsEditionView;
         App.Views.ProfileView.ProfilePaymentCVVView = App.Views.CoreProfileView.CoreProfilePaymentCVVView;
         App.Views.ProfileView.ProfileTermsOfUseView = App.Views.CoreProfileView.CoreProfileTermsOfUseView;
         App.Views.ProfileView.ProfileOrderItemView = App.Views.CoreProfileView.CoreProfileOrderItemView;
         App.Views.ProfileView.ProfileOrdersItemView = App.Views.CoreProfileView.CoreProfileOrdersItemView;
         App.Views.ProfileView.ProfileOrdersView = App.Views.CoreProfileView.CoreProfileOrdersView;
+        App.Views.ProfileView.ProfileRewardCardBalanceView = App.Views.CoreProfileView.CoreProfileRewardCardBalanceView;
     });
 });

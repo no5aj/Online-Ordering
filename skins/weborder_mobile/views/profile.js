@@ -156,7 +156,8 @@ define(["profile_view", "giftcard_view", "myorder_view"], function(profile_view)
 
     var ProfileRewardCardEditionView = App.Views.CoreProfileView.CoreProfileRewardCardEditionView.extend({
         bindings: {
-            '.card-number': 'value: number'
+            '.card-number': 'value: number',
+            '.balance-info': 'text: format(_lp_REWARDS_BALANCE_INFO, balance_points, balance_visits, _system_settings_currency_symbol, balance_purchases)'
         },
         events: {
             'click .ctrl': 'unlink'
@@ -168,9 +169,8 @@ define(["profile_view", "giftcard_view", "myorder_view"], function(profile_view)
 
     var ProfileRewardCardsEditionView = App.Views.CoreProfileView.CoreProfileRewardCardsEditionView.extend({
         bindings: {
-            '.new-loyalty-number': 'updateContent: newRewardCardView, toggle: not(length($collection))',
+            '.new-loyalty-number': 'updateContent: newRewardCardView, toggle: not(length($collection))'
         },
-        itemView: ProfileRewardCardEditionView,
         initialize: function() {
             App.Views.CoreProfileView.CoreProfileRewardCardsEditionView.prototype.initialize.apply(this, arguments);
             var newRewardCard = this.getBinding('$newRewardCard');
@@ -329,6 +329,7 @@ define(["profile_view", "giftcard_view", "myorder_view"], function(profile_view)
         App.Views.ProfileView.ProfileRewardCardSelectionView = ProfileRewardCardSelectionView;
         App.Views.ProfileView.ProfileRewardCardsSelectionView = ProfileRewardCardsSelectionView;
         App.Views.ProfileView.ProfileRewardCardsEditionView = ProfileRewardCardsEditionView;
+        App.Views.ProfileView.ProfileRewardCardEditionView = ProfileRewardCardEditionView;
         App.Views.ProfileView.ProfileOrdersItemView = ProfileOrdersItemView;
         App.Views.ProfileView.ProfileOrderItemView = ProfileOrderItemView;
         App.Views.ProfileView.ProfileOrderItemComboView = ProfileOrderItemComboView;

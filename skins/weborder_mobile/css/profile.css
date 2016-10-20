@@ -246,6 +246,12 @@
     white-space: nowrap;
 }
 
+.reward-cards-list .balance-info {
+    margin-top: 0.5em;
+    padding: 1em;
+    font-size: 2.5em;
+}
+
 .payment-item.selected::after  {
     content: '\f00c';
     font-family: "FontAwesome";

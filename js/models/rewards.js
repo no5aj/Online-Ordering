@@ -557,6 +557,7 @@ define(['backbone', 'captcha'], function(Backbone) {
 
                     switch(data.status) {
                         case "OK":
+                            self.updateBalance(data.data.balances);
                             break;
                         default:
                             self.trigger('onLinkError', data.errorMsg || 'Reward Card error');

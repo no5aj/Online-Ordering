@@ -308,6 +308,7 @@
 .profile-edit .select-wrapper[class] select,
 .profile-edit .new_gift_card,
 .profile-edit .reward-cards-list,
+.profile-edit .reward-card-balance,
 .profile-edit .new_reward_card,
 .profile-edit .gift-cards-list {
     max-width: 300px;
@@ -396,7 +397,8 @@
 }
 
 .profile-edit .reward-cards-list > li,
-.profile-edit .gift-cards-list > li {
+.profile-edit .gift-cards-list > li,
+.profile-edit .reward-card-balance > li {
     margin: 13px 0;
 }
 
@@ -459,6 +461,21 @@
     padding-top: 96px;
     font-size: 28px;
     letter-spacing: 0.4px;
+}
+
+.profile-edit .balance-info-wrap {
+    margin-top: 22px;
+}
+
+.profile-edit .balance-info-wrap li.balance-info {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.profile-edit .balance-info-wrap .item-value {
+    padding: 5px;
+    font-size: 18px;
 }
 
 .profile-orders .orders {

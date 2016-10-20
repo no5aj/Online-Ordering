@@ -271,6 +271,18 @@ define(["profile_view"], function(profile_view) {
         return _loc.CREDIT_CARD_TYPES[code];
     }
 
+    var ProfileRewardCardsEditionView = App.Views.CoreProfileView.CoreProfileRewardCardsEditionView.extend({
+        bindings: {
+            '.reward-card-balance': 'collection: $collection, itemView: "itemViewBalance"',
+        },
+        itemViewBalance: function(opts) {
+            return App.Views.GeneratorView.create('Profile', _.extend(opts, {
+                mod: 'RewardCardBalance',
+                balance: opts.model.get('balance')
+            }));
+        }
+    });
+
     return new (require('factory'))(profile_view.initViews.bind(profile_view), function() {
         App.Views.ProfileView.ProfilePaymentsSelectionView = ProfilePaymentsSelectionView;
         App.Views.ProfileView.ProfileGiftCardsSelectionView = ProfileGiftCardsSelectionView;
@@ -280,5 +292,6 @@ define(["profile_view"], function(profile_view) {
         App.Views.ProfileView.ProfileOrdersView = ProfileOrdersView;
         App.Views.ProfileView.ProfileOrderItemView = ProfileOrderItemView;
         App.Views.ProfileView.ProfilePastOrderView = ProfilePastOrderView;
+        App.Views.ProfileView.ProfileRewardCardsEditionView = ProfileRewardCardsEditionView;
     });
 });

@@ -348,6 +348,28 @@
     </div>
 </script>
 
+<script type="text/template" id="profile_reward_card_balance-template">
+    <h3 class="header-underline">
+        <%= _lp.REWARDS_BALANCE_HEADER %>
+    </h3>
+    <div class="reward-card-info">
+        <ul class="balance-info-wrap">
+            <li class="balance-info">
+                <span class="item-descr"><%= _lp.REWARDS_BALANCE_PURCHASE_POINTS %></span>
+                <span class="item-value purchase-points"></span>
+            </li>
+            <li class="balance-info">
+                <span class="item-descr"><%= _lp.REWARDS_BALANCE_ITEM_POINTS %></span>
+                <span class="item-value item-points"></span>
+            </li>
+            <li class="balance-info">
+                <span class="item-descr"><%= _lp.REWARDS_BALANCE_VISIT_POINTS %></span>
+                <span class="item-value visit-points"></span>
+            </li>
+        </ul>
+    </div>
+</script>
+
 <script type="text/template" id="profile_reward_cards_edition-template">
     <h2 class="category-title primary-border category-bg"><%= _lp.PROFILE_LOYALTY_PROGRAM %></h2>
     <div class="cols">
@@ -361,6 +383,7 @@
             <div class="new-loyalty-number"></div>
             <div class="reward-cards-list"></div>
         </div>
+        <div class="reward-card-balance col-left border-box fl-left"></div>
     </div>
 </script>
 
