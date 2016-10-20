@@ -336,6 +336,7 @@ define(["backbone"], function(Backbone) {
             }
             var items = this.get('items'),
                 self = this;
+
             return Backbone.$.ajax({
                 url: '/weborders/v1/order/' + this.get('id') + '/orderitems/',
                 method: 'GET',

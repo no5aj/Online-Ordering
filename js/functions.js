@@ -2799,7 +2799,8 @@ function dbgSetAliases() {
     Backbone.Model.prototype.t = Backbone.Model.prototype.getType;
     Backbone.Collection.prototype.t = Backbone.Collection.prototype.getType;
 }
-/*
+
+/**
 *  Debug objects methods
 *  usage example: spyFunction(App.Data.customer.get('addresses'), 'add')
 */
@@ -2810,6 +2811,6 @@ function spyFunction(object, func_name) {
             trace(e.stack);
             trace("arguments are:", arguments);
             object.constructor.prototype[func_name].apply(object, arguments);
-        }
+        };
 }
 

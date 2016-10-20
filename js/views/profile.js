@@ -1269,14 +1269,15 @@ App.Views.CoreProfileView.CoreProfileAddressCreateView = App.Views.FactoryView.e
             '.order-id': 'text: id',
             '.qty': 'text: items_qty',
             '.subtotal': 'text: currencyFormat(subtotal)',
-            '.animate-spin': 'classes: {hide: length($orderItems)}',
+            '.animate-spin': 'classes: {hide: any(length($orderItems),not(ui_collapse))}',
             '.items': 'collection: $orderItems, itemView: "itemView"'
         },
         itemView: function(opts) {
             return App.Views.GeneratorView.create('Profile', _.extend(opts, {
                 mod: 'OrderItem',
+                model: opts.model,
                 order: opts.collectionView.model
-            }), opts.model.get('id'));
+            }));
         },
         bindingSources: {
             ui: function() {
@@ -1329,7 +1330,7 @@ App.Views.CoreProfileView.CoreProfileAddressCreateView = App.Views.FactoryView.e
                 mod: 'OrdersItem',
                 customer: opts.collectionView.model,
                 orderItems: opts.model.get('items')
-            }), opts.model.get('id'));
+            }), opts.model.get('id')).delegateEvents();
         }
     });
 
