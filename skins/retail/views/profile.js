@@ -212,47 +212,6 @@ define(["profile_view"], function(profile_view) {
         className: 'item',
         bindings: {
             '.modifiers': 'text: select(is_combo, getComboItems($model), select(has_upsell, getUpsellItems($model), getModifiers($model)))'
-        },
-        bindingFilters: {
-            getModifiers: function(model) {
-                var modifiers = model.get_modifiers(),
-                    items = [];
-
-                modifiers && modifiers.get_modifierList().forEach(function(modifier) {
-                    modifier.get('selected') && items.push(modifier.get('name'));
-                });
-
-                return items.length ? '+' + items.join(', +') : '';
-            },
-            getComboItems: function(model) {
-                var data = model.item_submit(),
-                    items = [];
-
-                _.isObject(data) && Array.isArray(data.products_sets) && data.products_sets.forEach(function(pset) {
-                   pset.products.forEach(function(product) {
-                        items.push(product.quantity + 'x ' + product.product_name_override);
-                    });
-                });
-
-                return items.join(', ');
-            },
-            getUpsellItems: function(model) {
-                var data = model.item_submit(),
-                    product = model.get_product(),
-                    items = [];
-
-                if (product) {
-                    items.push(product.get('name'));
-                }
-
-                _.isObject(data) && Array.isArray(data.products_sets) && data.products_sets.forEach(function(pset) {
-                   pset.products.forEach(function(product) {
-                        items.push(product.quantity + 'x ' + product.product_name_override);
-                    });
-                });
-
-                return items.join(', ');
-            }
         }
     });
 

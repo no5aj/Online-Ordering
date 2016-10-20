@@ -1255,6 +1255,52 @@ App.Views.CoreProfileView.CoreProfileAddressCreateView = App.Views.FactoryView.e
                 var product = this.model.get_product();
                 return product.get('has_upsell') ? product.get('combo_price') : this.model.get('sum');
             }
+        },
+        bindingFilters: {
+            getModifiers: function(model) {
+                var modifiers = model.get_modifiers(),
+                    items = [];
+
+                modifiers && modifiers.get_modifierList().forEach(function(modifier) {
+                    modifier.get('selected') && items.push(get_modifier_str(modifier));
+                });
+
+                function get_modifier_str(mdf) {
+                    return mdf.get('quantity') + 'x' +
+                           (mdf.get('qty_type') > 0 ? (' (' + MSG.HALF_PRICE_STR[mdf.get('qty_type')] + ')') : '') +
+                           ' ' + mdf.get('name');
+                }
+                return items.length ? '+' + items.join(', +') : '';
+            },
+            getComboItems: function(model) {
+                var data = model.item_submit(),
+                    items = [];
+
+                _.isObject(data) && Array.isArray(data.products_sets) && data.products_sets.forEach(function(pset) {
+                   pset.products.forEach(function(product) {
+                        items.push(product.quantity + 'x ' + product.product_name_override);
+                    });
+                });
+
+                return items.join(', ');
+            },
+            getUpsellItems: function(model) {
+                var data = model.item_submit(),
+                    product = model.get_product(),
+                    items = [];
+
+                if (product) {
+                    items.push(product.get('name'));
+                }
+
+                _.isObject(data) && Array.isArray(data.products_sets) && data.products_sets.forEach(function(pset) {
+                   pset.products.forEach(function(product) {
+                        items.push(product.quantity + 'x ' + product.product_name_override);
+                    });
+                });
+
+                return items.join(', ');
+            }
         }
     })
 
