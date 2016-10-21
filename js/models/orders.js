@@ -393,6 +393,7 @@ define(["backbone"], function(Backbone) {
                     dining_option = settings.dining_options.indexOf(order.dining_option) > -1
                         ? _.invert(DINING_OPTION)[order.dining_option]
                         : settings.default_dining_option,
+                    accepted_dining_options = settings.dining_options,
                     changes = [];
 
                 if (!items) {
@@ -421,8 +422,12 @@ define(["backbone"], function(Backbone) {
                     ));
                 }
 
+                if (settings.payment_processor.gift_card || settings.payment_processor.stanford) {
+                    accepted_dining_options.push(DINING_OPTION.DINING_OPTION_ONLINE);
+                }
+
                 // check dining_option
-                if (settings.dining_options.indexOf(order.dining_option) == -1) {
+                if (accepted_dining_options.indexOf(order.dining_option) == -1) {
                     changes.push('dining_option');
                 }
 
