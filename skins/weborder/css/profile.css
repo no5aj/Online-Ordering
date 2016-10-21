@@ -575,11 +575,19 @@
     font-size: 12px;
 }
 
+.profile-orders .names {
+    margin-right: 500px;
+}
+
 @media only screen and (max-width: 1380px) {
     .profile-orders .subtotal,
     .profile-orders .price,
     .profile-orders .qty {
         width: 130px;
+    }
+
+    .profile-orders .names {
+        margin-right: 400px;
     }
 }
 
@@ -588,6 +596,10 @@
     .profile-orders .price,
     .profile-orders .qty {
         width: 70px;
+    }
+
+    .profile-orders .names {
+        margin-right: 280px;
     }
 
     .profile-orders .created-at-col {
@@ -606,10 +618,6 @@
 
 .profile-orders .col {
     padding: 16px 10px;
-}
-
-.profile-orders .names {
-    max-width: 190px;
 }
 
 .profile-orders .subtotal-title {
