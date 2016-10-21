@@ -411,6 +411,12 @@
     margin-bottom: 15px;
 }
 
+.profile-edit .address-item .required:before {
+    position: absolute;
+    left: 5px;
+    top: 15px;
+}
+
 .profile-edit .address__header {
     max-width: 300px;
     width: 100%;

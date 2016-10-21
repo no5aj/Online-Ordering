@@ -78,11 +78,15 @@ define(["myorder_view"], function(myorder_view) {
 
     var MyOrderListView = App.Views.CoreMyOrderView.CoreMyOrderListView.extend({
         bindings: {
-            ':el': 'toggle: items'
+            ':el': 'toggle: items',
+            '.edit': 'toggle: !disallowEdit'
         },
         computeds: {
             items: function() {
                 return this.getBinding('$collection').get_only_product_quantity();
+            },
+            disallowEdit: function() {
+                return Boolean(this.options.disallow_edit);
             }
         }
     });
