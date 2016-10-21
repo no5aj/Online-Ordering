@@ -83,6 +83,10 @@
     vertical-align: middle;
 }
 
+.rewards-info .reward__discount-text {
+    text-transform: capitalize;
+}
+
 .rewards-info .checkbox {
     margin-right: 10px;
 }

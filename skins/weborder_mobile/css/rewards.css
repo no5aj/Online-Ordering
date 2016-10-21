@@ -60,6 +60,10 @@
     vertical-align: middle;
 }
 
+.rewards-info .reward__discount-text {
+    text-transform: capitalize;
+}
+
 .reward__redemption {
     display: block;
 }

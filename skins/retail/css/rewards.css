@@ -72,6 +72,10 @@
     vertical-align: middle;
 }
 
+.rewards-info .reward__discount-text {
+    text-transform: capitalize;
+}
+
 .rewards-info .points {
     padding-left: 10px;
 }
