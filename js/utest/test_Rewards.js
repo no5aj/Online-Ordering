@@ -255,6 +255,7 @@ define(['js/utest/data/Rewards', 'rewards'], function(rewardsData) {
                 data = {status: 'ERROR', errorMsg: '...'};
                 jqXHR.resolve();
                 expectRequestParameters();
+                expect(rewardsCard.trigger).toHaveBeenCalledWith('onResetData');
                 expect(rewardsCard.trigger).toHaveBeenCalledWith('onRewardsErrors', data.errorMsg);
                 expect(rewardsCard.get('purchases')).toBe(rewardsCard.defaults.purchases);
                 expect(rewardsCard.get('visits')).toBe(rewardsCard.defaults.visits);
