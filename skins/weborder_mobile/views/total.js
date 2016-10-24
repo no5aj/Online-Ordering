@@ -61,7 +61,7 @@ define(["total_view"], function(total_view) {
             showRewards: {
                 deps: ['_system_settings_enable_reward_cards_collecting', 'rewardsCard_discounts'],
                 get: function(enable_reward_cards_collecting, discount) {
-                    return enable_reward_cards_collecting; //&& !discount.length;
+                    return enable_reward_cards_collecting && !discount.length;
                 }
             }
         }),
