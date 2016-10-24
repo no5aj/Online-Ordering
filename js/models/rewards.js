@@ -385,6 +385,7 @@ define(['backbone', 'captcha'], function(Backbone) {
                     } else {
                         // restore default rewards
                         resetData();
+                        self.trigger('onResetData');
                         self.trigger('onRewardsErrors', data.errorMsg);
                     }
                 }
