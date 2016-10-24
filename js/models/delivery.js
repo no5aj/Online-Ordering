@@ -122,26 +122,9 @@ define(["backbone"], function(Backbone) {
         getRemainingAmount: function(subtotal) {
             // Get correct delivery charge and service fee
             var service_fee = App.Data.myorder.get_service_fee_charge(),
-                items_total = subtotal - service_fee,
-                charges = this.get('charges'),
-                charge = 0;
+                items_total = subtotal - service_fee;
 
-            if (charges) {
-                for (var i in charges) {
-                    var obj = charges[i],
-                        min = obj.min_threshold,
-                        max = obj.max_threshold;
-
-                    if (items_total > min && (items_total <= max || max === null)) {
-                        charge = (obj.type === 1) ? (items_total/100 * obj.amount) : obj.amount;
-                    }
-                }
-            }
-
-            var min_amount = this.get('min_amount'),
-                diff = this.get('enable') ? min_amount - (subtotal - charge) : null
-
-            return diff;
+            return this.get('enable') ? this.get('min_amount') - items_total : null;
         }
     });
 });
