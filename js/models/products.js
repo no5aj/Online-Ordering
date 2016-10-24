@@ -711,11 +711,15 @@ define(["backbone", 'childproducts', 'collection_sort', 'product_sets'], functio
             for (var it = 0, len = attrs.length; it < len; it++) {
                 var key = attrs[it];
                 if (this.get(key) !== actual_data[key]) {
-                    this.set(key, actual_data[key]);
-                    // do not notify about price change if the product is combo or has upsell
                     if (key == 'price') {
-                        !ignorePriceChange && !this.get('is_combo') && !this.get('has_upsell') && changes.push(key);
+                        // do not handle price if the product is gift
+                        if (!this.get('is_gift')) {
+                            // do not notify about price change if the product is combo or has upsell
+                            this.set(key, actual_data[key]);
+                            !ignorePriceChange && !this.get('is_combo') && !this.get('has_upsell') && changes.push(key);
+                        }
                     } else {
+                        this.set(key, actual_data[key]);
                         changes.push(key);
                     }
                 }

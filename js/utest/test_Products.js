@@ -1338,7 +1338,29 @@ define(['products', 'js/utest/data/Products', 'js/utest/data/Timetable', 'catego
                 expect(model.get('price')).toBe(25);
             });
 
-            it('`price` changed, `ignorePriceChange` is false', function() {
+            it('`price` changed, `is_gift` is true, `ignorePriceChange` is false', function() {
+                model.set({
+                    actual_data: {
+                        available: true,
+                        is_cold: false,
+                        is_gift: true,
+                        sold_by_weight: false,
+                        tax: 5,
+                        price: 25
+                    },
+                    available: true,
+                    is_cold: false,
+                    is_gift: false,
+                    sold_by_weight: false,
+                    tax: 5,
+                    price: 20,
+                    is_gift: true
+                });
+                expect(model.reorder()).toEqual([]);
+                expect(model.get('price')).toBe(20);
+            });
+
+            it('`price` changed, `is_gift` is false, `ignorePriceChange` is false', function() {
                 model.set({
                     actual_data: {
                         available: true,
@@ -1353,13 +1375,14 @@ define(['products', 'js/utest/data/Products', 'js/utest/data/Timetable', 'catego
                     is_gift: false,
                     sold_by_weight: false,
                     tax: 5,
-                    price: 20
+                    price: 20,
+                    is_gift: false
                 });
                 expect(model.reorder()).toEqual(['price']);
                 expect(model.get('price')).toBe(25);
             });
 
-            it('`price` changed, `ignorePriceChange` is false, `is_combo` is true', function() {
+            it('`price` changed, `is_gift` is false, `ignorePriceChange` is false, `is_combo` is true', function() {
                 model.set({
                     actual_data: {
                         available: true,
@@ -1382,7 +1405,7 @@ define(['products', 'js/utest/data/Products', 'js/utest/data/Timetable', 'catego
                 expect(model.get('price')).toBe(25);
             });
 
-            it('`price` changed, `ignorePriceChange` is false, `has_upsell` is true', function() {
+            it('`price` changed, `is_gift` is false, `ignorePriceChange` is false, `has_upsell` is true', function() {
                 model.set({
                     actual_data: {
                         available: true,
