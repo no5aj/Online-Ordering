@@ -24,6 +24,13 @@
     'use strict';
 
     var RewardsCardView = App.Views.CoreRewardsView.CoreRewardsCardView.extend({
+        initialize: function() {
+            App.Views.CoreRewardsView.CoreRewardsCardView.prototype.initialize.apply(this, arguments);
+
+            this.listenTo(this.model, 'onRewardsErrors', function() {
+                this.model.trigger('onResetData');
+            }, this);
+        },
         bindings: {
             '.reward_card_number': 'classes: {disabled: length(customer_rewardCards)}',
             '.rewards-input': 'value: number, events: ["input"], disabled: length(customer_rewardCards)'
