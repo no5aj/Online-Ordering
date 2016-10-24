@@ -124,7 +124,7 @@ define(['delivery'], function() {
                 App.Data.myorder = myorder;
             });
 
-            it('`charges` isn\'t an object, `enable` is false', function() {
+            it('`enable` is false', function() {
                 model.set({
                     min_amount: 3,
                     enable: false
@@ -132,71 +132,12 @@ define(['delivery'], function() {
                 expect(model.getRemainingAmount(10)).toBe(null);
             });
 
-            it('`charges` isn\'t an object, `enable` is true', function() {
+            it('`enable` is true', function() {
+                serviceFee = 2;
                 model.set({
                     min_amount: 3,
                     enable: true
                 });
-                expect(model.getRemainingAmount(10)).toBe(-7);
-            });
-
-            it('`charges` is an object, `items_total` < `min_threshold`', function() {
-                model.set({
-                    min_amount: 3,
-                    enable: true,
-                    charges: charges
-                });
-
-                serviceFee = 8;
-                expect(model.getRemainingAmount(10)).toBe(-7);
-            });
-
-            it('`charges` is an object, `items_total` > `min_threshold`, `items_total` > `max_threshold`', function() {
-                model.set({
-                    min_amount: 3,
-                    enable: true,
-                    charges: charges
-                });
-
-                serviceFee = 1;
-                expect(model.getRemainingAmount(10)).toBe(-7);
-            });
-
-            it('`charges` is an object, `items_total` > `min_threshold`, `max_threshold` is null', function() {
-                model.set({
-                    min_amount: 3,
-                    enable: true,
-                    charges: charges
-                });
-
-                serviceFee = 1;
-                expect(model.getRemainingAmount(10)).toBe(-7);
-            });
-
-            it('`charges` is an object, `items_total` > `min_threshold`, `items_total` < `max_threshold`, `charges[i].amount` is percent', function() {
-                charges.delivery.amount = 50;
-
-                model.set({
-                    min_amount: 3,
-                    enable: true,
-                    charges: charges
-                });
-
-                serviceFee = 4;
-                expect(model.getRemainingAmount(10)).toBe(-4);
-            });
-
-            it('`charges` is an object, `items_total` > `min_threshold`, `items_total` < `max_threshold`, `charges[i].amount` is amount', function() {
-                charges.delivery.amount = 2;
-                charges.delivery.type = 0;
-
-                model.set({
-                    min_amount: 3,
-                    enable: true,
-                    charges: charges
-                });
-
-                serviceFee = 4;
                 expect(model.getRemainingAmount(10)).toBe(-5);
             });
         });
