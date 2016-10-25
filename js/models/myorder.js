@@ -2408,14 +2408,22 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
                 req;
 
             if (validationOnly || payment_type != PAYMENT_TYPE.CREDIT || !App.Data.customer.isAuthorized() || !App.Data.customer.payments || (!doPayWithToken && !card.rememberCard && (!payment.credit_card_dialog || card.cardNumber))) {
-                req = $.ajax({
-                    type: "POST",
-                    url: App.Data.settings.get("host") + "/weborders/" + (validationOnly ? "pre_validate/" : "create_order_and_pay_v1/"),
-                    data: myorder_json,
-                    dataType: "json",
-                    success: new Function(), // to override global ajax success handler
-                    error: new Function()    // to override global ajax error handler
-                });
+
+                if (capturePhase && !order.paymentInfo.cardInfo.transaction_id && payment_type == PAYMENT_TYPE.CREDIT) {
+                    setTimeout(function() {
+                        App.Data.errors.alert("Payment processor didn't return transaction_id", true);
+                    }, 1000);
+                    throw new Error("Payment processor didn't return transaction_id");
+                } else {
+                    req = $.ajax({
+                        type: "POST",
+                        url: App.Data.settings.get("host") + "/weborders/" + (validationOnly ? "pre_validate/" : "create_order_and_pay_v1/"),
+                        data: myorder_json,
+                        dataType: "json",
+                        success: new Function(), // to override global ajax success handler
+                        error: new Function()    // to override global ajax error handler
+                    });
+                }
             } else {
                 req = App.Data.customer.payWithToken(order, card, payment_info.token_id);
             }
