@@ -487,6 +487,12 @@ define(['backbone'], function(Backbone) {
                 headers: authorizationHeader,
                 success: function(data) {
                     if (Array.isArray(data)) {
+                        // filter only available tokens: created on the same establishment or shared among instances or establishments
+                        data = data.filter(function(payment) {
+                            var paymentEstablishment = payment.establishment;
+                            return _.isObject(paymentEstablishment) && (paymentEstablishment.is_shared_instances || paymentEstablishment.instance_name == getInstanceName())
+                                && (paymentEstablishment.is_shared_establishments || paymentEstablishment.atlas_id == App.Data.settings.get('establishment'));
+                        });
                         self.reset(data);
                     }
                 },
