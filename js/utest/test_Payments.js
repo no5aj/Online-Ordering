@@ -18,7 +18,7 @@ define(['payments', 'js/utest/data/Payments', 'js/utest/data/Timetable'], functi
         });
 
         describe("initialize()", function() {
-            
+
         });
 
         describe("setPrimaryAsSelected()", function() {
@@ -98,7 +98,7 @@ define(['payments', 'js/utest/data/Payments', 'js/utest/data/Timetable'], functi
                 model.set('id', id);
                 model.type = type;
                 expect(model.removePayment(serverURL, authHeader)).toBe(ajaxReq);
-                expect(ajaxParams.url).toBe(serverURL + "/v1/customers/payments/" + type + "/" + id + "/");
+                expect(ajaxParams.url).toBe(serverURL + "/customers/payments/" + type + "/" + id + "/");
                 expect(ajaxParams.method).toBe("DELETE");
                 expect(ajaxParams.headers).toBe(authHeader);
                 expect(ajaxParams.success).toEqual(jasmine.any(Function));
@@ -135,7 +135,7 @@ define(['payments', 'js/utest/data/Payments', 'js/utest/data/Timetable'], functi
                 model.set('id', id);
                 model.type = type;
                 expect(model.changePayment(serverURL, authHeader, _data)).toBe(ajaxReq);
-                expect(ajaxParams.url).toBe(serverURL + "/v1/customers/payments/" + type + "/" + id + "/");
+                expect(ajaxParams.url).toBe(serverURL + "/customers/payments/" + type + "/" + id + "/");
                 expect(ajaxParams.method).toBe("PATCH");
                 expect(ajaxParams.headers).toBe(authHeader);
                 expect(ajaxParams.contentType).toBe("application/json");
@@ -168,6 +168,18 @@ define(['payments', 'js/utest/data/Payments', 'js/utest/data/Timetable'], functi
             expect(collection.listenTo).toHaveBeenCalledWith(collection, 'change:selected', collection.radioSelection);
             expect(collection.listenTo).toHaveBeenCalledWith(collection, 'change:is_primary', collection.checkboxSelection);
             expect(collection.listenTo).toHaveBeenCalledWith(collection, 'add', collection.onAddHandler);
+        });
+
+        it("resetModelsAttrs()", function() {
+            var payment1 = new App.Models.PaymentToken(),
+                payment2 = new App.Models.PaymentToken();
+
+            spyOn(payment1, 'resetAttributes');
+            spyOn(payment2, 'resetAttributes');
+            collection.add([payment1, payment2]);
+            collection.resetModelsAttrs();
+            expect(payment1.resetAttributes).toHaveBeenCalled();
+            expect(payment2.resetAttributes).toHaveBeenCalled();
         });
 
         describe("radioSelection()", function() {
@@ -409,7 +421,8 @@ define(['payments', 'js/utest/data/Payments', 'js/utest/data/Timetable'], functi
             var authHeader = {Authorization: "Bearer SDASDASDASD"},
                 serverURL = "https://identity-dev.revelup.com",
                 type = 'testType',
-                ajaxReq, ajaxParams;
+                ajaxReq, ajaxParams,
+                instanceName, est, curEst;
 
             beforeEach(function() {
                 ajaxReq = Backbone.$.Deferred();
@@ -422,12 +435,23 @@ define(['payments', 'js/utest/data/Payments', 'js/utest/data/Timetable'], functi
                     ajaxReq.done(ajaxParams.success);
                     return ajaxReq;
                 });
+
+                instanceName = null;
+                curEst = App.Data.settings.get('establishment');
+
+                spyOn(window, 'getInstanceName').and.callFake(function() {
+                    return instanceName;
+                });
+            });
+
+            afterEach(function() {
+                App.Data.settings.set('establishment', curEst);
             });
 
             function commonExpectations(req) {
                 expect(req).toBe(ajaxReq);
                 expect(Backbone.$.ajax).toHaveBeenCalled();
-                expect(ajaxParams.url).toBe(serverURL + "/v1/customers/payments/" + type + "/");
+                expect(ajaxParams.url).toBe(serverURL + "/customers/payments/" + type + "/");
                 expect(ajaxParams.method).toBe("GET");
                 expect(ajaxParams.headers).toBe(authHeader);
                 expect(ajaxParams.success).toEqual(jasmine.any(Function));
@@ -450,9 +474,163 @@ define(['payments', 'js/utest/data/Payments', 'js/utest/data/Timetable'], functi
                 });
             });
 
-            it("request is successful, `data` is an array", function() {
+            it("request is successful, `data` is an array, `tokens[i].establishment` is not object", function() {
                 var req = collection.getPayments(authHeader);
                 ajaxReq.resolve([{id:1}, {id:2}]);
+                commonExpectations(req);
+                expect(collection.length).toBe(0);
+            });
+
+            it("request is successful, `data` is an array, `tokens[i].establishment` is object, token was created on another instance, `tokens[i].establishment.is_shared_instances` is false", function() {
+                var req = collection.getPayments(authHeader);
+                instanceName = "bbb";
+                ajaxReq.resolve([
+                    {
+                        id:1,
+                        establishment: {
+                            instance_name: "aaa",
+                            atlas_id: App.Data.settings.get('establishment'),
+                            is_shared_instances: false
+                        }
+                    },
+                    {
+                        id:2,
+                        establishment: {
+                            instance_name: "ccc",
+                            atlas_id: App.Data.settings.get('establishment'),
+                            is_shared_instances: false
+                        }
+                    }
+                ]);
+                commonExpectations(req);
+                expect(collection.length).toBe(0);
+            });
+
+            it("request is successful, `data` is an array, `tokens[i].establishment` is object, token was created on another instance, `tokens[i].establishment.is_shared_instances` is true", function() {
+                var req = collection.getPayments(authHeader);
+                instanceName = "bbb";
+                ajaxReq.resolve([
+                    {
+                        id:1,
+                        establishment: {
+                            instance_name: instanceName,
+                            atlas_id: App.Data.settings.get('establishment'),
+                            is_shared_instances: true
+                        }
+                    },
+                    {
+                        id:2,
+                        establishment: {
+                            instance_name: "ccc",
+                            atlas_id: App.Data.settings.get('establishment'),
+                            is_shared_instances: false
+                        }
+                    }
+                ]);
+                commonExpectations(req);
+                expect(collection.length).toBe(1);
+            });
+
+            it("request is successful, `data` is an array, `tokens[i].establishment` is object, token was created on the same instance", function() {
+                var req = collection.getPayments(authHeader);
+                instanceName = "bbb";
+                ajaxReq.resolve([
+                    {
+                        id:1,
+                        establishment: {
+                            instance_name: instanceName,
+                            atlas_id: App.Data.settings.get('establishment'),
+                            is_shared_instances: true
+                        }
+                    },
+                    {
+                        id:2,
+                        establishment: {
+                            instance_name: instanceName,
+                            atlas_id: App.Data.settings.get('establishment'),
+                            is_shared_instances: false
+                        }
+                    }
+                ]);
+                commonExpectations(req);
+                expect(collection.length).toBe(2);
+            });
+
+            it("request is successful, `data` is an array, `tokens[i].establishment` is object, token was created on another establishment, `tokens[i].establishment.is_shared_establishments` is false", function() {
+                var req = collection.getPayments(authHeader);
+                instanceName = "bbb";
+                App.Data.settings.set('establishment', 122);
+                ajaxReq.resolve([
+                    {
+                        id:1,
+                        establishment: {
+                            instance_name: instanceName,
+                            atlas_id: 333,
+                            is_shared_establishments: false
+                        }
+                    },
+                    {
+                        id:2,
+                        establishment: {
+                            instance_name: instanceName,
+                            atlas_id: 444,
+                            is_shared_establishments: false
+                        }
+                    }
+                ]);
+                commonExpectations(req);
+                expect(collection.length).toBe(0);
+            });
+
+            it("request is successful, `data` is an array, `tokens[i].establishment` is object, token was created on another establishment, `tokens[i].establishment.is_shared_establishments` is true", function() {
+                var req = collection.getPayments(authHeader);
+                instanceName = "bbb";
+                App.Data.settings.set('establishment', 122);
+                ajaxReq.resolve([
+                    {
+                        id:1,
+                        establishment: {
+                            instance_name: instanceName,
+                            atlas_id: 333,
+                            is_shared_establishments: true
+                        }
+                    },
+                    {
+                        id:2,
+                        establishment: {
+                            instance_name: instanceName,
+                            atlas_id: 444,
+                            is_shared_establishments: false
+                        }
+                    }
+                ]);
+                commonExpectations(req);
+                expect(collection.length).toBe(1);
+            });
+
+            it("request is successful, `data` is an array, `tokens[i].establishment` is object, token was created on the same establishment", function() {
+                var req = collection.getPayments(authHeader),
+                    est = 122;
+                instanceName = "bbb";
+                App.Data.settings.set('establishment', est);
+                ajaxReq.resolve([
+                    {
+                        id:1,
+                        establishment: {
+                            instance_name: instanceName,
+                            atlas_id: est,
+                            is_shared_establishments: true
+                        }
+                    },
+                    {
+                        id:2,
+                        establishment: {
+                            instance_name: instanceName,
+                            atlas_id: est,
+                            is_shared_establishments: false
+                        }
+                    }
+                ]);
                 commonExpectations(req);
                 expect(collection.length).toBe(2);
             });
@@ -879,7 +1057,7 @@ define(['payments', 'js/utest/data/Payments', 'js/utest/data/Timetable'], functi
 
             function commonExpectations(req) {
                 expect(req).toBe(ajaxReq);
-                expect(ajaxParams.url).toBe(serverURL + "/v1/customers/payments/" + collection.type + "/");
+                expect(ajaxParams.url).toBe(serverURL + "/customers/payments/" + collection.type + "/");
                 expect(ajaxParams.method).toBe("POST");
                 expect(ajaxParams.data).toBe(JSON.stringify(_data));
                 expect(ajaxParams.headers).toBe(authHeader);
