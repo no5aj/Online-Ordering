@@ -463,6 +463,7 @@ define(['backbone'], function() {
 
             for(var ind = 0, length = filters.length; ind < length; ind++) {
                 if(!filters[ind].get('optional') && !filters[ind].getSelected().length) {
+                    App.Data.devMode && console.warn('filter \'', filters[ind].get('title'), '\' is reqiured and unselected, all items will be hidden');
                     result.valid = [];
                     result.invalid = valid.concat(invalid);
                     result.invalid.forEach(function(item) {
