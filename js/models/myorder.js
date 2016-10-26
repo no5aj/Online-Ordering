@@ -2409,7 +2409,7 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
 
             if (validationOnly || payment_type != PAYMENT_TYPE.CREDIT || !App.Data.customer.isAuthorized() || !App.Data.customer.payments || (!doPayWithToken && !card.rememberCard && (!payment.credit_card_dialog || card.cardNumber))) {
 
-                if (capturePhase && !order.paymentInfo.cardInfo.transaction_id && payment_type == PAYMENT_TYPE.CREDIT) {
+                if (capturePhase && !order.paymentInfo.transaction_id && payment_type == PAYMENT_TYPE.CREDIT) {
                     setTimeout(function() {
                         App.Data.errors.alert("Payment processor didn't return transaction_id", true);
                     }, 1000);
