@@ -79,7 +79,7 @@ define(["myorder_view"], function(myorder_view) {
     var MyOrderListView = App.Views.CoreMyOrderView.CoreMyOrderListView.extend({
         bindings: {
             ':el': 'toggle: items',
-            '.edit': 'toggle: !disallowEdit'
+            '.edit': 'toggle: not(disallowEdit)'
         },
         computeds: {
             items: function() {

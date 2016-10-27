@@ -2763,7 +2763,7 @@ function traceTriggers(filter, ignore) {
             type = this.getType ?  this.getType() : 'type_undefined';
         var regexp = new RegExp(filter, 'i');
         var ignoreRegExp = new RegExp(ignore, 'i');
-        if (!type || (regexp.test(type) && !ignoreRegExp.test(type))) {
+        if (!type || (regexp.test(type) && (!ignore || !ignoreRegExp.test(type)))) {
             console.log("TRIGGER EVENT:", type, arguments, e.stack);
         }
     }

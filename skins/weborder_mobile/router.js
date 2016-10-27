@@ -784,9 +784,9 @@ define(["main_router"], function(main_router) {
                                 self.stopListening(self, 'route', back);
                                 originOrder.update(order);
                                 combo_order.trigger("change:modifiers");
+                                if (action == "then_add_item")
+                                    App.Data.myorder.trigger("add_upsell_item_to_cart");
                             }
-                            if (action == "then_add_item")
-                                App.Data.myorder.trigger("add_upsell_item_to_cart");
                         }
                     });
                     self.listenTo(order, 'change', setHeaderToUpdate);
