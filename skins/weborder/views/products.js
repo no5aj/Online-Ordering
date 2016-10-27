@@ -116,7 +116,7 @@ define(['products_view'], function(products_view) {
         }
     });
 
-    var ProductModifiersView = App.Views.CoreProductView.CoreProductModifiersView.extend({
+    var noImageMixin = {
         bindings: {
             '.img_wrapper': 'classes: {"no-photo": isDefaultImage(_product_image)}'
         },
@@ -125,11 +125,16 @@ define(['products_view'], function(products_view) {
                 return image == App.Data.settings.get_img_default();
             }
         }
-    });
+    }
+    var ProductModifiersView = App.Views.CoreProductView.CoreProductModifiersView.extend( noImageMixin );
+    var ProductModifiersComboView = App.Views.CoreProductView.CoreProductModifiersComboView.extend( noImageMixin );
+    var ProductModifiersUpsellView = App.Views.CoreProductView.CoreProductModifiersUpsellView.extend( noImageMixin );
 
     return new (require('factory'))(products_view.initViews.bind(products_view), function() {
         App.Views.ProductView.ProductListItemView = ProductListItemView;
         App.Views.ProductView.ProductPriceView = ProductPriceView;
         App.Views.ProductView.ProductModifiersView = ProductModifiersView;
+        App.Views.ProductView.ProductModifiersComboView = ProductModifiersComboView;
+        App.Views.ProductView.ProductModifiersUpsellView = ProductModifiersUpsellView;
     });
 });
