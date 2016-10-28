@@ -175,6 +175,9 @@ define(["profile_view", "giftcard_view", "myorder_view"], function(profile_view)
             App.Views.CoreProfileView.CoreProfileRewardCardsEditionView.prototype.initialize.apply(this, arguments);
             var newRewardCard = this.getBinding('$newRewardCard');
             this.listenTo(newRewardCard, 'change:number change:captchaValue', this.options.onRewardCardChanged.bind(this, newRewardCard));
+            this.listenTo(this.model, 'onResetRewardCaptcha', function() {
+                newRewardCard.trigger('onResetData');
+            });
         }
     });
 
