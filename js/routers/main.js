@@ -2146,6 +2146,9 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
                     self.listenTo(customer, 'onLogout', logout);
                     self.listenToOnce(self, 'route', header.set.bind(header, 'enableLink', true));
                     self.listenToOnce(self, 'route', self.stopListening.bind(self, customer, 'onLogout', logout));
+                    self.off('loyalty_rc_update').listenTo(self, 'loyalty_rc_update', function(value) {
+                        rewardCard = value;
+                    });
                 }, 0);
             }
 
@@ -2162,10 +2165,10 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
             function onRewardCardChanged(newRewardCard) {
                 if (newRewardCard.check().status == 'OK') {
                     header.set('enableLink', true);
-                    rewardCard = newRewardCard.clone();
+                    self.trigger('loyalty_rc_update', newRewardCard.clone());
                 } else {
                     header.set('enableLink', false);
-                    rewardCard = null;
+                    self.trigger('loyalty_rc_update', null);
                 }
             }
 
@@ -2202,7 +2205,10 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
                         }
                     });
                     req.error(onError);
-                    req.always(mainModel.trigger.bind(mainModel, 'loadCompleted'));
+                    req.always(function() {
+                        customer.trigger('onResetRewardCaptcha');
+                        mainModel.trigger('loadCompleted');
+                    });
                     return req;
                 }
 
