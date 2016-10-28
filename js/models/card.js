@@ -271,7 +271,13 @@ define(["backbone"], function(Backbone) {
                 payment = App.Data.settings.get_payment_process(),
                 err = [];
 
-            if (payment.paypal) {
+            if (payment.paypal ||
+                payment.usaepay ||
+                payment.braintree ||
+                payment.globalcollect ||
+                payment.quickbooks ||
+                payment.worldpay)
+            {
                 (!card.firstName) && err.push(_loc.CARD_FIRST_NAME);
                 (!card.secondName) && err.push(_loc.CARD_LAST_NAME);
             }
