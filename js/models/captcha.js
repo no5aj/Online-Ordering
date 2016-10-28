@@ -67,6 +67,9 @@ define(["backbone"], function(Backbone) {
              */
             captchaValue: ''
         },
+        initialize: function() {
+            this.defaults.captchaKey = App.Settings.recaptcha_site_key;
+        },
         /**
          * Sets `captchaKey` attribute as `recaptcha_site_key` system settings.
          * Updates `captchaValue`, `captchaKey` attributes.

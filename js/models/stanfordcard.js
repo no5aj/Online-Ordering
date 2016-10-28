@@ -186,6 +186,7 @@ define(["backbone", "captcha"], function(Backbone) {
             }  else {
                 this.listenTo(this, 'change:validated', this.doNotAskStudentStatus, this);
             }
+            App.Models.Captcha.prototype.initialize.apply(this, arguments);
         },
         /**
          * @method
