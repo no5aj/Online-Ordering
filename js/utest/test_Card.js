@@ -317,6 +317,91 @@ define(['card'], function() {
                 expect(model.checkPerson().indexOf(_loc.CARD_LAST_NAME)).not.toBe(-1);
                 expect(model.trim).toHaveBeenCalled();
             });
+
+            it('payment is usaepay, all values are valid', function() {
+                payment.and.returnValue({usaepay: 'smth'});
+                model.set({firstName: 'John', secondName: 'Smith'});
+
+                expect(model.checkPerson()).toEqual([]);
+                expect(model.trim).toHaveBeenCalled();
+            });
+
+            it('payment is usaepay, empty fields', function() {
+                payment.and.returnValue({usaepay: 'smth'});
+                model.set({firstName: '', secondName: ''});
+
+                expect(model.checkPerson().indexOf(_loc.CARD_FIRST_NAME)).not.toBe(-1);
+                expect(model.checkPerson().indexOf(_loc.CARD_LAST_NAME)).not.toBe(-1);
+                expect(model.trim).toHaveBeenCalled();
+            });
+
+            it('payment is braintree, all values are valid', function() {
+                payment.and.returnValue({braintree: 'smth'});
+                model.set({firstName: 'John', secondName: 'Smith'});
+
+                expect(model.checkPerson()).toEqual([]);
+                expect(model.trim).toHaveBeenCalled();
+            });
+
+            it('payment is braintree, empty fields', function() {
+                payment.and.returnValue({braintree: 'smth'});
+                model.set({firstName: '', secondName: ''});
+
+                expect(model.checkPerson().indexOf(_loc.CARD_FIRST_NAME)).not.toBe(-1);
+                expect(model.checkPerson().indexOf(_loc.CARD_LAST_NAME)).not.toBe(-1);
+                expect(model.trim).toHaveBeenCalled();
+            });
+
+            it('payment is globalcollect, all values are valid', function() {
+                payment.and.returnValue({globalcollect: 'smth'});
+                model.set({firstName: 'John', secondName: 'Smith'});
+
+                expect(model.checkPerson()).toEqual([]);
+                expect(model.trim).toHaveBeenCalled();
+            });
+
+            it('payment is globalcollect, empty fields', function() {
+                payment.and.returnValue({globalcollect: 'smth'});
+                model.set({firstName: '', secondName: ''});
+
+                expect(model.checkPerson().indexOf(_loc.CARD_FIRST_NAME)).not.toBe(-1);
+                expect(model.checkPerson().indexOf(_loc.CARD_LAST_NAME)).not.toBe(-1);
+                expect(model.trim).toHaveBeenCalled();
+            });
+
+            it('payment is quickbooks, all values are valid', function() {
+                payment.and.returnValue({quickbooks: 'smth'});
+                model.set({firstName: 'John', secondName: 'Smith'});
+
+                expect(model.checkPerson()).toEqual([]);
+                expect(model.trim).toHaveBeenCalled();
+            });
+
+            it('payment is quickbooks, empty fields', function() {
+                payment.and.returnValue({quickbooks: 'smth'});
+                model.set({firstName: '', secondName: ''});
+
+                expect(model.checkPerson().indexOf(_loc.CARD_FIRST_NAME)).not.toBe(-1);
+                expect(model.checkPerson().indexOf(_loc.CARD_LAST_NAME)).not.toBe(-1);
+                expect(model.trim).toHaveBeenCalled();
+            });
+
+            it('payment is worldpay, all values are valid', function() {
+                payment.and.returnValue({worldpay: 'smth'});
+                model.set({firstName: 'John', secondName: 'Smith'});
+
+                expect(model.checkPerson()).toEqual([]);
+                expect(model.trim).toHaveBeenCalled();
+            });
+
+            it('payment is worldpay, empty fields', function() {
+                payment.and.returnValue({worldpay: 'smth'});
+                model.set({firstName: '', secondName: ''});
+
+                expect(model.checkPerson().indexOf(_loc.CARD_FIRST_NAME)).not.toBe(-1);
+                expect(model.checkPerson().indexOf(_loc.CARD_LAST_NAME)).not.toBe(-1);
+                expect(model.trim).toHaveBeenCalled();
+            });
         });
 
         describe('checkSecurityCode()', function() {
