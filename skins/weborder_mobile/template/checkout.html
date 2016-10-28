@@ -2,24 +2,24 @@
     <div class="list-title list-header-text">
         <span class="font-size1"><%= _lp.CHECKOUT_CONTACT_INFO %></span>
     </div>
-    <ul class="contact-info block font-size2 text-center">
-        <li class="required">
+    <ul class="contact-info block text-center">
+        <li class="required font-size2">
             <input type="text" placeholder="<%= _lp.PROFILE_FIRST_NAME %>" class="firstName ios-safari-caret input-colors" value="<%= firstName %>">
         </li>
-        <li class="required">
+        <li class="required font-size2">
             <input type="text" placeholder="<%= _lp.PROFILE_LAST_NAME %>" class="lastName ios-safari-caret input-colors" value="<%= lastName %>">
         </li>
-        <li class="required">
+        <li class="required font-size2">
             <input type="email" placeholder="<%= _lp.PROFILE_EMAIL_ADDRESS %>" class="email ios-safari-caret input-colors" value="<%= email %>" autocorrect="off" autocapitalize="none">
         </li>
-        <li class="required">
+        <li class="required font-size2">
             <input type="tel" placeholder="<%= _lp.PROFILE_PHONE %>" class="phone ios-safari-caret input-colors" value="<%= phone %>" min="0">
         </li>
         <li class="delivery_address">
         </li>
-        <li class="delivery_seat">
+        <li class="delivery_seat font-size2">
         </li>
-        <li class="delivery_other">
+        <li class="delivery_other font-size2">
         </li>
     </ul>
     <% if(enableRewardCard) { %>
@@ -168,7 +168,7 @@
         </div>
     </div>
     <% if(isShippingServices) { %>
-        <div class="select-wrapper shipping-services input-colors">
+        <div class="select-wrapper shipping-services input-colors font-size2">
             <select class="shipping-select"></select>
             <span class="shipping-status img-spinner"></span>
         </div>
