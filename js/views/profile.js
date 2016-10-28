@@ -1315,6 +1315,10 @@ App.Views.CoreProfileView.CoreProfileAddressCreateView = App.Views.FactoryView.e
                 });
 
                 return items.join(', ');
+            },
+            getWeightedItemInfo: function(model) {
+                var data = model.item_submit();
+                return data.product_name_override;
             }
         }
     })

@@ -211,7 +211,7 @@ define(["profile_view"], function(profile_view) {
     var ProfileOrderItemView = App.Views.CoreProfileView.CoreProfileOrderItemView.extend({
         className: 'item',
         bindings: {
-            '.modifiers': 'text: select(is_combo, getComboItems($model), select(has_upsell, getUpsellItems($model), getModifiers($model)))'
+            '.modifiers': 'text: select(weight, getWeightedItemInfo($model), select(is_combo, getComboItems($model), select(has_upsell, getUpsellItems($model), getModifiers($model))))'
         }
     });
 
