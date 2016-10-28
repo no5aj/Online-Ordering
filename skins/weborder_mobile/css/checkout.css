@@ -123,3 +123,11 @@
 .checkout.checkout-lines .select-wrapper {
     width: 100%;
 }
+
+.delivery_address .shipping-status.img-spinner {
+    position: absolute !important;
+    right: 6em;
+    top: 50%;
+    z-index: 2;
+    font-size: 0.5em;
+}

@@ -28,7 +28,7 @@ define(["factory"], function() {
     App.Views.CoreCartView.CoreCartCoreView = App.Views.FactoryView.extend({
         bindings: {
             '.btn': 'classes: {disabled: any(not(orderItems_quantity), orderItems_pending, shippingPending)}',
-            '.animate-spin': 'classes: {hide: all(not(orderItems_pending), not(shippingPending))}',
+            '.animate-spin': 'classes: {hide: all(not(orderItems_pending))}',
             '.order-items': 'toggle: orderItems_quantity',
             '.total_block': 'toggle: orderItems_quantity'
         },
