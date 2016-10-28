@@ -671,8 +671,8 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
     App.Views.CoreMyOrderView.CoreMyOrderNoteView = App.Views.FactoryView.extend({
         name: 'myorder',
         mod: 'note',
-        events: {
-            'change .note_field textarea' : 'change_note'
+        bindings: {
+            '.note_field textarea': 'value: notes, events: ["input"]'
         },
         render: function() {
             var data = {
@@ -680,9 +680,6 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
                 note: this.model.get('notes')
             };
             this.$el.html(this.template(data));
-        },
-        change_note: function(e) {
-            this.model.set('notes', e.target.value);
         }
     });
 
