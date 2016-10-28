@@ -24,7 +24,8 @@
     font-family: 'FontAwesome';
 }
 
-.myorder .qty {
+.myorder .qty,
+.myorder .weight {
     display: block;
     font-size: 16px;
     font-weight: 600;
