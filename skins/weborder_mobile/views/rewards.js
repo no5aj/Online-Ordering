@@ -23,15 +23,6 @@
  define(["rewards_view"], function(rewards_view) {
     'use strict';
 
-    var RewardsInfoView = App.Views.RewardsView.RewardsInfoView.extend({
-        events: {
-            'click .skip': 'skip'
-        },
-        skip: function() {
-            typeof this.options.skip == 'function' &&  this.options.skip();
-        }
-    });
-
     var RewardsCardView = App.Views.CoreRewardsView.CoreRewardsCardView.extend({
         bindings: {
             '.rewards-input': 'value: number, events: ["input"], disabled: length(customer_rewardCards), classes: {disabled: length(customer_rewardCards)}'
@@ -39,7 +30,6 @@
     });
 
     return new (require('factory'))(rewards_view.initViews.bind(rewards_view), function() {
-        App.Views.RewardsView.RewardsInfoView = RewardsInfoView;
         App.Views.RewardsView.RewardsCardView = RewardsCardView;
     });
 });

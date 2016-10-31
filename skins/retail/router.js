@@ -421,7 +421,8 @@ define(["main_router"], function(main_router) {
 
             // onRewardsReceived event occurs when Rewards Card data is received from server
             this.listenTo(App.Data.myorder.rewardsCard, 'onRewardsReceived', function() {
-                var rewardsCard = App.Data.myorder.rewardsCard;
+                var rewardsCard = App.Data.myorder.rewardsCard,
+                    errors = App.Data.errors;
 
                 if (!rewardsCard.get('rewards').length) {
                     App.Data.errors.alert(MSG.NO_REWARDS_AVAILABLE);
@@ -434,10 +435,11 @@ define(["main_router"], function(main_router) {
                             balance: clone.get('balance'),
                             rewards: clone.get('rewards'),
                             discounts: clone.get('discounts'),
-                            className: 'rewards-info'
+                            className: 'rewards-info',
+                            skip: errors.trigger.bind(errors, 'hideAlertMessage', 1)
                         });
 
-                    App.Data.errors.alert('', false, false, {
+                    errors.alert('', false, false, {
                         isConfirm: true,
                         typeIcon: '',
                         confirm: {

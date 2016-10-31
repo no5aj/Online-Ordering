@@ -170,6 +170,7 @@
         'REWARDS_ITEM_LEVEL_DISCOUNT': 'off All Eligible Items',
         'REWARDS_ITEM_LEVEL_REPRICE_DISCOUNT': 're-price for All Eligible Items',
         'REWARDS_APPLY': 'Apply Reward',
+        'REWARDS_SKIP': 'Skip. Save for future.',
         'REWARDS_OFF': 'Off',
         'REWARDS_POINTS_REDEMPTION_AMOUNT': [
             'Point will be redeemed',

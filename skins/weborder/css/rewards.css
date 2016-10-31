@@ -99,3 +99,11 @@
     content: '−';
     padding-right: 5px;
 }
+
+.rewards-info .skip-box {
+    padding: 20px;
+}
+
+.rewards-info .skip {
+    text-decoration: underline;
+}

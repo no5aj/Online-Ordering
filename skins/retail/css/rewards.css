@@ -79,3 +79,11 @@
 .rewards-info .points {
     padding-left: 10px;
 }
+
+.rewards-info .skip-box {
+    padding: 20px;
+}
+
+.rewards-info .skip {
+    text-decoration: underline;
+}
