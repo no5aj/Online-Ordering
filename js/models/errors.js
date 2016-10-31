@@ -105,7 +105,13 @@ define(['backbone'], function(Backbone) {
              * @type {?Backbone.View}
              * @default null
              */
-            customView: null
+            customView: null,
+            /**
+             * Indicates  whether 'OK' button is disabled in confirmation alert
+             * @type {boolean}
+             * @default false
+             */
+            btnDisabled1: false
         },
         /**
          * Clears model (sets default values).

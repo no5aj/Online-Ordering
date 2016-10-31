@@ -457,7 +457,10 @@ define(["main_router"], function(main_router) {
             // onApplyRewardsCard event occurs when Rewards Card's 'Apply' button is clicked on #checkout page
             this.listenTo(App.Data.myorder.rewardsCard, 'onApplyRewardsCard', function() {
                 var rewardsCard = App.Data.myorder.rewardsCard,
+                    events = 'change:number change:captchaValue',
+                    errors = App.Data.errors,
                     customer = App.Data.customer,
+                    self = this,
                     view;
 
                 if (!rewardsCard.get('number') && customer.isAuthorized() && customer.get('rewardCards').length) {
@@ -471,7 +474,7 @@ define(["main_router"], function(main_router) {
                     className: 'rewards-info'
                 });
 
-                App.Data.errors.alert('', false, false, {
+                errors.alert('', false, false, {
                     isConfirm: true,
                     typeIcon: '',
                     confirm: {
@@ -481,17 +484,26 @@ define(["main_router"], function(main_router) {
                     },
                     customView: view,
                     callback: function(res) {
+                        stopCtrlBtn();
                         res && view.submit();
-                    },
-                    initialize: function(alertView) {
-                        alertView.listenTo(rewardsCard, 'change:number change:captchaValue', function(model) {
-                            var hasCaptchaValue = Boolean(model.get('captchaValue')),
-                                hasNumber = Boolean(model.get('number'));
-
-                            alertView.model.set('btnDisabled1', !(hasNumber && hasCaptchaValue));
-                        });
                     }
                 });
+
+                // need to change App.Data.errors.attribute.btnDisabled1 value to false once number and captchaValue get valid
+                this.listenTo(rewardsCard, events, ctrlBtn);
+                ctrlBtn();
+
+                function ctrlBtn() {
+                    var hasCaptchaValue = Boolean(rewardsCard.get('captchaValue')),
+                        hasNumber = Boolean(rewardsCard.get('number'));
+
+                    errors.set('btnDisabled1', !(hasNumber && hasCaptchaValue));
+                }
+
+                function stopCtrlBtn() {
+                    self.stopListening(rewardsCard, events, ctrlBtn);
+                    errors.set('btnDisabled1', App.Data.errors.defaults.btnDisabled1);
+                }
             });
 
             // onGetRewards event occurs when Rewards Card's 'Submit' button is clicked on 'Rewards Card Info' popup
