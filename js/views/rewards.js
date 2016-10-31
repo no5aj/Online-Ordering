@@ -240,10 +240,12 @@
             '.apply-reward': 'classes: {disabled: not(length(discounts))}'
         },
         events: {
-            'click .apply-reward': 'apply'
+            'click .apply-reward': 'apply',
+            'click .skip': 'skip'
         },
         onEnterListeners: {
-            '.apply-reward': 'apply'
+            '.apply-reward': 'apply',
+            '.skip': 'skip'
         },
         bindingSources: {
             itemRewards: function() {
@@ -319,6 +321,9 @@
             var rewardsCard = this.collection.rewardsCard;
             rewardsCard.update(this.model);
             rewardsCard.trigger('onRedemptionApplied');
+        },
+        skip: function() {
+            typeof this.options.skip == 'function' &&  this.options.skip();
         }
     });
 

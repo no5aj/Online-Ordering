@@ -298,14 +298,15 @@ define(["main_router"], function(main_router) {
 
             // onRewardsReceived event occurs when Rewards Card data is received from server
             this.listenTo(App.Data.myorder.rewardsCard, 'onRewardsReceived', function() {
-                var rewardsCard = App.Data.myorder.rewardsCard;
+                var rewardsCard = App.Data.myorder.rewardsCard,
+                    mainModel = App.Data.mainModel;
 
                 if (!rewardsCard.get('rewards').length) {
                     App.Data.errors.alert(MSG.NO_REWARDS_AVAILABLE);
                 } else {
                     var clone = rewardsCard.clone();
 
-                    App.Data.mainModel.set('popup', {
+                    mainModel.set('popup', {
                         modelName: 'Rewards',
                         mod: 'Info',
                         model: clone,
@@ -313,11 +314,12 @@ define(["main_router"], function(main_router) {
                         collection: App.Data.myorder,
                         balance: clone.get('balance'),
                         rewards: clone.get('rewards'),
-                        discounts: clone.get('discounts')
+                        discounts: clone.get('discounts'),
+                        skip: mainModel.unset.bind(mainModel, 'popup')
                     });
                 }
 
-                App.Data.mainModel.trigger('loadCompleted');
+                mainModel.trigger('loadCompleted');
             });
 
             // onApplyRewardsCard event occurs when Rewards Card's 'Apply' button is clicked on #checkout page
