@@ -58,7 +58,7 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
                 return this.model.get_modifiers().length > 0 || this.model.get_product().get("sold_by_weight");
             },
             modifiers_sum: {
-                deps: ['modifiers'],
+                deps: ['$model'],
                 get: function() {
                     return this.model.get_sum_of_modifiers();
                 }
