@@ -123,6 +123,6 @@
 }
 
 .confirm .order-item .quantity_select,
-.confirm .order-item .weight_edit_inner {
+.confirm .order-item .weight-box {
     display: none;
 }
