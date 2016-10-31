@@ -141,14 +141,17 @@ define(["myorder_view"], function(myorder_view) {
         render: function() {
             App.Views.CoreMyOrderView.CoreMyOrderItemView.prototype.render.apply(this, arguments);
 
-            var product = this.model.get_product(),
-                view = App.Views.GeneratorView.create('Quantity', {
+            var product = this.model.get_product();
+
+            if (!product.get('sold_by_weight')) {
+                var view = App.Views.GeneratorView.create('Quantity', {
                     el: this.$('.qty-box'),
-                    mod: product.get('sold_by_weight') ? 'Weight' : 'Main',
+                    mod: 'Main',
                     model: this.model,
                     className: 'inline-block'
                 });
-            this.subViews.push(view);
+                this.subViews.push(view);
+            }
 
             this.applyBindings();
             return this;
