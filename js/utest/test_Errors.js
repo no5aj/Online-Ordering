@@ -21,7 +21,8 @@ define(['errors'], function() {
                     "btnsSwap": false,
                     "cancelHide": false
                 },
-                "customView": null
+                "customView": null,
+                "btnDisabled1": false
             }, empty = {
                 "message": "No alert message",
                 "reloadPage": false,
@@ -37,7 +38,8 @@ define(['errors'], function() {
                 "customView": null,
                 "defaultView": false,
                 "btnText1": "OK",
-                "btnText2": "Cancel"
+                "btnText2": "Cancel",
+                "btnDisabled1": false
             };
             result = deepClone(empty);
             spyOn(model, 'trigger');
@@ -118,6 +120,48 @@ define(['errors'], function() {
                 result.defaultView = true;
                 expect(model.toJSON()).toEqual(result);
                 expectTrigger();
+            });
+
+            it('`options.isConfirm` is false, skin is Weborder Mobile', function() {
+                var skin = App.skin;
+                App.skin = App.Skins.WEBORDER_MOBILE;
+                model.alert(null, null, true);
+                result.defaultView = true;
+                expect(model.toJSON()).toEqual(result);
+                expectTrigger();
+                App.skin = skin;
+            });
+
+            it('skin is Directory or Directory Mobile', function() {
+                var skin = App.skin;
+
+                // directory mobile
+                App.skin = App.Skins.DIRECTORY_MOBILE;
+
+                model.alert(null, null, true);
+                result.defaultView = true;
+                expect(model.toJSON()).toEqual(result);
+                expectTrigger();
+
+                model.alert(null, null, false);
+                result.defaultView = false;
+                expect(model.toJSON()).toEqual(result);
+                expectTrigger();
+
+                // directory
+                App.skin = App.Skins.DIRECTORY;
+
+                model.alert(null, null, true);
+                result.defaultView = true;
+                expect(model.toJSON()).toEqual(result);
+                expectTrigger();
+
+                model.alert(null, null, false);
+                result.defaultView = false;
+                expect(model.toJSON()).toEqual(result);
+                expectTrigger();
+
+                App.skin = skin;
             });
 
             it('`options.isConfirm` is true', function() {
