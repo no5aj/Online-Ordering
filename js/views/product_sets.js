@@ -68,8 +68,11 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
                 get: function(cur_qty_to_add) {
                     var data=[],
                         is_selected = this.model.get('selected');
-                    // trace(this.model.get("product").get("name"), "cur_qty_to_add =", max_quantity, "is_selected=", is_selected, "qty=", this.model.get('quantity'));
                     var max_quantity = is_selected ? cur_qty_to_add + this.model.get('quantity') : cur_qty_to_add;
+                    //trace(this.model.get("product").get("name"), "cur_qty_to_add =", cur_qty_to_add, "is_selected=", is_selected, "qty=", this.model.get('quantity'), "max_qty=", max_quantity);
+                    if (max_quantity <= 0){
+                        max_quantity = 1;
+                    }
                     for (var i = 1; i <= max_quantity; i++) {
                         data.push({
                             label: "x" + i,
@@ -177,14 +180,7 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
             var quantity;
             if(this.model.get('selected')) {
                 this.$('.input').attr('checked', 'checked');
-
                 this.$(".mdf_quantity").css("display", "inline-block");
-                this.$('.mdf_quantity option:selected').removeAttr('selected');
-                quantity = this.model.get('quantity');
-
-                if (quantity > 0) {
-                    this.$(".mdf_quantity select").val(quantity);
-                }
                 this.$(".split-qty-wrapper").addClass('single')
             }
             else {

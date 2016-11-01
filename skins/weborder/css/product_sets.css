@@ -24,7 +24,7 @@
 
 .combo_item .mdf_quantity {
     position: absolute;
-    top: -11px;
+    top: -16px;
 }
 
 .combo_item .customize {
@@ -34,4 +34,8 @@
 .no_combo_link {
     display: inline-block;
     padding: 14px 0;
+}
+
+.combo_item_wrap .checkbox[checked=checked]::before {
+  margin: 3px;
 }

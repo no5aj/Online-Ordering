@@ -134,7 +134,8 @@
 .mdf_split.select-wrapper::after {
     content: '\f107';
     font-size: 17px;
-    padding: 3px 5px 2px 3px;
+    padding: 0px;
+    margin: 3px 5px 2px 3px;
 }
 
 .mdf_quantity.select-wrapper select,

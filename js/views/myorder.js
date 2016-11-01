@@ -317,6 +317,9 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
             this.check_weight_product();
             return this;
         },
+        bindings: {
+            ":el": "classes:{combo: true}"
+        },
         check_model: function() {
             return this.model.get('product').get('product_sets').check_selected();
         },
@@ -340,6 +343,9 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
         },
         events: {
             'click .no_combo_link': 'no_combo'
+        },
+        bindings: {
+            ":el": "classes:{combo: false}"
         },
         no_combo: function() {
             var self = this;
