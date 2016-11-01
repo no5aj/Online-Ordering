@@ -231,7 +231,7 @@ define(["myorder_view"], function(myorder_view) {
             _.extend(this.bindingSources, {
                 stanford: this.model.get('stanfordCard')
             });
-            App.Views.FactoryView.prototype.initialize.apply(this, arguments);
+            MyOrderItemGiftCardView.prototype.initialize.apply(this, arguments);
         }
     });
 
