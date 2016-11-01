@@ -169,6 +169,8 @@ define(["backbone", "factory", "generator"], function(Backbone) {
                         color = _store.selected ? self.activePinColor : self.regularPinColor,
                         scale = _store.selected ? 0.3 : 0.2,
                         address = [_store.line_1, _store.city, (_store.state ? _store.state : _store.province), _store.zipcode],
+                        address_line = address.join(', '),
+                        address_url = '//maps.google.com?q=' + address_line,
                         zIndex = _store.selected ? self.activeMarkerZIndex : self.regularMarkerZIndex,
                         coords, marker, popup;
 
@@ -184,7 +186,9 @@ define(["backbone", "factory", "generator"], function(Backbone) {
                     popup = new google.maps.InfoWindow({
                         content: '<div id="googlemaps_popup">' +
                                     '<div class="bold">' + _store.name + '</div>' +
-                                    '<div>' + address.join(', ') + '</div>' +
+                                    '<div>' +
+                                        '<a href="' + address_url + '" class="primary-text link" target="_blank">' + address_line + '</a>' +
+                                    '</div>' +
                                  '</div>',
                         position: coords
                     });
@@ -194,7 +198,12 @@ define(["backbone", "factory", "generator"], function(Backbone) {
                     }
 
                     google.maps.event.addListener(marker, 'click', function() {
-                        store.set('selected', true);
+                        if (store.get('selected')) {
+                            popup.open(self.mapData.map, marker);
+                        }
+                        else {
+                            store.set('selected', true);
+                        }
                     });
 
                     self.markers[store.id] = {
