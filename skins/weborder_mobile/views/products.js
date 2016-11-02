@@ -113,7 +113,7 @@ define(["products_view"], function(products_view) {
                 return this.options.action === 'add';
             },
             product_price: {
-                deps: ['initial_price', "_product_combo_price", "modifiers"],
+                deps: ['initial_price', "_product_combo_price", "$model"],
                 get: function() {
                     var modifiers_price = this.model.get_sum_of_modifiers();
                     return round_monetary_currency(this.model.get_product_price() + modifiers_price);
