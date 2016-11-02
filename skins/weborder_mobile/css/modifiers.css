@@ -156,7 +156,9 @@ span.tooltip {
     padding: 0.5em 0.7em;
     position: absolute;
     z-index: 9999;
-    left: 2.3em;
+    left: 0;
+    top: 50%;
+    margin-left: 2.3em;
     -moz-transition: opacity .2s ease-out;
     -webkit-transition: opacity .2s ease-out;
     -o-transition: opacity .2s ease-out;
@@ -170,8 +172,9 @@ span.tooltip:before {
     content: ' ';
     display: block;
     height: 0;
-    left: -0.4em;
+    left: -1.9em;
     margin-top: -0.6em;
+    padding-left: 1.5em;
     position: absolute;
     top: 50%;
     width: 0;

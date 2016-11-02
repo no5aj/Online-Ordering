@@ -136,9 +136,6 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
         },
         showTooltip: function(event) {
             event.preventDefault();
-            if (event.target.className != 'info') {
-                return;
-            }
             var $el = this.$(event.target),
                 modifierLabel = $el.parent().parent();
 
@@ -148,16 +145,15 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
             this.hideTooltip();
 
             var $tooltip = this.$('.tooltip');
-            this.setTooltipPosition($tooltip, $el).removeClass('transparent');
+            this.setTooltipPosition($tooltip).removeClass('transparent');
         },
         hideTooltip: function() {
             return this.$('.tooltip').addClass('transparent');
         },
         setTooltipPosition: function(tooltip, el) {
-            var $tooltip = tooltip || Backbone.$('.tooltip:not(.transparent)'),
-                $el = el || $tooltip.parent();
+            var $tooltip = tooltip || Backbone.$('.tooltip:not(.transparent)');
             $tooltip.css({
-                top: - $tooltip.outerHeight()/2 + $el.outerHeight()/2
+                marginTop: $tooltip.outerHeight()/-2
             });
             return $tooltip;
         },
