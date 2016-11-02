@@ -1427,6 +1427,66 @@ define(['products', 'js/utest/data/Products', 'js/utest/data/Timetable', 'catego
                 expect(model.reorder(false)).toEqual([]);
                 expect(model.get('price')).toBe(25);
             });
+
+            it('`attribute_type` is 2 (child product)', function() {
+                var data = {
+                    actual_data: {
+                        available: true,
+                        is_cold: false,
+                        is_gift: false,
+                        sold_by_weight: false,
+                        tax: 5,
+                        price: 25
+                    },
+                    available: true,
+                    is_cold: false,
+                    is_gift: false,
+                    sold_by_weight: false,
+                    tax: 5,
+                    price: 20,
+                    has_upsell: true
+                };
+
+                model.set(_.extend(data, {
+                    attribute_type: 2,
+                    attribute_1_enable: true,
+                    attribute_2_enable: true
+                }));
+
+                model.reorder();
+                expect(model.get('attribute_1_selected')).toBe(true);
+                expect(model.get('attribute_2_selected')).toBe(true);
+
+                model.set(_.extend(data, {
+                    attribute_type: 2,
+                    attribute_1_enable: false,
+                    attribute_2_enable: true
+                }));
+
+                model.reorder();
+                expect(model.get('attribute_1_selected')).toBe(false);
+                expect(model.get('attribute_2_selected')).toBe(true);
+
+                model.set(_.extend(data, {
+                    attribute_type: 2,
+                    attribute_1_enable: true,
+                    attribute_2_enable: false
+                }));
+
+                model.reorder();
+                expect(model.get('attribute_1_selected')).toBe(true);
+                expect(model.get('attribute_2_selected')).toBe(false);
+
+                model.set(_.extend(data, {
+                    attribute_type: 2,
+                    attribute_1_enable: false,
+                    attribute_2_enable: false
+                }));
+
+                model.reorder();
+                expect(model.get('attribute_1_selected')).toBe(false);
+                expect(model.get('attribute_2_selected')).toBe(false);
+            });
         });
     });
 
