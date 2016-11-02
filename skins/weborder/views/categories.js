@@ -119,13 +119,8 @@ define(["generator", "list", "categories_view"], function() {
                 this.$('ul').find('input').attr('checked', false);
             }
             else if (this.collection.saved_parent_selected) {
-                var hasCheckedItems = this.$('ul').find('label').hasClass('checked');
-
-                if (!hasCheckedItems) {
-                    this.collection.setSelected(0, true);
-                    this.collection.setParentSelected(this.collection.saved_parent_selected);
-                }
-                
+                this.collection.setSelected(0, true);
+                this.collection.setParentSelected(this.collection.saved_parent_selected);
                 delete this.collection.saved_parent_selected;
             }
         },
@@ -227,6 +222,10 @@ define(["generator", "list", "categories_view"], function() {
             });
         },
         on_menu_change: function() {
+            if (this.collection.saved_parent_selected) {
+                delete this.collection.saved_parent_selected;
+            }
+
             this.options.searchLine.empty_search_line();
             this.collection.trigger("show_subcategory");
         },
