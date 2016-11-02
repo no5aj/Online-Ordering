@@ -725,6 +725,14 @@ define(["backbone", 'childproducts', 'collection_sort', 'product_sets'], functio
                 }
             }
 
+            // set attribute_<number>_selected to true for child products (Bug #52770)
+            if (this.get('attribute_type') == 2) {
+                this.set({
+                    attribute_1_selected: this.get('attribute_1_enable'),
+                    attribute_2_selected: this.get('attribute_2_enable')
+                });
+            }
+
             return changes;
         }
     });
