@@ -885,6 +885,7 @@ define(["main_router"], function(main_router) {
 
                 if (order_id > 0) {
                     reorderReq = this.reorder(order_id);
+                    window.location.replace('#checkout');
                 }
 
                 this.listenTo(customer, 'change:access_token', function() {
