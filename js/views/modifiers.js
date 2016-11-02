@@ -35,6 +35,7 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
             'change input': 'change',
             'click .special_label': 'add_special',
             'click .info': 'showTooltip',
+            'mouseover .info': 'showTooltip',
             'mouseout .info': 'hideTooltip'
         },
         bindings: {
