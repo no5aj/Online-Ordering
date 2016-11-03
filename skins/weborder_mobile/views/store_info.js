@@ -32,7 +32,8 @@ define(["store_info_view"], function(store_info_view) {
             '.delivery-info-wrapper': 'toggle: _system_settings_delivery_for_online_orders',
             '.delivery-minimum': 'text: currencyFormat(_system_settings_min_delivery_amount)',
             '.delivery-distance': 'text: delivery_distance',
-            '.delivery-time': 'text: delivery_time'
+            '.delivery-time': 'text: delivery_time',
+            '.change-store': 'toggle: showChangeStore'
         },
         events: {
             'click .address-link': 'onAddressClick',
@@ -99,6 +100,12 @@ define(["store_info_view"], function(store_info_view) {
                     }
 
                     return (label && value) ? (label + ': ' + value) : '';
+                }
+            },
+            showChangeStore: {
+                deps: ['$establishments', '_settings_establishment'],
+                get: function(estabs, cur_est) {
+                    return _.without(estabs.pluck('id'), cur_est).length;
                 }
             }
         },

@@ -1820,6 +1820,7 @@ define(["main_router"], function(main_router) {
                     content: {
                         modelName: 'StoreInfo',
                         model: model,
+                        establishments: App.Data.establishments,
                         mod: 'Main',
                         className: 'store-info',
                         cacheId: true
