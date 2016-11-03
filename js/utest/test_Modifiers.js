@@ -51,14 +51,26 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
         });
 
         describe('updateSum()', function() {
-            it('`free_amount` is undefined', function() {
+            beforeEach(function() {
                 spyOn(model, 'getSum').and.returnValue(10);
+            });
+
+            it('`max_price_amount` is set', function() {
+                model.set({
+                    max_price_amount: 10,
+                    free_amount: 5
+                });
                 model.updateSum(2);
                 expect(model.get('sum')).toBe(20);
             });
 
             it('`free_amount` is set', function() {
                 model.set('free_amount', 10);
+                model.updateSum(2);
+                expect(model.get('sum')).toBe(20);
+            });
+
+            it('`free_amount` is undefined', function() {
                 model.updateSum(2);
                 expect(model.get('sum')).toBe(20);
             });
@@ -283,7 +295,7 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
             def = deepClone(data.def),
             ex = deepClone(data.ex);
             ex2 = deepClone(data.ex2);
-
+            ex3 = deepClone(data.ex3);
         });
 
         it('Environment', function() {
@@ -316,6 +328,13 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
                 delete _ex.split;
                 delete _ex2.split;
                 expect(model.addJSON([_ex, _ex2]).pluck('split')).toEqual([true, true]);
+            });
+
+            it('`data` is array, `data[i].qty` is present instead of `data[i].quantity`', function() {
+                var res = model.addJSON([ex3]).toJSON();
+                expect(res).toEqual([ex3]);
+                expect(res[0].qty).toBeUndefined();
+                expect(res[0].quantity).toBe(data.ex3.qty);
             });
         });
 

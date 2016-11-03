@@ -36,7 +36,8 @@ define([], function() {
             "is_combo": false,
             "combo_price": null,
             "has_upsell": false,
-            "actual_data": null
+            "actual_data": null,
+            "max_price": null
         },
         "defaults_initialized": {
             "description": null,
@@ -74,7 +75,8 @@ define([], function() {
             "is_combo": false,
             "combo_price": null,
             "has_upsell": false,
-            "actual_data": null
+            "actual_data": null,
+            "max_price": null
         },
         "product_with_image": {
             "description": "some product",
@@ -113,7 +115,8 @@ define([], function() {
             "is_combo": false,
             "combo_price": null,
             "has_upsell": false,
-            "actual_data": null
+            "actual_data": null,
+            "max_price": null
         },
         "addJSON_without_image": {
             "image": "",

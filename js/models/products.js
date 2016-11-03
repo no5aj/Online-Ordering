@@ -253,7 +253,13 @@ define(["backbone", 'childproducts', 'collection_sort', 'product_sets'], functio
              * @type {?object}
              * @default null
              */
-            actual_data: null
+            actual_data: null,
+            /**
+             * Max price value of the product including modifiers.
+             * @type {?number}
+             * @default null
+             */
+            max_price: null
         },
         /**
          * Sets `img` as App.Data.settings.get("img_path") value, `checked_gift_cards` as `{}`,

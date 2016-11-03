@@ -69,6 +69,21 @@ define([], function() {
             "actual_data": null,
             "split": false
         },
+        "ex3": {
+            "id": 125554,
+            "name": "Test test test2",
+            "price": 2.75,
+            "sum": null,
+            "selected": true,
+            "sort": 4,
+            "cost": null,
+            "img": window._phantom ? "base/skins/weborder/img/" : "./skins/weborder/img/",
+            "qty": 1,
+            "qty_type": 0,
+            "description": null,
+            "actual_data": null,
+            "split": false
+        },
         "defBlock": {
             "id": null,
             "sort": null,

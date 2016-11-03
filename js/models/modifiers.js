@@ -186,7 +186,20 @@ define(["backbone"], function(Backbone) {
          * @param  {number} multiplier - a product quantity
          */
         updateSum: function(multiplier) {
-            var price = this.get('free_amount') != undefined ? this.get('free_amount') : this.getSum();
+            var freeAmount = this.get('free_amount'),
+                maxPriceAmount = this.get('max_price_amount')
+                price = 0;
+
+            // `max_price_amount` overrides `free_amount` and `price` if it's applied.
+            // `free_amount` overrides `price` if it's applied.
+            if (maxPriceAmount != undefined) {
+                price = maxPriceAmount;
+            } else if (freeAmount != undefined) {
+                var price = freeAmount;
+            } else {
+                price = this.getSum();
+            }
+
             this.set('sum', price * multiplier);
         },
         /**
