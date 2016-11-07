@@ -208,7 +208,6 @@ define(['backbone', 'factory'], function(Backbone) {
             });
 
             this.isShippingServices = this.options.checkout && this.options.checkout.get('dining_option') === 'DINING_OPTION_SHIPPING';
-
             if (this.isShippingServices)
                 this.listenTo(this.options.customer, 'change:shipping_services', this.updateShippingServices, this);
 
@@ -340,15 +339,23 @@ define(['backbone', 'factory'], function(Backbone) {
         },
         updateAddress: function() {
             App.Views.AddressView.prototype.updateAddress.apply(this, arguments);
-            var dining_option = this.options.checkout.get('dining_option'),
+            var checkout = this.options.checkout,
+                dining_option = checkout.get('dining_option'),
+                isDelivery = checkout.get('dining_option') === 'DINING_OPTION_DELIVERY',
+                isCatering = checkout.get('dining_option') === 'DINING_OPTION_CATERING',
                 model = this.options.customer.getCheckoutAddress(dining_option);
             // need to reset shipping services before updating them
             // due to server needs a no shipping service specified to return a new set of shipping services.
             this.options.customer.resetShippingServices();
-            this.isShippingServices = this.options.checkout && this.options.checkout.get('dining_option') === 'DINING_OPTION_SHIPPING';
-            if (this.isShippingServices && model.street_1 && model.city && model.country && model.zipcode
+            this.isShippingServices = checkout.get('dining_option') === 'DINING_OPTION_SHIPPING';
+
+            if (model.street_1 && model.city && model.country && model.zipcode
                 && (model.country == 'US' ? model.state : true) && (model.country == 'CA' ? model.province : true)) {
-                App.Data.myorder.update_cart_totals({update_shipping_options: true});
+                if (this.isShippingServices) {
+                    App.Data.myorder.update_cart_totals({update_shipping_options: true});
+                } else if (isDelivery || isCatering) {
+                    App.Data.myorder.update_cart_totals();
+                }
             }
         }
     });

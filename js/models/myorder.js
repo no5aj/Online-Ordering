@@ -1978,7 +1978,7 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
                     orderInfo: order_info
                 },
                 shipping_address,
-                isShipping,
+                isShipping, isDelivery, isCatering,
                 request;
 
             this.preparePickupTime();
@@ -1998,13 +1998,20 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
 
             order_info.dining_option = DINING_OPTION[checkout.dining_option];
 
-            isShipping = checkout.dining_option === 'DINING_OPTION_SHIPPING' && customer
-                && (shipping_address = this.getCustomerAddress())
-                && !customer._check_delivery_fields().length;
+            isShipping = checkout.dining_option === 'DINING_OPTION_SHIPPING' && checkAddressFields();
+            isDelivery = checkout.dining_option === 'DINING_OPTION_DELIVERY' && checkAddressFields();
+            isCatering = checkout.dining_option === 'DINING_OPTION_CATERING' && checkAddressFields();
+            function checkAddressFields() {
+                return customer && (shipping_address = myorder.getCustomerAddress())
+                       && !customer._check_delivery_fields().length;
+            }
 
             if(isShipping) {
                 order_info.shipping = customer.get('shipping_services')[customer.get('shipping_selected')] || {};
                 order_info.customer =  {address: shipping_address};
+            }
+            if(isDelivery || isCatering) {
+                order_info.customer = {address: shipping_address};
             }
 
             // add rewards card and selected discounts
