@@ -1143,11 +1143,12 @@ function inputTypeSwitcher(el, type) {
             el.attr("type", "number");
         }
         else if (type == 'float') { //for float numbers (1.23)
-            if (parseFloat(cssua.userAgent.android) >= 5 || cssua.userAgent.ios)
-                el.attr("type", "number");
-            else
+            if (cssua.userAgent.android)
                 el.attr("type", "tel");
-                // Some devices have problem with numeric (type='number') keypad - don't have '.', ',' symbols (Bug 11032)
+                // "phone" touchpad on ios doesn't have '.', ',' symbols
+            else
+                el.attr("type", "number");
+                // Some devices have problem with numeric (type='number') keypad - don't have '.', ',' symbols (Bug 11032, 53186)
         }
         else if (type == 'numeric') { //for numeric text (e.g 000123456)
             if (parseFloat(cssua.userAgent.android) >= 4.3 || parseFloat(cssua.userAgent.ios) >= 7)

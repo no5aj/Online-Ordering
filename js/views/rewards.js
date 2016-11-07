@@ -233,7 +233,6 @@
             '.visit-rewards': 'collection: $visitRewards, itemView: "visitRewards"',
             '.purchase-rewards-box': 'classes: {hide: not(length($purchaseRewards))}',
             '.purchase-rewards': 'collection: $purchaseRewards, itemView: "purchaseRewards"',
-            '.rewards-unavailable': 'toggle: not(length(rewards))',
             '.total-row-points': 'classes: {hide: isNull(balance_points)}',
             '.total-row-visits': 'classes: {hide: isNull(balance_visits)}',
             '.total-row-purchase': 'classes: {hide: isNull(balance_purchases)}',
