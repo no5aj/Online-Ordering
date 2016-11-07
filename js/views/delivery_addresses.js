@@ -341,13 +341,13 @@ define(['backbone', 'factory'], function(Backbone) {
             App.Views.AddressView.prototype.updateAddress.apply(this, arguments);
             var checkout = this.options.checkout,
                 dining_option = checkout.get('dining_option'),
-                isDelivery = checkout.get('dining_option') === 'DINING_OPTION_DELIVERY',
-                isCatering = checkout.get('dining_option') === 'DINING_OPTION_CATERING',
+                isDelivery = dining_option === 'DINING_OPTION_DELIVERY',
+                isCatering = dining_option === 'DINING_OPTION_CATERING',
                 model = this.options.customer.getCheckoutAddress(dining_option);
             // need to reset shipping services before updating them
             // due to server needs a no shipping service specified to return a new set of shipping services.
             this.options.customer.resetShippingServices();
-            this.isShippingServices = checkout.get('dining_option') === 'DINING_OPTION_SHIPPING';
+            this.isShippingServices = dining_option === 'DINING_OPTION_SHIPPING';
 
             if (model.street_1 && model.city && model.country && model.zipcode
                 && (model.country == 'US' ? model.state : true) && (model.country == 'CA' ? model.province : true)) {
