@@ -60,7 +60,9 @@
     display: inline-block;
 }
 
-.checkbox-outer .title_wrapper {
+.card__remember.checkbox-outer .title_wrapper,
+.billing_address .checkbox-outer .title_wrapper
+{
     width: 92%;
 }
 .billing_address .inactive

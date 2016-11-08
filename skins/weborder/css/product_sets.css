@@ -7,12 +7,15 @@
 }
 
 .combo_item .input {
-    border-radius: 0;
     padding: 0;
     cursor: pointer;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: content-box;
+}
+
+.combo_item .input.checkbox {
+    border-radius: 0;
 }
 
 .combo_item .mdf_spacer {
@@ -38,4 +41,8 @@
 
 .combo_item_wrap .checkbox[checked=checked]::before {
   margin: 3px;
+}
+
+.combo_item .checkbox-outer {
+    display: inline-block;
 }

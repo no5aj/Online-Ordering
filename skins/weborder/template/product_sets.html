@@ -4,8 +4,10 @@
         <span class="plus">+</span><span class="price"></span>
     </div>
     <div class="customize link fl-right primary-text"><%= _lp.COMBO_CUSTOMIZE %></div>
-    <div type="checkbox" class="input checkbox primary-border" id="product<%= id_product %>"></div>
-    <div class="title"><%= name %></div>
+    <div class="checkbox-outer">
+        <div type="checkbox" class="input checkbox primary-border" id="product<%= id_product %>"></div>
+        <div class="title"><%= name %></div>
+    </div>
     <% if (!sold_by_weight && !is_gift) { %>
     <div class="mdf_spacer">
         <span class='mdf_quantity select-wrapper primary-text' style="display:none;">

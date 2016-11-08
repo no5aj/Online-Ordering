@@ -25,8 +25,7 @@ define(["product_sets_view"], function(product_sets_view) {
 
     var ComboItemView = App.Views.CoreComboView.CoreComboItemView.extend({
         events: {
-            'click .customize': 'customize',
-            'click label': 'change'
+            'click .customize': 'customize'
         },
         start: function() {
             this.check_model();

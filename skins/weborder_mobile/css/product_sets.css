@@ -13,8 +13,8 @@
     line-height: 1em;
 }
 
-.product_set_list .combo_item .modifier__label {
-    margin-bottom: 1em;
+.product_set_list .combo_item .checkbox-outer {
+    display: inline-block;
 }
 
 .product_set_list .combo_item .input {
