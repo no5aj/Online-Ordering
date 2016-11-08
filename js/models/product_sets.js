@@ -141,7 +141,7 @@ define(["backbone", 'products', 'collection_sort', 'myorder'], function(Backbone
          * Initialization through a json object, used after the server is requested for product sets information
          * @param {Object} data
          */
-        addAjaxJSON: function(data) {
+        addAjaxJSON: function(data, combo_type) {
             var self = this, ext_data = {}, product;
 
             ext_data.minimum_amount = data.quantity ? data.quantity : 1;
@@ -169,8 +169,10 @@ define(["backbone", 'products', 'collection_sort', 'myorder'], function(Backbone
                 });
                 order_product.update_prices();
                 order_products.add(order_product);
-
             });
+            if (combo_type == 'upsell') {
+                order_products.models.sort(order_products.sort_comparator);
+            }
             ext_data['order_products'] = order_products;
 
             ext_data = _.extend({}, data, ext_data);
@@ -237,6 +239,9 @@ define(["backbone", 'products', 'collection_sort', 'myorder'], function(Backbone
      * @lends App.Collections.ProductSetModels.prototype
      */
     {
+        sort_comparator: function(m1, m2) {
+            return m1.get('product').get('sort') > m2.get('product').get('sort');
+        }
     });
 
     /**
@@ -272,7 +277,7 @@ define(["backbone", 'products', 'collection_sort', 'myorder'], function(Backbone
                     var product_sets = combo_type == 'combo' ? data : data['slots'];
                     product_sets.forEach(function(pset, index) {
                         var prod_set = new App.Models.ProductSet();
-                        prod_set.addAjaxJSON(pset);
+                        prod_set.addAjaxJSON(pset, combo_type);
                         self.add(prod_set);
                         if (combo_type == 'upsell') {
                             self.upcharge_name = data.name;
