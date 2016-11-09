@@ -35,9 +35,9 @@ define(["total_view"], function(total_view) {
         }),
         computeds: extendProto('computeds', {
             haveDiscountCodeOrRewards: {
-                deps: ['_lp_MYORDER_HAVE_DISCOUNT_CODE_OR_REWARDS', '_lp_MYORDER_DISCOUNT_CODE', '_lp_REWARDS_NUMBER'],
-                get: function(MYORDER_HAVE_DISCOUNT_CODE_OR_REWARDS, MYORDER_DISCOUNT_CODE, REWARDS_NUMBER) {
-                    return MYORDER_HAVE_DISCOUNT_CODE_OR_REWARDS.replace('%s', wrap(MYORDER_DISCOUNT_CODE, 'discount-link')).replace('%s', wrap(REWARDS_NUMBER, 'rewards-link'));
+                deps: ['_lp_MYORDER_HAVE_DISCOUNT_CODE_OR_REWARDS', '_lp_MYORDER_DISCOUNT_CODE', '_lp_REWARDS_NUMBER', '_lp_REWARDS_REDEEM', 'rewardsCard_number'],
+                get: function(MYORDER_HAVE_DISCOUNT_CODE_OR_REWARDS, MYORDER_DISCOUNT_CODE, REWARDS_NUMBER, REWARDS_REDEEM, number) {
+                    return MYORDER_HAVE_DISCOUNT_CODE_OR_REWARDS.replace('%s', wrap(MYORDER_DISCOUNT_CODE, 'discount-link')).replace('%s', wrap(number ? REWARDS_REDEEM : REWARDS_NUMBER, 'rewards-link'));
                 }
             },
             haveDiscountCode: {
@@ -47,9 +47,9 @@ define(["total_view"], function(total_view) {
                 }
             },
             haveRewards: {
-                deps: ['_lp_MYORDER_HAVE_DISCOUNT_CODE', '_lp_REWARDS_NUMBER'],
-                get: function(MYORDER_HAVE_DISCOUNT_CODE, REWARDS_NUMBER) {
-                    return MYORDER_HAVE_DISCOUNT_CODE.replace('%s', wrap(REWARDS_NUMBER, 'rewards-link'));
+                deps: ['_lp_MYORDER_HAVE_DISCOUNT_CODE', '_lp_REWARDS_NUMBER', '_lp_REWARDS_REDEEM', 'rewardsCard_number'],
+                get: function(MYORDER_HAVE_DISCOUNT_CODE, REWARDS_NUMBER, REWARDS_REDEEM, number) {
+                    return number ? wrap(REWARDS_REDEEM, 'rewards-link') : MYORDER_HAVE_DISCOUNT_CODE.replace('%s', wrap(REWARDS_NUMBER, 'rewards-link'));
                 }
             },
             showDiscountCode: {
@@ -91,8 +91,12 @@ define(["total_view"], function(total_view) {
             this.collection.get_cart_totals();
         },
         removeRewardRedemption: function() {
-            this.options.rewardsCard.resetData();
-            this.options.rewardCards.resetSelection();
+            var rewardsCard = this.options.rewardsCard,
+                rewardCards = this.options.rewardCards,
+                savedRewardCard = rewardCards.at(0);
+            rewardsCard.resetData();
+            savedRewardCard && rewardsCard.selectRewardCard(savedRewardCard);
+            rewardCards.resetSelection();
         }
     });
 

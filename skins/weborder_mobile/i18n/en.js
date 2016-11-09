@@ -211,6 +211,7 @@
         'REWARDS_VISIT_REWARDS': 'Visit Rewards',
         'REWARDS_PURCHASE_REWARDS': 'Purchase Rewards',
         'REWARDS_BALANCE_INFO': 'You\'ve earned $1 Reward Points for order items, $2 Reward Points for store visits and $3$4 Reward Points for store purchases.',
+        'REWARDS_REDEEM': 'Redeem Rewards',
         'CONFIRM_SUBMIT': 'Submit',
         'SEARCH_ENTER_STRING': 'Search',
         'PRODUCTS_NOT_FOUND': 'No products found',
