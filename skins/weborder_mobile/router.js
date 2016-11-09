@@ -312,6 +312,7 @@ define(["main_router"], function(main_router) {
                     App.Data.mainModel.trigger('loadCompleted');
                     App.Data.myorder.rewardsCard.trigger('onRedemptionApplyComplete');
                     self.navigate(self.rewardsPageReferrerHash, true);
+                    self.rewardsPageReferrerHash = null;
                 });
             }, this);
 
@@ -1886,7 +1887,10 @@ define(["main_router"], function(main_router) {
         },
         rewards_card_submit: function() {
             var rewardsCard = App.Data.myorder.rewardsCard;
-            this.rewardsPageReferrerHash = this.lastHash;
+
+            if (!App.Data.customer.isAuthorized() && !this.rewardsPageReferrerHash) {
+                this.rewardsPageReferrerHash = this.lastHash;
+            }
 
             App.Data.header.set({
                 page_title: _loc.HEADER_REWARDS_CARD_PT,
@@ -1931,7 +1935,10 @@ define(["main_router"], function(main_router) {
         reward_cards_select: function() {
             var self = this,
                 rewardCards = App.Data.customer.get('rewardCards');
-            this.rewardsPageReferrerHash = this.lastHash;
+
+            if (!this.rewardsPageReferrerHash) {
+                this.rewardsPageReferrerHash = this.lastHash;
+            }
 
             if (!rewardCards.length) {
                 return this.navigate('index', true);
