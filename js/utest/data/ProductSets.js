@@ -5,7 +5,7 @@ define([], function() {
             "sort": 1,
             "name": "Product set 1",
             "products": [{
-                "sort": 5,
+                "sort": 4,
                 "id_category": 479,
                 "is_cold": false,
                 "description": "",
@@ -46,7 +46,7 @@ define([], function() {
                 "price": 8,
                 "uom": "Unit"
             }, {
-                "sort": 6,
+                "sort": 3,
                 "id_category": 479,
                 "is_cold": false,
                 "description": "",
@@ -73,7 +73,7 @@ define([], function() {
                 "price": 9,
                 "uom": "Unit"
             }, {
-                "sort": 7,
+                "sort": 1,
                 "id_category": 479,
                 "is_cold": false,
                 "description": null,
@@ -111,6 +111,7 @@ define([], function() {
             "is_combo_saving": false,
             "order_products": [{
                 "product": {
+                    "actual_data": null,
                     "description": null,
                     "id": 2078,
                     "id_category": 495,
@@ -175,6 +176,7 @@ define([], function() {
                 "selected": true
             }, {
                 "product": {
+                    "actual_data": null,
                     "description": null,
                     "id": 2079,
                     "id_category": 495,

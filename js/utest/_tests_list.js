@@ -37,7 +37,7 @@ var tests_list = [
     'test_Total'
 ];
 
-//tests_list = ['test_Search'];
+//tests_list = ['test_ProductSets'];
 
 if (!window._phantom) {
     for(var key in tests_list) {

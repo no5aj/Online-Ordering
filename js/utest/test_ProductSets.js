@@ -38,8 +38,8 @@ define(['js/utest/data/ProductSets', 'product_sets'], function(data) {
             expect(modelJson.is_combo_saving).toBe(addJson.is_combo_saving);
         });
 
-        it('addAjaxJSON()', function() {
-            model.addAjaxJSON(dataJson);
+        it('addAjaxJSON() upsell mode', function() {
+            model.addAjaxJSON(dataJson, 'upsell');
 
             var modelJson = model.toJSON();
             expect(modelJson.id).toBe(dataJson.id);
@@ -51,12 +51,23 @@ define(['js/utest/data/ProductSets', 'product_sets'], function(data) {
             expect(modelJson.is_combo_saving).toBe(dataJson.is_combo_saving);
             expect(modelJson.order_products.length).toBe(dataJson.products.length);
 
+            expect(modelJson.order_products.at(0).get('product').get('name')).toBe('Burger $10');
+            expect(modelJson.order_products.at(1).get('product').get('name')).toBe('Burger $9');
+
             model = new App.Models.ProductSet();
             delete dataJson.quantity;
             model.addAjaxJSON(dataJson);
             var modelJson = model.toJSON();
             expect(modelJson.minimum_amount).toBe(1);
             expect(modelJson.maximum_amount).toBe(1);
+        });
+
+        it('addAjaxJSON() combo mode', function() {
+            model.addAjaxJSON(dataJson, 'combo');
+            var modelJson = model.toJSON();
+
+            expect(modelJson.order_products.at(0).get('product').get('name')).toBe('Burger $8');
+            expect(modelJson.order_products.at(1).get('product').get('name')).toBe('Burger $9');
         });
 
         it('get_selected_qty()', function() {

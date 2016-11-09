@@ -134,13 +134,15 @@ require(['app', 'utest/data/Settings'], function(app, settings_data) {
 
     /*
     *  Set multiline output for Jasmine
-    *  Use it after Jasmine tests processing completes.
+    *  Use it after Jasmine tests processing completes e.g. jasmineLineBreaks("to equal")
     */
-    window.jasmineLineBreaks = function() {
-        // This trick replaces the text from Jasmine marked by <br> into &#13;&#10;
+    window.jasmineLineBreaks = function(pattern) {
+        var from_pattern = pattern ? pattern : "&lt;br&gt;";
+        // This trick replaces the text from Jasmine marked by <br> into &#13;&#10 (by default);
         $(".messages div").each(function(index, elem) {
-            $(elem).html($(elem).html().replace("&lt;br&gt;", "&#13;&#10;") );
+            $(elem).html($(elem).html().replace(from_pattern, "&#13;&#10;" + from_pattern));
         });
+        $(".html-reporter .result-message").css("overflow-y", "auto");
     }
 
 });

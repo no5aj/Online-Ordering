@@ -239,8 +239,12 @@ define(["backbone", 'products', 'collection_sort', 'myorder'], function(Backbone
      * @lends App.Collections.ProductSetModels.prototype
      */
     {
+        /**
+         * Comparator for sorting products
+         * @return {number} - if the result <0 then m1 comes first, >0 then m1 comes last, =0 then no change in order
+         */
         sort_comparator: function(m1, m2) {
-            return m1.get('product').get('sort') > m2.get('product').get('sort');
+            return m1.get('product').get('sort') - m2.get('product').get('sort');
         }
     });
 
