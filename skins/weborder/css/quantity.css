@@ -4,7 +4,7 @@
 
 .quantity_info input,
 .weight-wrapper::before {
-    padding: 8px 0;
+    height: 42px;
     border: none;
     font-size: 21px;
     font-weight: 600;
