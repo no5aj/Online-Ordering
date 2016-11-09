@@ -252,7 +252,7 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
 
             if(typeof free_amount != 'undefined') {
                 hide.call($cost);
-                $free.find('.value').text(parseFloat(free_amount) ? '+' + currency_symbol + round_monetary_currency(free_amount) : MSG.MODIFIER_FREE);
+                $free.find('.value').text(parseFloat(free_amount) ? '+ ' + currency_symbol + round_monetary_currency(free_amount) : MSG.MODIFIER_FREE);
                 show.call($free);
             } else {
                 hide.call($free);
