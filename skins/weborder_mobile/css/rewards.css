@@ -140,3 +140,7 @@
     content: '−';
     padding-right: 5px;
 }
+
+.rewards-info .total-redemption {
+    white-space: nowrap;
+}
