@@ -117,7 +117,7 @@
         'MYORDER_ORDER_NOTES': 'Order Notes',
         'MYORDER_ORDER_NOTES_INPUT': 'Order notes',
         'MYORDER_HAVE_DISCOUNT_CODE': 'Have a %s?',
-        'MYORDER_HAVE_DISCOUNT_CODE_OR_REWARDS': 'Have a %s or %s?',
+        'MYORDER_HAVE_DISCOUNT_CODE_OR_REWARDS': 'Use a %s or %s',
         'MYORDER_DISCOUNT_CODE': 'Discount Code',
         'MYORDER_APPLY': 'Apply',
         'MYORDER_REMOVE_DISCOUNT': 'Remove Discount Code?',
