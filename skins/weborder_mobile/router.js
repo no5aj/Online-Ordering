@@ -616,7 +616,9 @@ define(["main_router"], function(main_router) {
                     isOrderChanged = false;
                 } else {
                     setHeaderToAdd();
-                    order.add_empty(id_product * 1, id_category * 1).then(showProductDetails);
+                    self.initCategories().always(function() {
+                        order.add_empty(id_product * 1, id_category * 1).then(showProductDetails);
+                    });
                 }
 
                 function showProductDetails() {

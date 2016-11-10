@@ -29,7 +29,7 @@
             "css": ["modifiers", "products", "quantity", "instructions", "myorder", "stanfordcard", "card"],
             "views": ["products", "quantity", "instructions", "myorder", "stanfordcard", "modifiers"],
             "templates": ["modifiers", "products", "quantity", "instructions", "myorder", "stanfordcard"],
-            "core": ["categories", "products", "modifiers"]
+            "core": ["categories", "products", "modifiers", "subcategories"]
         },
         "combo_product": {
             "css": ["modifiers", "products", "quantity", "instructions", "myorder", "stanfordcard", "card", "product_sets"],
