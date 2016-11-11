@@ -136,7 +136,7 @@ define(["backbone", "facebook", "js_cookie", "page_visibility", "giftcard", "ord
              * @type {boolean}
              * @default true
              */
-            terms_accepted: false,
+            terms_accepted: true,
             /**
              * Email notifications
              * @type {boolean}

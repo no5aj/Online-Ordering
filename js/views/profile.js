@@ -1407,10 +1407,6 @@ App.Views.CoreProfileView.CoreProfileAddressCreateView = App.Views.FactoryView.e
                 showMenu: showMenu,
                 showPWDReset: showPWDReset
             });
-
-            if (showSignUp) {
-                this.model.set('terms_accepted', false);
-            }
         };
     }
 
