@@ -494,6 +494,9 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
 
             // 'onReorderCompleted' event emits when an order completes a reorder
             this.listenTo(customer.orders, 'onReorderCompleted', function(changes) {
+                if (!App.Data.myorder.length) {
+                    return App.Data.errors.alert(_loc.PROFILE_REORDER_NO_ITEMS_AVAILABLE);;
+                }
                 if (Array.isArray(changes) && changes.length) {
                     App.Data.errors.alert(_loc.ORDER_CHANGED);
                 }
