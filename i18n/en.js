@@ -483,7 +483,7 @@
             'ERROR_INTEGRITY_TEST_MAIN': 'There is no testA_xx function in main.js (functions.js). Try manually clear the browser cache and restart.',
             'MODIFIER_FREE': 'free',
             'ERROR_PAYPAL_DIRECTIONS_NO_RESULT': 'Unable to get directions',
-            'NO_REWARDS_AVAILABLE': 'No rewards are available for this card number',
+            'NO_REWARDS_AVAILABLE': 'There are currently no qualified rewards for this loyalty account.',
             'MERCURY_RETURN_MESSAGE_SUCCESS': 'Success',
             'MERCURY_RETURN_MESSAGE_AUTH_FAIL': 'Auth Fail',
             'MERCURY_RETURN_MESSAGE_CARD_DECLINED': 'Card Declined',
