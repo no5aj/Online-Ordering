@@ -124,6 +124,24 @@
     text-indent: 20px;
 }
 
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  .combobox input {
+    text-indent: 0;
+  }
+  
+  .combobox input::-webkit-inner-spin-button,
+  .combobox input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+@-moz-document url-prefix() {
+  .combobox input {
+    text-indent: 10px;
+  }
+}
+
 .selectbox {
     display: none;
     width: 100%;
