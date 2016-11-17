@@ -1,0 +1,45 @@
+.resolve-background (@color) when (length(@color) > 1) {
+    @startColor: extract(@color, 1);
+    @endColor: extract(@color, 2);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, @startColor), color-stop(1, @endColor));
+    background: -o-linear-gradient(bottom, @startColor 0%, @endColor 100%);
+    background: -moz-linear-gradient(bottom, @startColor 0%, @endColor 100%);
+    background: -webkit-linear-gradient(bottom, @startColor 0%, @endColor 100%);
+    background: -ms-linear-gradient(bottom, @startColor 0%, @endColor 100%);
+    background: linear-gradient(to bottom, @startColor 0%, @endColor 100%);
+}
+
+.resolve-background (@color) when (length(@color) = 1) {
+    background: @color;
+}
+
+.resolve-background-alpha (@color, @alpha) when (length(@color) > 1) {
+    @startColor: fade(extract(@color, 1), @alpha);
+    @endColor: fade(extract(@color, 2), @alpha);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0, @startColor), color-stop(1, @endColor));
+    background: -o-linear-gradient(bottom, @startColor 0%, @endColor 100%);
+    background: -moz-linear-gradient(bottom, @startColor 0%, @endColor 100%);
+    background: -webkit-linear-gradient(bottom, @startColor 0%, @endColor 100%);
+    background: -ms-linear-gradient(bottom, @startColor 0%, @endColor 100%);
+    background: linear-gradient(to bottom, @startColor 0%, @endColor 100%);
+}
+
+.resolve-background-alpha (@color, @alpha) when (length(@color) = 1) {
+    background: fade(extract(@color, 1), @alpha);
+}
+
+.resolve-color (@color) {
+    color: extract(@color, 1);
+}
+
+.resolve-color-alpha (@color, @alpha) {
+    color: fade(extract(@color, 1), @alpha);
+}
+
+.resolve-border-color (@color) {
+    border-color: extract(@color, 1);
+}
+
+.resolve-border-color-alpha (@color, @alpha) {
+    border-color: fade(extract(@color, 1), @alpha);
+}

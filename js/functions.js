@@ -582,7 +582,7 @@ function loadCSS(name, loadModelCSS) {
         elem = loadCSS.cache[id];
     } else {
         //trace("name =", name, "starting load...");
-        elem = loadCSS.cache[id] = $('<link rel="stylesheet" href="' + name + '.css' + version + '" type="text/css" />');
+        elem = loadCSS.cache[id] = $('<link rel="stylesheet" href="' + name + (loadModelCSS.hasExtention ? '' : '.css') + version + '" type="text/css" />');
         // bug #18285 - no timeout for app assets
         var timer = window.setTimeout(error, App.Data.settings.get('timeout'));
 
