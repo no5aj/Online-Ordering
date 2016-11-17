@@ -21,6 +21,10 @@
     margin-bottom: 1.4em;
 }
 
+.profile-form .select-wrapper.placeholder select {
+    opacity: 0;
+}
+
 .profile-form .account-password-input {
     position: relative;
 }
