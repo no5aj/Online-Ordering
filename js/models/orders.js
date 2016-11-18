@@ -741,7 +741,7 @@ define(["backbone"], function(Backbone) {
             if (Array.isArray(orders)) {
                 return orders.filter(function(order) {
                     return order.items.every(function(item) {
-                        return !item.combo_used && !item.has_upsell && !item.is_combo;
+                        return !item.combo_used && !item.has_upsell && !item.is_combo && (App.Data.is_stanford_mode ? !item.actual_data.is_gift : true);
                     });
                 });
             }
