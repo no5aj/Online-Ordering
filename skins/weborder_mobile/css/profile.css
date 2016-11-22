@@ -44,7 +44,7 @@
 }
 
 .content-profile-login .login-fb-btn {
-    margin-bottom: .6em;
+    margin-bottom: 2.8rem;
     background: #3b5998;
     opacity: 0.89;
 }
@@ -58,15 +58,8 @@
     margin-bottom: 5.6em;
 }
 
-.profile-btns {
-    position: absolute;
-    bottom: 0;
-    left: 1.8em;
-    right: 1.8em;
-}
-
 .profile-btns .btn {
-    margin-bottom: 1.4em;
+    margin-bottom: 1.4rem;
     border-width: 1px;
     border-style: solid;
 }
