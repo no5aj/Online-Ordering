@@ -109,5 +109,13 @@
     bottom: 0px;
     background: black;
     z-index: 200;
-    overflow: hidden;    
+    overflow: hidden;
+}
+
+#googlemaps_popup {
+    margin-top: 1rem;
+}
+
+#googlemaps_popup .working-hours {
+    margin-top: 0.6em;
 }

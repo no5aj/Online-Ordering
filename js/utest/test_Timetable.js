@@ -493,7 +493,9 @@ define(['js/utest/data/Timetable', 'timetable'], function(timetables) {
                 get_dining_offset: function() {},
                 pickupTimeOptions: function() {},
                 checking_work_shop: function() {},
-                getLastPTforPeriod: function() { return "all-the-day"; }
+                getLastPTforPeriod: function() { return "all-the-day"; },
+                _isClosedToday: function() {}
+
             });
             this.timetables = App.Data.settings.get("settings_system").timetables;
             this.server_time = App.Data.settings.get("settings_system").server_time;
@@ -512,8 +514,9 @@ define(['js/utest/data/Timetable', 'timetable'], function(timetables) {
                 timetables: [],
                 server_time: 0,
                 holidays: [],
-                hours: null
-            };           
+                hours: null,
+                time_format: App.Settings.time_format
+            };
         });
 
         afterEach(function() {
@@ -715,14 +718,24 @@ define(['js/utest/data/Timetable', 'timetable'], function(timetables) {
             });
 
             it('timetable is defined and defined day. 12-hours format', function() {
-                App.Data.settings.get('settings_system').time_format = "12 hour";
-                model.set('timetables', timetable);
+                model.set({
+                    timetables: timetable,
+                    time_format: '12 hour'
+                });
                 expect(model.get_working_hours(date7)).toEqual(timetable[2].timetable_data.wednesday12);
             });
 
             it('timetable is defined and defined day. 24-hours format', function() {
-                model.set('timetables', timetable);
+                model.set({
+                    timetables: timetable,
+                    time_format: '24 hour'
+                });
+                expect(model.get_working_hours(date7)).toEqual(timetable[2].timetable_data.wednesday13);
 
+                model.set({
+                    timetables: timetable,
+                    time_format: '12 hour'
+                });
                 expect(model.get_working_hours(date7, 1)).toEqual(timetable[2].timetable_data.wednesday);
             });
 
@@ -757,13 +770,16 @@ define(['js/utest/data/Timetable', 'timetable'], function(timetables) {
             var date = new Date(2014, 0, 22),
                 dateBase,
                 counter, getTimetable,
-                table;
+                table,
+                format_output;
 
             beforeEach(function() {
+                format_output = undefined;
                 spyOn(model,'base').and.callFake(function() {
                     return new Date(dateBase);
                 });
-                spyOn(model,'get_working_hours').and.callFake(function() {
+                spyOn(model,'get_working_hours').and.callFake(function(date, output) {
+                    format_output = output;
                     return table();
                 });
                 dateBase = new Date(date);
@@ -786,6 +802,10 @@ define(['js/utest/data/Timetable', 'timetable'], function(timetables) {
                 expect(calls.filter(function(element, i) {
                     return element[0].getTime() !== dateBase.setTime(date.getTime() + i * 1000 * 60 * 60 * 24);
                 }).length).toBe(0);
+                expect(format_output).toBe(0);
+
+                model.get_timetable_on_week(1); // check result;
+                expect(format_output).toBe(1);
             });
 
             it('check result', function() {
@@ -859,19 +879,27 @@ define(['js/utest/data/Timetable', 'timetable'], function(timetables) {
             });
         });
 
+        it('round_date(date)', function() {
+            var date = new Date();
+                roundDate = model.round_date(date);
+            expect(roundDate.getHours()).toBe(0);
+            expect(roundDate.getMinutes()).toBe(0);
+            expect(roundDate.getSeconds()).toBe(0);
+        });
+
         describe('getPickupList()', function() {
-            var dateBase = new Date(2014, 0, 22);            
-                
+            var dateBase = new Date(2014, 0, 22);
+
             beforeEach(function() {
                 spyOn(model,'base').and.callFake(function() {
                     return new Date(dateBase);
-                }); 
+                });
                 App.Models.WorkingDay = this.working_day;
                 App.Settings.online_order_date_range = 100;
                 model.set({ timetables: timetables.timetable4 });
-            });                 
-           
-            it('default params', function() {                
+            });
+
+            it('default params', function() {
                 var list = model.getPickupList();
                 expect(list.length).toEqual(5);//number of valid days (not holidays and not closed a full day)
                 expect(list[0].delta).toEqual(10); //10 is delta [in days] between Jan-22 to Feb-1 (first valid day from timetables.timetable)
@@ -881,7 +909,7 @@ define(['js/utest/data/Timetable', 'timetable'], function(timetables) {
             it('out index_by_day_delta param', function() {
                 var index_by_day_delta = {};
                 var list = model.getPickupList(false, index_by_day_delta);
-               
+
                 expect(index_by_day_delta[10]).toEqual(0); //10 is delta [in days] between Jan-22 to Feb-1 (first valid day from timetables.timetable)
                 expect(index_by_day_delta[21]).toEqual(4); //21 is delta [in days] between Jan-22 to Feb-12 (first valid day from timetables.timetable)
             });
@@ -935,7 +963,7 @@ define(['js/utest/data/Timetable', 'timetable'], function(timetables) {
                     return !(i === 0 && element[0] === true || true); // only first call with arguments today.
                 }).length).toBe(0);
             });
-        
+
             it('pickupTimeOptions calls isDelivery = true', function() {
                 model.getPickupList(true);
                 var calls = model.workingDay.pickupTimeOptions.calls; // check get_working_hours calls
@@ -1072,6 +1100,41 @@ define(['js/utest/data/Timetable', 'timetable'], function(timetables) {
                 model.openNow();
 
                 expect(model.checking_work_shop).toHaveBeenCalledWith(dateBase);
+            });
+        });
+
+        describe('isClosedToday()', function() {
+            it('`workinDay` isn\'t initialized', function() {
+                var workingDay = undefined;
+                model.workingDay = workingDay;
+                expect(model.isClosedToday()).toBe(workingDay);
+            });
+
+            it('`workinDay` is initialized', function() {
+                var isClosed = true;
+                spyOn(model.workingDay, '_isClosedToday').and.returnValue(isClosed);
+                expect(model.isClosedToday()).toBe(isClosed);
+            });
+        });
+
+        describe('getWorkingHoursToday()', function() {
+            it('`getCurDayHours()` returns null', function() {
+                spyOn(model, 'getCurDayHours').and.returnValue(null);
+                expect(model.getWorkingHoursToday()).toBe(_loc.STORE_INFO_CLOSED);
+            });
+
+            it('`day` is an object, `day.hours` is an empty array', function() {
+                spyOn(model, 'getCurDayHours').and.callFake(function() {
+                    return {hours: []};
+                });
+                expect(model.getWorkingHoursToday()).toBe(_loc.STORE_INFO_ROUND_THE_CLOCK);
+            });
+
+            it('`day` is an object, `day.hours` is non-empty array', function() {
+                spyOn(model, 'getCurDayHours').and.callFake(function() {
+                    return {hours: [{from: '9:00', to: '14:00'}, {from: '16:00', to: '19:00'}]};
+                });
+                expect(model.getWorkingHoursToday()).toBe(_loc.STORE_INFO_OPEN_TODAY + ': 9:00 - 14:00, 16:00 - 19:00');
             });
         });
     });
