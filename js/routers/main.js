@@ -1017,7 +1017,13 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
                             zipcode: store.zipcode,
                             latitude: store.latitude,
                             longitude: store.longitude,
-                            selected: selected
+                            selected: selected,
+                            timetable: new App.Models.Timetable({
+                                timetables: store.timetables,
+                                holidays: store.holidays,
+                                server_time: store.server_time,
+                                time_format: store.system_settings.time_format
+                            })
                         };
                         data.region = settings.getRegion(data);
                         if (selected) {

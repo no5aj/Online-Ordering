@@ -141,3 +141,7 @@
     bottom: 76px;
     right: 0;
 }
+
+#googlemaps_popup .working-hours {
+    margin-top: 8px;
+}

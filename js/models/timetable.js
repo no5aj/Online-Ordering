@@ -443,7 +443,13 @@ define(["backbone"], function(Backbone) {
              * @type {?array}
              * @default null
              */
-            hours: null
+            hours: null,
+            /**
+             * Time format used for week/day working hours output.
+             * @type {string}
+             * @default ''
+             */
+            time_format: ''
         },
         /**
          * Initializes the model.
@@ -453,6 +459,7 @@ define(["backbone"], function(Backbone) {
                 hours;
             if (!this.get('timetables')) this.set('timetables', times.timetables);
             if (!this.get('holidays')) this.set('holidays', times.holidays);
+            if (!this.get('time_format')) this.set('time_format', times.time_format);
             if (this.get('server_time') == null) this.set('server_time', times.server_time);
             this.workingDay = new App.Models.WorkingDay();
             (hours = this.getHoursOnWeek()) && this.set('hours', hours);
@@ -586,8 +593,8 @@ define(["backbone"], function(Backbone) {
         /**
          * Gets an array of working hours on a particular day.
          * @param {Date} current_date - current date.
-         * @param {number} format_output - format of output time:
-         * - 0: 12-hours format (default);
+         * @param {number} [format_output=0] - format of time output:
+         * - 0: applies `time_format` attribute value;
          * - 1: 24-hours format.
          * @returns {?boolean}
          * - TRUE - around the clock;
@@ -606,14 +613,15 @@ define(["backbone"], function(Backbone) {
                 if (timetable === null) {
                     return null;
                 } else if (!empty_object(timetable)) { // check object (empty or not empty)
-                    var current_day_timetable = timetable[weekDays[current_date.getDay()]];
+                    var current_day_timetable = timetable[weekDays[current_date.getDay()]],
+                        time_format = this.get('time_format');
                     if (current_day_timetable) {
                         if (!format_output) {
                             var timetable_in_format = [];
                             for (var i = 0; i < current_day_timetable.length; i++) {
                                 var time = current_day_timetable[i],
-                                    time_from = new TimeFrm(time.from.split(":")[0] * 1, time.from.split(":")[1] * 1).toString(),
-                                    time_to = new TimeFrm(time.to.split(":")[0] * 1, time.to.split(":")[1] * 1).toString();
+                                    time_from = new TimeFrm(time.from.split(":")[0] * 1, time.from.split(":")[1] * 1, time_format).toString(),
+                                    time_to = new TimeFrm(time.to.split(":")[0] * 1, time.to.split(":")[1] * 1, time_format).toString();
 
                                 timetable_in_format.push({
                                     from: time_from, // output of time in requirement format
@@ -635,8 +643,8 @@ define(["backbone"], function(Backbone) {
         },
         /**
          * Gets timetable on the week from the current day.
-         * @param {number} format_output - format of output time:
-         * - 0: 12-hours format (default);
+         * @param {number} format_output - format of time output:
+         * - 0: applies `time_format` attribute value;
          * - 1: 24-hours format.
          * @returns {?object}
          * - timetable object in following format:
@@ -853,6 +861,37 @@ define(["backbone"], function(Backbone) {
             this.workingDay.start_time = 0;
             this.workingDay.end_time = 0;
             return this.checking_work_shop(this.base());
+        },
+        /**
+         * Checks whether the store is closed today or not
+         * @returns {boolean} `true` if the store is closed today.
+         */
+        isClosedToday: function() {
+            return this.workingDay && this.workingDay._isClosedToday();
+        },
+        /**
+         * @returns {string} One of the following strings:
+         *      'Open Today: <period 1>, <period 2>, ..., <period N>',
+         *      'Round the clock',
+         *      'Closed'
+         */
+        getWorkingHoursToday: function() {
+            var day = this.getCurDayHours(),
+                res = _loc.STORE_INFO_CLOSED;
+
+            if (_.isObject(day)) {
+                if (day.hours instanceof Array && day.hours.length > 0) {
+                    res = [];
+                    day.hours.forEach(function(day, i) {
+                        res.push(day.from + ' - ' + day.to);
+                    });
+                    res = _loc.STORE_INFO_OPEN_TODAY + ': ' + res.join(', ');
+                } else if(day.hours) {
+                    res = _loc.STORE_INFO_ROUND_THE_CLOCK;
+                }
+            }
+
+            return res;
         }
     });
 });
