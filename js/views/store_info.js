@@ -173,7 +173,8 @@ define(["backbone", "factory", "generator"], function(Backbone) {
                         address_url = '//maps.google.com?q=' + address_line,
                         zIndex = _store.selected ? self.activeMarkerZIndex : self.regularMarkerZIndex,
                         timetable = _store.timetable,
-                        coords, marker, popup, working_hours, isClosedToday;
+                        working_hours = '',
+                        coords, marker, popup, isClosedToday;
 
                     coords = new google.maps.LatLng(_store.latitude, _store.longitude),
                     marker = new google.maps.Marker({
@@ -184,8 +185,12 @@ define(["backbone", "factory", "generator"], function(Backbone) {
                         zIndex: zIndex
                     });
 
-                    working_hours = timetable ? timetable.getWorkingHoursToday() : '';
-                    isClosedToday = timetable && timetable.isClosedToday();
+                    if (timetable) {
+                        // to set timetable.workingDay.get('timetable');
+                        timetable.checking_work_shop(timetable.base());
+                        working_hours = timetable.getWorkingHoursToday();
+                        isClosedToday = timetable.isClosedToday();
+                    }
 
                     popup = new google.maps.InfoWindow({
                         content: '<div id="googlemaps_popup">' +

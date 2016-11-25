@@ -1021,7 +1021,7 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
                             timetable: new App.Models.Timetable({
                                 timetables: store.timetables,
                                 holidays: store.holidays,
-                                server_time: store.server_time,
+                                server_time: getDiffWithServerTime(store.server_time, store.time_zone_offset),
                                 time_format: store.system_settings.time_format
                             })
                         };
