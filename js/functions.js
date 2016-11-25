@@ -2657,6 +2657,21 @@ IN THE SOFTWARE.
         return null;
 }
 
+function getDiffWithServerTime(server_time, sever_time_zone_offset) {
+    var srvDate = new Date(server_time),
+        clientDate = new Date(),
+        diff;
+
+    sever_time_zone_offset = sever_time_zone_offset * 1000 || 0;
+
+    // create the delta in ms. between server and client by time_zone offset:
+    diff = sever_time_zone_offset + (new Date()).getTimezoneOffset() * 60 * 1000;
+    // add the delta in ms. between server and client times set:
+    diff +=  srvDate.getTime() - clientDate.getTime();
+
+    return diff;
+}
+
 /**
  * Detects the differences between objects including nested ones.
  * @param {Object} a - the first object for comparison.
