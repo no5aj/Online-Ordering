@@ -402,3 +402,15 @@ ul.reward-selection > li,
 .profile-menu.shown {
     .resolve-background-alpha(@shadow_background, 60%);
 }
+
+/* header customization */
+#header .title when (isurl(url(@header_logo_image))) {
+    display: inline-block !important;
+    height: 2em !important;
+    width: 10em !important;
+    background-image: url(@header_logo_image);
+    background-size: contain !important;
+    background-position: 50% !important;
+    background-repeat: no-repeat !important;
+    color: transparent;
+}
