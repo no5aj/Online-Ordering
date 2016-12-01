@@ -211,7 +211,7 @@
         'DONE_ORDER_SUBMITTED': 'Your Order from %s has been Submitted!',
         'DONE_ARRIVE_TIME': 'It should arrive at %s.',
         'DONE_PICKUP_TIME': 'You can pickup your order at %s.',
-        'DONE_DETAILS_INFO': 'Checkout out the details below about your order.',
+        'DONE_DETAILS_INFO': 'Check out the details below about your order.',
         'DONE_STORE_ADDRESS': 'Store Address',
         'STORE_INFO_MAP_SHOW_DELIVERY_AREA': 'Show Delivery Area',
         'PAST_ORDERS_DATE_TITLE': 'Date Ordered',
