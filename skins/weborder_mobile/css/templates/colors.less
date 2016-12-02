@@ -247,8 +247,7 @@ select:-moz-focusring {
     .resolve-color(@list_separator);
 }
 
-.profile-menu-links a:not(:last-child)::after,
-.toolbar {
+.profile-menu-links a:not(:last-child)::after {
     .resolve-background(@list_separator);
 }
 
@@ -403,8 +402,13 @@ ul.reward-selection > li,
     .resolve-background-alpha(@shadow_background, 60%);
 }
 
+/* [toolbar] *
+.toolbar {
+    background: @toolbar;
+}
+
 /* header customization */
-#header .title when (isurl(url(@header_logo_image))) {
+#header .main .title when (isurl(url(@header_logo_image))) {
     display: inline-block !important;
     height: 2em !important;
     width: 10em !important;
