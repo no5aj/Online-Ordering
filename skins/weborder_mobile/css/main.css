@@ -312,6 +312,10 @@ select::-ms-expand { /*Removes default IE style*/
     box-sizing: border-box;
 }
 
+.select-wrapper.no-arrows::after {
+    display: none;
+}
+
 .icon-check::before {
     content: '\f00c';
     font-family: "FontAwesome";

@@ -277,6 +277,10 @@ textarea:focus {
     background: inherit;
 }
 
+.select-wrapper.no-arrows::after {
+    display: none;
+}
+
 .select-wrapper[class] select {
     width: auto;
     padding-right: 27px;

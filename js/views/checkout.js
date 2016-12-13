@@ -203,9 +203,14 @@ define(["delivery_addresses", "generator"], function(delivery_addresses) {
         mod: 'order_type',
         bindings: {
             ':el': 'toggle: not(equal(dining_option, "DINING_OPTION_ONLINE"))',
+            '.select-wrapper': 'classes: { "no-arrows": hide_arrows }',
             '.order-type-select': 'value: diningOption, options: dining_options'
         },
         computeds: {
+            hide_arrows: function() {
+                var opts = this.getBinding('dining_options');
+                return opts.length <= 1;
+            },
             dining_options: function() {
                 var opts = [];
                 if (_.isObject(this.options.DINING_OPTION_NAME)) {
