@@ -113,13 +113,20 @@
   Backbone.Model.prototype.clone = function() {
       var copy = new this.constructor();
       for (var key in this.attributes) {
-          var value = this.get(key);
+          var new_value,
+              value = this.get(key);
+
           if (value && value.clone) {
               //trace("deep clone for key: ", key);
-              value = value.clone();
+              new_value = value.clone();
+          } else if (Array.isArray(value)) {
+              new_value = [];
+              new_value.push.apply(new_value, value);
+          } else {
+              new_value = value;
           }
           //trace("set value for key: ", key);
-          copy.set(key, value, {silent: true });
+          copy.set(key, new_value, {silent: true });
       }
       return copy;
   }

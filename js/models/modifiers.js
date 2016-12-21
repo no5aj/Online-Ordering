@@ -607,15 +607,23 @@ define(["backbone"], function(Backbone) {
 
             newBlock.stopListening(newBlock.get('modifiers'));
             for (var key in this.attributes) {
-                var value = this.get(key);
-                if (value && value.clone) { value = value.clone(); }
-                newBlock.set(key, value, {silent: true });
+                var new_value,
+                    value = this.get(key);
+
+                if (value && value.clone) {
+                    new_value = value.clone();
+                } else if (Array.isArray(value)) {
+                    new_value = [];
+                    new_value.push.apply(new_value, value);
+                } else {
+                    new_value = value;
+                }
+                newBlock.set(key, new_value, {silent: true });
             }
 
-            if(newBlock.get('amount_free_selected').length == 0)
+            if(newBlock.get('amount_free_selected').length == 0) {
                 newBlock.initFreeModifiers();
-            else
-                newBlock.restoreFreeModifiers();
+            }
 
             newBlock.listenToModifiers();
 
@@ -692,6 +700,13 @@ define(["backbone"], function(Backbone) {
                 return this.get('modifiers').update_prices(max_price);
             }
         },
+         /**
+         * Updates selected items that are considered as free.
+         * @returns {boolean} true - if this modifiers block has a quota on some amount of free modifiers, false - otherwise
+         */
+        isFreeModifiers: function() {
+            return this.get('amount_free') > 0;
+        },
         /**
          * Updates selected items that are considered as free.
          * @param {App.Models.Modifier} model - modifiers item.
@@ -702,11 +717,13 @@ define(["backbone"], function(Backbone) {
 
             var isPrice = this.get('amount_free_is_dollars'),
                 isAdmin = this.get('admin_modifier'),
-                amount = this.get('amount_free'),
+                isFree = this.isFreeModifiers(),
                 selected = this.get('amount_free_selected'),
                 needAdd = model.get('selected'),
                 changed = false;
-            var model_selected = selected.find(function(m){ return m.get('id') == model.get('id') }),
+            var model_selected = selected.find(function(id){
+                    return id == model.get('id')
+                }),
                 index = selected.indexOf(model_selected);
 
             // if it is admin_modifier amount_free functionality should be ignored
@@ -715,8 +732,8 @@ define(["backbone"], function(Backbone) {
             }
 
             // add modifier to free selected
-            if(amount && needAdd) {
-                selected.push(model);
+            if(isFree && needAdd) {
+                selected.push(model.get('id'));
                 changed = true;
             }
 
@@ -732,10 +749,10 @@ define(["backbone"], function(Backbone) {
             }
 
             if(isPrice) {
-                this.update_free_price(model);
+                this.update_free_price();
             }
             else {
-                this.update_free_quantity(model);
+                this.update_free_quantity();
             }
 
             this.set('amount_free_selected', selected);
@@ -756,19 +773,20 @@ define(["backbone"], function(Backbone) {
                 return;
             }
 
-            isPrice ? this.update_free_price(model) : this.update_free_quantity(model);
+            isPrice ? this.update_free_price() : this.update_free_quantity();
         },
         /**
          * Updates free items.
-         * @param {App.Models.Modifier} model - modifiers item
          */
-        update_free_quantity: function(model) {
-            var free_qty_amount = this.get('amount_free'),
+        update_free_quantity: function() {
+            var self = this,
+                free_qty_amount = this.get('amount_free'),
                 selected = this.get('amount_free_selected');
 
             var qty, delta,
                 qty_total = 0;
-            selected.forEach(function(model, index) {
+            selected.forEach(function(id, index) {
+                var model = self.get('modifiers').findWhere({id: id});
                 qty = model.get("quantity") * model.half_price_koeff();
                 qty_total += qty;
 
@@ -788,14 +806,15 @@ define(["backbone"], function(Backbone) {
         },
         /**
          * Updates free items.
-         * @param {App.Models.Modifier} model - modifiers item
          */
-        update_free_price: function(model) {
-            var amount = this.get('amount_free'),
+        update_free_price: function() {
+            var self = this,
+                amount = this.get('amount_free'),
                 selected = this.get('amount_free_selected');
 
-            selected.forEach(function(model) {
-                var price = model.get('price'),
+            selected.forEach(function(id) {
+                var model = self.get('modifiers').findWhere({id: id}),
+                    price = model.get('price'),
                     mdf_price_sum = model.getSum();
 
                 if(amount == 0)
@@ -821,25 +840,9 @@ define(["backbone"], function(Backbone) {
                 selected = this.get('amount_free_selected');
 
             modifiers instanceof Backbone.Collection && modifiers.where({selected: true}).forEach(function(modifier) {
-                if(selected.indexOf(modifier) == -1)
+                if(selected.indexOf(modifier.get('id')) == -1)
                     this.update_free(modifier);
             }, this);
-        },
-        /**
-         * Restores free modifiers.
-         */
-        restoreFreeModifiers: function() {
-            if(this.get('ignore_free_modifiers'))
-                return;
-
-            var amount_free_selected = this.get('amount_free_selected'),
-                restored = [];
-            amount_free_selected.forEach(function(modifier, index) {
-                var copiedModifier = this.get('modifiers').where({id: modifier.id, selected: true}); //modifier.get('id')
-                if(copiedModifier.length && copiedModifier[0])
-                    restored.push(copiedModifier[0]);
-            }, this);
-            this.set('amount_free_selected', restored);
         },
         /**
          * Adds listeners to `modifiers`.
