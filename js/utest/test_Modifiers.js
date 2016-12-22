@@ -614,7 +614,6 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
 
             beforeEach(function() {
                 spyOn(App.Models.ModifierBlock.prototype, 'initFreeModifiers');
-                spyOn(App.Models.ModifierBlock.prototype, 'restoreFreeModifiers');
                 spyOn(App.Models.ModifierBlock.prototype, 'listenToModifiers');
             });
 
@@ -623,7 +622,6 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
                 clone = model.clone();
 
                 commonExpect();
-                expect(App.Models.ModifierBlock.prototype.restoreFreeModifiers).not.toHaveBeenCalled();
                 expect(App.Models.ModifierBlock.prototype.initFreeModifiers).toHaveBeenCalled();
                 expect(App.Models.ModifierBlock.prototype.initFreeModifiers.calls.mostRecent().object).toBe(clone);
             });
@@ -634,8 +632,8 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
                 clone = model.clone();
 
                 commonExpect();
-                expect(App.Models.ModifierBlock.prototype.restoreFreeModifiers).toHaveBeenCalled();
-                expect(App.Models.ModifierBlock.prototype.restoreFreeModifiers.calls.mostRecent().object).toBe(clone);
+                expect(clone.get('amount_free_selected')).toEqual(model.get('amount_free_selected'));
+                expect(clone.get('amount_free_selected') == model.get('amount_free_selected')).toEqual(false);
             });
 
             function commonExpect() {
@@ -793,7 +791,7 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
             var modifier;
 
             beforeEach(function() {
-                modifier = new App.Models.Modifier();
+                modifier = new App.Models.Modifier({id: 1});
                 modifier.set(ex);
             });
 
@@ -818,12 +816,13 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
             it('`amount_free` is set, modifier is selected', function() {
                 model.set('amount_free', 10);
                 modifier.set('selected', true);
+                model.get('modifiers').add(modifier);
                 model.update_free(modifier);
-                expect(model.get('amount_free_selected')).toEqual([modifier]);
+                expect(model.get('amount_free_selected')).toEqual([modifier.get('id')]);
             });
 
             it('remove modifier from free selected', function() {
-                model.set('amount_free_selected', [modifier]);
+                model.set('amount_free_selected', [modifier.id]);
                 modifier.set('free_amount', 10);
                 modifier.set('selected', false);
 
@@ -838,7 +837,7 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
                 model.set('amount_free', 10);
                 model.set('amount_free_is_dollars', true);
                 model.update_free(modifier);
-                expect(model.update_free_price).toHaveBeenCalledWith(modifier);
+                expect(model.update_free_price).toHaveBeenCalled();
             });
         });
 
@@ -866,13 +865,13 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
                 model.set('amount_free_is_dollars', true);
                 model.update_free_quantity_change(arg);
 
-                expect(model.update_free_price).toHaveBeenCalledWith(arg);
+                expect(model.update_free_price).toHaveBeenCalledWith();
             });
 
             it('`amount_free_is_dollars` is false', function() {
                 model.update_free_quantity_change(arg);
 
-                expect(model.update_free_quantity).toHaveBeenCalledWith(arg);
+                expect(model.update_free_quantity).toHaveBeenCalledWith();
             });
         });
 
@@ -881,18 +880,20 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
             beforeEach(function() {
                 modifier1 = new App.Models.Modifier(ex);
                 modifier2 = new App.Models.Modifier(ex2);
+                model.get('modifiers').add([modifier1, modifier2]);
                 model.set('amount_free_selected', [modifier1, modifier2]);
             });
 
             it('`amount_free` is 1, 1 modifier selected', function() {
                 model.set('amount_free', 1);
-                model.set('amount_free_selected', [modifier1]);
+                model.set('amount_free_selected', [modifier1.id]);
                 model.update_free_quantity();
 
                 expect(modifier1.get('free_amount')).toBe(0);
             });
 
             it('`amount_free` is 1, 2 modifiers selected', function() {
+                model.set('amount_free_selected', [modifier1.id, modifier2.id]);
                 model.set('amount_free', 1);
                 model.update_free_quantity();
 
@@ -901,6 +902,7 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
             });
 
             it('`amount_free` is 2, 2 modifiers selected', function() {
+                model.set('amount_free_selected', [modifier1.id, modifier2.id]);
                 model.set('amount_free', 2);
                 model.update_free_quantity();
 
@@ -909,6 +911,7 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
             });
 
             it('`amount_free` is 1.5, 2 modifiers selected', function() {
+                model.set('amount_free_selected', [modifier1.id, modifier2.id]);
                 model.set('amount_free', 1.5);
                 modifier2.set('price', 1);
                 model.update_free_quantity();
@@ -918,6 +921,7 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
             });
 
             it('`amount_free` is 1, 2 modifiers selected, both by one half', function() {
+                model.set('amount_free_selected', [modifier1.id, modifier2.id]);
                 spyOn(modifier1, 'half_price_koeff').and.returnValue(0.5);
                 spyOn(modifier2, 'half_price_koeff').and.returnValue(0.5);
                 model.set('amount_free', 1);
@@ -928,6 +932,7 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
             });
 
             it('`amount_free` is 1, 2 modifiers selected, modifier1 is one half', function() {
+                model.set('amount_free_selected', [modifier1.id, modifier2.id]);
                 spyOn(modifier1, 'half_price_koeff').and.returnValue(0.5);
                 model.set('amount_free', 1);
                 modifier2.set('price', 1);
@@ -943,7 +948,8 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
             beforeEach(function() {
                 modifier1 = new App.Models.Modifier(ex);
                 modifier2 = new App.Models.Modifier(ex2);
-                model.set('amount_free_selected', [modifier1, modifier2]);
+                model.get('modifiers').add([modifier1, modifier2]);
+                model.set('amount_free_selected', [modifier1.id, modifier2.id]);
             });
 
             it('`amount_free` is 0', function() {
@@ -972,34 +978,6 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
 
                 expect(model.initFreeModifiers()).toBeUndefined();
                 expect(model.get).not.toHaveBeenCalledWith('modifiers');
-            });
-        });
-
-        describe('restoreFreeModifiers()', function() {
-            var modifier1, modifier2;
-            beforeEach(function() {
-                modifier1 = new App.Models.Modifier(ex);
-                modifier2 = new App.Models.Modifier(ex2);
-            });
-
-            it('`ignore_free_modifiers` is true', function() {
-                model.set('ignore_free_modifiers', true);
-                spyOn(model, 'get').and.callThrough();
-
-                expect(model.restoreFreeModifiers()).toBeUndefined();
-                expect(model.get).not.toHaveBeenCalledWith('amount_free_selected');
-            });
-
-            it('`ignore_free_modifiers` is false', function() {
-                model.get('modifiers').reset([modifier1, modifier2]);
-                model.set({
-                    ignore_free_modifiers: false,
-                    amount_free_selected: [modifier1, modifier2]
-                });
-                modifier1.set('selected', false);
-
-                expect(model.restoreFreeModifiers()).toBeUndefined();
-                expect(model.get('amount_free_selected')).toEqual([modifier2]);
             });
         });
 
