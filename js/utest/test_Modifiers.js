@@ -1174,13 +1174,34 @@ define(['modifiers', 'js/utest/data/Modifiers'], function(modifiers, data) {
 
         it('clone()', function() {
             model.addJSON(exBlocks2);
+            model.at(3).set("amount_free_selected", [31]);
             var clone = model.clone();
             expect(clone.length).toBe(model.length);
 
             expect(clone.__proto__).toBe(model.__proto__);
 
+            expect(clone.at(3).get('amount_free_selected')).not.toBe(model.at(3).get('amount_free_selected'));
+            expect(clone.at(3).get('amount_free_selected')).toEqual(model.at(3).get('amount_free_selected'));
+
             expect(clone.at(0).cid).not.toBe(model.at(0).cid);
             expect(clone.at(1).cid).not.toBe(model.at(1).cid);
+        });
+
+        it('clone() with init free modifiers', function() {
+            model.addJSON(exBlocks2);
+            spyOn(App.Models.ModifierBlock.prototype, 'initFreeModifiers');
+
+            var clone = model.clone();
+            expect(clone.length).toBe(model.length);
+
+            expect(clone.__proto__).toBe(model.__proto__);
+
+            expect(clone.at(3).get('amount_free_selected')).not.toBe(model.at(3).get('amount_free_selected'));
+            expect(clone.at(3).get('amount_free_selected')).toEqual(model.at(3).get('amount_free_selected'));
+
+            expect(clone.at(0).cid).not.toBe(model.at(0).cid);
+            expect(clone.at(1).cid).not.toBe(model.at(1).cid);
+            expect(App.Models.ModifierBlock.prototype.initFreeModifiers).toHaveBeenCalled();
         });
 
         it('update(newModel)', function() {
