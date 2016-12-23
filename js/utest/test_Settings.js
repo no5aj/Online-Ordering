@@ -1,4 +1,4 @@
-define(['js/utest/data/Settings'], function(settings) {
+define(['js/utest/data/Settings', 'settings'], function(settings) {
 
     describe('App.Models.Settings', function() {
         var baseSettings, local = {},

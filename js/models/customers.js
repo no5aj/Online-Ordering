@@ -246,7 +246,7 @@ define(["backbone", "facebook", "js_cookie", "page_visibility", "giftcard", "ord
          */
         FB_init: function() {
             FB.init({
-                appId   : '233118313739765',
+                appId   : App.Settings.fb_app_id,
                 version : 'v2.6'
             });
         },

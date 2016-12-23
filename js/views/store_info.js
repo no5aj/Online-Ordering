@@ -92,14 +92,20 @@ define(["backbone", "factory", "generator"], function(Backbone) {
         },
         map: function(zoomControl, panControl, mapTypeControl) {
             var settings = App.Settings,
-                self = this;
+                self = this,
+                GoogleMapsAPIURL = "https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true",
+                GoogleMapsAPIKey = App.Settings.google_maps_api_key;
+
+            if (GoogleMapsAPIKey) {
+                GoogleMapsAPIURL += '&key=' + GoogleMapsAPIKey;
+            }
 
             this.mapData = {
                 loadLib: Backbone.$.Deferred()
             };
             self.$(".view_larger_map").hide();
             self.$("#mapBox").hide();
-            settings.geolocation_load.done(function() {require(["async!https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"], function() {
+            settings.geolocation_load.done(function() {require(["async!" + GoogleMapsAPIURL], function() {
                 self.$("#mapBox").show();
                 var address = settings.address,
                     title = settings.business_name || '',

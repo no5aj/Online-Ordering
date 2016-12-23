@@ -5,6 +5,7 @@ require(['app', 'utest/data/Settings'], function(app, settings_data) {
     app.config.paths['blanket'] = "../core/js/utest/jasmine/lib/jasmine2/blanket";
     app.config.paths['jasmine_blanket'] = "../core/js/utest/jasmine/lib/jasmine2/jasmine-blanket";
     app.config.paths['model_errors'] = "../core/js/models/errors"; // don't use 'errors' path in require([...]) because it should be used in test_Errors.js to be added in total coverage list
+    app.config.paths['model_settings'] = "../core/js/models/settings"; // don't use 'settings' path in require([...]) because it should be used in test_Settings.js to be added in total coverage list
 
     app.config.shim['jasmine_blanket'] = {deps: ['blanket'],  exports: 'blanket'};
 
@@ -29,7 +30,7 @@ require(['app', 'utest/data/Settings'], function(app, settings_data) {
     // set config for require
     require.config(app.config);
 
-    require(['cssua', 'functions', 'model_errors', 'tests_list', 'e2e_list', 'settings', 'tax', 'main_router', 'locale'], function() {
+    require(['cssua', 'functions', 'model_errors', 'tests_list', 'e2e_list', 'model_settings', 'tax', 'main_router', 'locale'], function() {
         app.get = parse_get_params();
         // hardcode English locale
         App.Data.get_parameters = {locale: 'en'};

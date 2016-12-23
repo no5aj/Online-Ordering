@@ -459,7 +459,9 @@ define(["backbone", "async"], function(Backbone) {
                         "braintree":false,
                         "globalcollect":false
                     },
-                    recaptcha_site_key: '6LcTkCETAAAAAO-aSGuRIl6Habqu3f0s8WeAvV5R'
+                    recaptcha_site_key: '6LcTkCETAAAAAO-aSGuRIl6Habqu3f0s8WeAvV5R', // for *.revelup.com domain
+                    google_maps_api_key: '',
+                    fb_app_id: '233118313739765' // for *.revelup.com domain
                 },
                 load = $.Deferred();
 
@@ -479,6 +481,14 @@ define(["backbone", "async"], function(Backbone) {
                     switch (response.status) {
                         case "OK":
                             var data = response.data;
+
+                            if (!data.recaptcha_site_key) {
+                                data.recaptcha_site_key = settings_system.recaptcha_site_key;
+                            }
+
+                            if (!data.fb_app_id) {
+                                data.fb_app_id = settings_system.fb_app_id;
+                            }
 
                             $.extend(true, settings_system, data);
                             self.set('brand', data.brand);
@@ -742,13 +752,18 @@ define(["backbone", "async"], function(Backbone) {
                                  set_sys.address.state_province + " " +
                                  set_sys.address.postal_code + ", " +
                                  set_sys.address.country + ", " +
-                                 set_sys.address.line_1;
+                                 set_sys.address.line_1,
+                GoogleMapsAPIURL = "https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true";
+
+                if (set_sys.google_maps_api_key) {
+                    GoogleMapsAPIURL += '&key=' + set_sys.google_maps_api_key;
+                };
 
                 if (set_sys.geolocation_load.state() == 'resolved') {
                     return;
                 }
 
-                require(["async!https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"], function() {
+                require(["async!" + GoogleMapsAPIURL], function() {
                     if (just_load_lib)
                         return set_sys.geolocation_load.resolve();
                     var geocoder = new google.maps.Geocoder();
