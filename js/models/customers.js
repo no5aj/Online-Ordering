@@ -959,7 +959,7 @@ define(["backbone", "facebook", "js_cookie", "page_visibility", "giftcard", "ord
                     address: _.isObject(address) ? address : undefined,
                     email_notifications: attrs.email_notifications,
                     push_notifications: attrs.push_notifications,
-                    instance: getInstanceName(),
+                    instance: !isRevelinOrigin() ? getInstanceName() : undefined,
                     establishment_id: App.Data.settings.get_current_establishment()
                 }),
                 success: function(data) {
@@ -1651,7 +1651,7 @@ define(["backbone", "facebook", "js_cookie", "page_visibility", "giftcard", "ord
                 data: {
                     email: attrs.email,
                     password: attrs.password,
-                    instance: getInstanceName()
+                    instance: !isRevelinOrigin() ? getInstanceName() : undefined
                 },
                 success: function(data) {
                     this.trigger('onResendActivationSuccess');
