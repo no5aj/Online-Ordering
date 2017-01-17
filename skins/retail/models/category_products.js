@@ -166,6 +166,29 @@ define(['products', 'filters'], function() {
                 filtersData = [],
                 prop, filterItem;
 
+            // Preventing keys duplicates in the attributes
+            var src, dest, keys;
+
+            if (Object.keys(attr1).length > 1) {
+                src = attr1;
+                dest = attr2;
+                keys = Object.keys(src);
+            }
+            else if (Object.keys(attr2).length > 1) {
+                src = attr2;
+                dest = attr1;
+                keys = Object.keys(src);
+            }
+
+            keys && keys.forEach(function(key) {
+                if (!dest[key]) {
+                    return;
+                }
+
+                dest[key] = _.union(src[key], dest[key]);
+                delete src[key];
+            });
+
             // process attribute1 values
             for (prop in attr1) {
                 filtersData.push({
