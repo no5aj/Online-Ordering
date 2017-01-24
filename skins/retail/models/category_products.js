@@ -226,7 +226,7 @@ define(['products', 'filters'], function() {
                 return {
                     value: item,
                     title: item,
-                    uid: btoa(uprefix + item)
+                    uid: btoa(unescape(encodeURIComponent(uprefix + item)))
                 };
             }
         },
