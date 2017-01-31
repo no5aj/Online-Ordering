@@ -1085,7 +1085,15 @@ define(["main_router"], function(main_router) {
             function update_data(order) {
                 orderModel.set(order.attributes);
                 orderCollection.checkout.set('notes', order.get('notes'));
+
                 order.get('items').each(function(orderItem) {
+                    var modifiers = orderItem.get_modifiers();
+
+                    if (modifiers) {
+                        modifiers.invoke('reorderFreeModifiers');
+                        modifiers.trigger('modifiers_changed');
+                    }
+
                     orderCollection.add(orderItem);
                 });
             }
