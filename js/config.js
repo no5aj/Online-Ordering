@@ -46,7 +46,7 @@ define({
          * @type {string}
          * @description The actual path of [app]{@link module:facebook} module.
          */
-        facebook: "https://connect.facebook.net/en_US/sdk",
+        facebook: 'js/libs/facebook_sdk', //#WOMA-443 & WOMA-491, the recent lib url: https://connect.facebook.net/en_US/sdk.js
         /**
          * @type {string}
          * @description The actual path of [app]{@link module:app} module.
