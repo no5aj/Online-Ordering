@@ -480,7 +480,7 @@ define({
          * @type {string}
          * @description The actual path to [raven]{@link module:raven} module. Used for logging
          */
-        raven: 'https://cdn.ravenjs.com/3.12.1/raven.min' //previously tested with 3.0.4 version
+        raven: 'js/libs/raven.min' //#WOMA-491, version 3.12.1 url: https://cdn.ravenjs.com/3.12.1/raven.min.js
     },
     /**
      * A waiting time of a module loading.
