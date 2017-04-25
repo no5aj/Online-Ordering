@@ -237,7 +237,6 @@
             App.Data.devMode && traceDeferredObjects();
 
             trace(">>>> Application starts .................");
-            trace({for: 'pay'}, "with GET params: ", parse_get_params());
 
             app.get = parse_get_params();
 
@@ -320,8 +319,11 @@
 
             // init log object and listen to ajax errors
             App.Data.log = new App.Models.Log({init: window.initErrors});
+            App.Data.ajax_errors_count = 0;
             $(document).ajaxError(function(e, jqxhr, settings, exception) {
                 App.Data.log.pushAjaxError(settings.url, jqxhr.state(), exception.toString());
+                trace(e.type, settings.url, jqxhr.status, jqxhr.statusText);
+                App.Data.ajax_errors_count++;
             });
 
             // init settings object

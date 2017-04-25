@@ -3019,7 +3019,8 @@ function raven_send_error(title, options) {
     for(var i = 0; i < Math.min(maxSize, trace.cache.length); i++) {
         logData['zlog' + ('0' + (maxSize - i)).slice(-2)] = trace.cache[trace.cache.length - i - 1];
     }
-    return libs_raven.captureMessage(title + "\n" + details,
+    App.Data.ajax_errors_count = 0;
+    return libs_raven.captureMessage(title /*+ "\n" + details */,
         $.extend(true, {level: 'error', extra: logData}, raven_common_info(), options));
 }
 

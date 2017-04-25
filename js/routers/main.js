@@ -690,7 +690,7 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
             // (it happens when user loses connection after return from payment processor, and the app reloads when the connection is restored)
             App.Data.get_parameters = _.extend({}, parse_get_params(), PaymentProcessor.getPaymentData());
 
-            trace({for: 'pay'}, "GET params joined with session data:", App.Data.get_parameters);
+            trace({for: 'pay'}, "GET params with session data:", App.Data.get_parameters);
             this.listenTo(myorder, 'paymentResponse', function() {
                 var is_gift, card = App.Data.card,
                     giftcard = App.Data.giftcard,

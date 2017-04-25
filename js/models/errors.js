@@ -170,6 +170,13 @@ define(['backbone'], function(Backbone) {
             });
             // buttons (end)
             this.trigger('alertMessage');
+
+            if (!!reloadPage) {
+                clearTimeout(_app_start_logtimer);
+                setTimeout(function() {
+                    errorSend("Alert & reload", message);
+                }, 0);
+            }
         }
     });
 });

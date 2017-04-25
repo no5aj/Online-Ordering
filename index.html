@@ -15,6 +15,11 @@
             var is_minimized_version = !(/\/dev\//.test(window.location.href) || /\/core\//.test(window.location.href));
             var is_browser_unsupported = false;
             var _app_start_time = new Date;
+            var _app_start_logtimer = setTimeout(function() {
+                    if (App.Data.ajax_errors_count > 0) {
+                        errorSend("App starts with errors");
+                    }
+                }, 3 * 60 * 1000);
             window.initErrors = [];
             window.onerror = function(m, f, l){
                 if(window.initErrors)
