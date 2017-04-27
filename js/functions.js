@@ -3032,9 +3032,11 @@ var domainsPermitted = [
 }
 
 function raven_send_error(title, options) {
-    //var details = "STACK: " + (new Error).stack + "\nLogs(" + trace.cache.length + "):\n" + trace.cache.join("").substring(0, 8200);
     if (App.SettingsDirectory && !(App.SettingsDirectory.sentry_errors_logging || IsDomainPermittedForSentry())) {
         return;
+    }
+    if (App.SettingsDirectory && App.SettingsDirectory.sentry_errors_logging == "NO") {
+        return; //it's to prohibit logging for a server in domainsPermitted array.
     }
 
     var logData = {},
@@ -3043,7 +3045,7 @@ function raven_send_error(title, options) {
         logData['zlog' + ('0' + (maxSize - i)).slice(-2)] = trace.cache[trace.cache.length - i - 1];
     }
     App.Data.ajax_errors_count = 0;
-    libs_raven && libs_raven.captureMessage(title /*+ "\n" + details */,
+    libs_raven && libs_raven.captureMessage(title,
         $.extend(true, {level: 'error', extra: logData}, raven_common_info(), options));
 }
 
