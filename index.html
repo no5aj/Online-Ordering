@@ -16,7 +16,9 @@
             var is_browser_unsupported = false;
             var _app_start_time = new Date;
             var _app_start_logtimer = setTimeout(function() {
-                    if (App.Data.ajax_errors_count > 0) {
+                    if ((App.skin == App.Skins.RETAIL || App.skin == App.Skins.WEBORDER) && _app_start_time !== true) {
+                        errorSend("App startup timeout");
+                    } else if (App.Data.ajax_errors_count > 0) {
                         errorSend("App starts with errors");
                     }
                 }, 3 * 60 * 1000);

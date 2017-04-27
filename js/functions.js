@@ -979,7 +979,7 @@ function loadSpinner(logo, anim_params, cb) {
             App.Data.images[makeImageName(logo)] = logo.clone();
             img.remove();
             typeof cb == 'function' && cb(logo);
-            App.Data.log && App.Data.log.pushImageError(e.target.src);
+            //App.Data.log && App.Data.log.pushImageError(e.target.src); //no need to push it to GA now
         });
         if (s == undefined) {
             s = $(spinner);
@@ -2983,9 +2983,10 @@ function logdiff(o1, o2) {
 
 function raven_init() {
     window.libs_raven = require('raven');
-
+    window.last_raven_ids = [];
     if (!libs_raven) {
         console.error('Raven: raven sdk is not loaded');
+        return;
     }
     libs_raven.config('https://6747797784d64d00b35d77aea85a998e@sentry.revelup.com/21', {
         autoBreadcrumbs: {
@@ -2995,32 +2996,54 @@ function raven_init() {
             'location': false  // url changes, including pushState/popState
         }
     }).install();
+    $(window).on('ravenSuccess', function(data){
+        var event_id = libs_raven.lastEventId();
+        last_raven_ids.push(event_id);
+        last_raven_ids = last_raven_ids.slice(-4);
+        console.log("Sentry last event id =", event_id);
+    });
 }
 
 function raven_send_report(title, options, cb_success) {
     var extra_msg = getOption(options, 'extra_msg', ''),
-        details = (extra_msg + "\nLOGS:\n" + trace.prev_cache.join("").substring(-4000) + trace.cache.join("")).substring(0, 8200);
+        details = (extra_msg + "\nLOGS:\n" + trace.prev_cache.join("\n\> ").substring(-4000) + trace.cache.join("\n\> ")).substring(0, 8200);
 
     $(window).one('ravenSuccess', function(data){
-        var event_id = libs_raven.lastEventId();
-        console.log("lastEventId = ", event_id);
+        var event_id = (libs_raven && libs_raven.lastEventId());
         cb_success & cb_success(event_id);
     });
 
-    libs_raven.captureMessage(title + "\n" + details,
+    libs_raven && libs_raven.captureMessage(title + "\n" + details,
         $.extend(raven_common_info(), {level: 'info'}, options));
 }
 
+function IsDomainPermittedForSentry() {
+var domainsPermitted = [
+    "localhost.revelup.com",
+    "qa2.revelup.com",
+    "2-27.revelup.com",
+    "2-28.revelup.com",
+    "2-29.revelup.com",
+    "zellaspizza.revelup.com",
+    "zacharys.revelup.com"
+    ];
+
+    return domainsPermitted.indexOf(window.location.hostname) != -1;
+}
+
 function raven_send_error(title, options) {
-    var details = "STACK: " + (new Error).stack + "\nLogs(" + trace.cache.length + "):\n" + trace.cache.join("").substring(0, 8200);
+    //var details = "STACK: " + (new Error).stack + "\nLogs(" + trace.cache.length + "):\n" + trace.cache.join("").substring(0, 8200);
+    if (App.SettingsDirectory && !(App.SettingsDirectory.sentry_errors_logging || IsDomainPermittedForSentry())) {
+        return;
+    }
 
     var logData = {},
-        maxSize = 40;
-    for(var i = 0; i < Math.min(maxSize, trace.cache.length); i++) {
+        maxSize = Math.min(40, trace.cache.length);
+    for(var i = 0; i < maxSize; i++) {
         logData['zlog' + ('0' + (maxSize - i)).slice(-2)] = trace.cache[trace.cache.length - i - 1];
     }
     App.Data.ajax_errors_count = 0;
-    return libs_raven.captureMessage(title /*+ "\n" + details */,
+    libs_raven && libs_raven.captureMessage(title /*+ "\n" + details */,
         $.extend(true, {level: 'error', extra: logData}, raven_common_info(), options));
 }
 
@@ -3042,6 +3065,7 @@ function raven_common_info() {
     return {
         tags: {skin: App.skin, hostname: window.location.hostname },
         extra: {
+            _last_report_ids: window.last_raven_ids,
             _server_host: App.Data.settings.get('host'),
             system_settings: App.Settings,
             directory_settings: App.SettingsDirectory
@@ -3099,7 +3123,7 @@ function trace(opt) { //window.trace
         trace.cache = trace.cache.slice(-200);
     }
 
-    isReport && trace.cache.push("> " + msg + "\n");
+    isReport && trace.cache.push(msg);
     isReport && !empty_object(App.Data.settings) && setData("traceLog", trace.cache);
 }
 
@@ -3127,6 +3151,18 @@ function triggerJSError() {
     setTimeout( function() {
         throw new Error("Test Error");
     }, 100);
+}
+
+function triggerAjaxError() {
+    $.ajax({
+        type: "GET",
+        url: "/weborders/products/",
+        dataType: "json",
+        success: function() {
+        },
+        error: function() {
+        }
+    });
 }
 
 function logSafe(obj, key) {

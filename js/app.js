@@ -321,9 +321,11 @@
             App.Data.log = new App.Models.Log({init: window.initErrors});
             App.Data.ajax_errors_count = 0;
             $(document).ajaxError(function(e, jqxhr, settings, exception) {
-                App.Data.log.pushAjaxError(settings.url, jqxhr.state(), exception.toString());
-                trace(e.type, settings.url, jqxhr.status, jqxhr.statusText);
-                App.Data.ajax_errors_count++;
+                //App.Data.log.pushAjaxError(settings.url, jqxhr.state(), exception.toString()); // no reason to push it to GA now
+                if (!/customers-auth/.test(settings.url)) {
+                    trace(e.type, settings.url, jqxhr.status, jqxhr.statusText);
+                    App.Data.ajax_errors_count++;
+                }
             });
 
             // init settings object
