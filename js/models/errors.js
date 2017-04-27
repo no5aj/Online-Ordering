@@ -172,7 +172,9 @@ define(['backbone'], function(Backbone) {
             this.trigger('alertMessage');
 
             if (!!reloadPage) {
-                clearTimeout(_app_start_logtimer);
+                if (typeof _app_start_logtimer != 'undefined') {
+                    clearTimeout(_app_start_logtimer);
+                }
                 setTimeout(function() {
                     errorSend("Alert & reload", message);
                 }, 0);

@@ -2462,6 +2462,7 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
                     lastPickupTime: 'last pt',
                     dining_option: '',
                     pickupTime: '',
+                    pickupTS: null,
                     level: '',
                     section: '',
                     row: '',

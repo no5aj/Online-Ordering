@@ -3006,7 +3006,7 @@ function raven_init() {
 
 function raven_send_report(title, options, cb_success) {
     var extra_msg = getOption(options, 'extra_msg', ''),
-        details = (extra_msg + "\nLOGS:\n" + trace.prev_cache.join("\n\> ").substring(-4000) + trace.cache.join("\n\> ")).substring(0, 8200);
+        details = (extra_msg + "\nLOGS:\n" + trace.prev_cache.join("\n\> ").substring(-4000) + "\n" + trace.cache.join("\n\> ")).substring(0, 8200);
 
     $(window).one('ravenSuccess', function(data){
         var event_id = (libs_raven && libs_raven.lastEventId());
@@ -3189,7 +3189,7 @@ function trace_init(simple) {
                     console.log.apply(window.console, arguments);
                 }
             }
-            window.errorSend = console.error.bind(window.console);
+            window.errorSend = console.log.bind(window.console);
         }
 
         trace.simple = true;
