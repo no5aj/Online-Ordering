@@ -1745,7 +1745,7 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
 
             function register() {
                 var check = customer.checkSignUpData(),
-                    _address = address.get('country') ? address.toJSON() : undefined; // only filled address can be passed
+                    _address = addresses.at(0).get('country') ? addresses.at(0).toJSON() : undefined; // only filled address can be passed
                 if (check.status == 'OK') {
                     mainModel.trigger('loadStarted');
                     customer.signup(_address)
