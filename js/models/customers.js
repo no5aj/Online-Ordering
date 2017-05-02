@@ -262,7 +262,7 @@ define(["backbone", "facebook", "js_cookie", "page_visibility", "giftcard", "ord
                 if (typeof cb === 'function') {
                     cb(response);
                 }
-            }, {scope: 'public_profile,email'});
+            }, {scope: 'public_profile,email', auth_type: 'rerequest'});
         },
         /**
          * Trims value of attribute passed as parameter.
