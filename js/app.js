@@ -184,9 +184,6 @@
              */
             config: config,
             init: init,
-            addSpinner: addSpinner,
-            getFontSize: getFontSize,
-            initSpinner: initSpinner,
             /**
              * A function is called before the app init. If you want to do something before the app init need to override this function.
              * @type {Function}
@@ -228,9 +225,6 @@
 
         // set config for require
         require.config(app.config);
-
-        // start spinner
-        var spinner = app.initSpinner(app.addSpinner, app.getFontSize);
 
         require(['cssua', 'raven', 'functions', 'generator', 'errors', 'errors_view', 'myorder', 'settings', 'timetable', 'log', 'tax', 'main_router', 'locale'], function() {
             var win = Backbone.$(window);
@@ -275,6 +269,7 @@
 
             App.Data.spinnerStartEvents = [];
 
+            App.Data.getSpinnerSize = MainSpinner.getFontSize;
             // init spinner plugin
             createSpinnerPlugin();
 
@@ -290,14 +285,14 @@
                 }
 
                 if (data.isLastEvent) {
-                    spinner.style.display = 'none';
+                    mainSpinnerEl.style.display = 'none';
                     return;
                 }
                 setTimeout( function() {
                     //#19303 we should wait in the case of a events series e.g. Start -> Navigate -> Search,
                     //only the last event (isLastEvent flag) should hide the spinner immediately.
                     if (App.Data.spinnerEvents.length == 0) {
-                        spinner.style.display = 'none';
+                        mainSpinnerEl.style.display = 'none';
                     }
                 }, 50);
             });
@@ -312,7 +307,7 @@
                 }
                 setTimeout( function() {
                     if (App.Data.spinnerEvents.indexOf(data.startEvent) >= 0) {
-                        spinner.style.display = 'block';
+                        mainSpinnerEl.style.display = 'block';
                     }
                 }, 50);
             });
@@ -412,79 +407,12 @@
         });
     }
 
-    /**
-     * Appends a spinner to html element. 'this' keyword value should be an HTMLElement instance.
-     * @memberof module:app
-     * @type {Function}
-     * @static
-     * @example
-     * // load 'app' module and add spinner to `body` element
-     * require(['app'], function('app') {
-     *     app.addSpinnder.call(document.body);
-     * });
-     */
-    function addSpinner() {
-        var html = '<div class="ui-spinner animate-spin"></div>';
-        if('absolute' !== this.style.position) {
-            this.style.position = 'relative';
-        }
-        this.innerHTML += html;
-    }
-
-    /**
-     * Calculates a font size based on client size. This value affects CSS sizes in `em` units.
-     * @memberof module:app
-     * @type {Function}
-     * @static
-     * @example
-     * // load 'app' module and set a font size to `body` element
-     * require(['app'], function('app') {
-     *     var fontSize = app.getFontSize(document.body);
-     *     document.body.style.fontSize = fontSize + 'px';
-     * });
-     * @returns {number} base font size
-     */
-    // define font-size for spinner
-    function getFontSize() {
-        var wCoef = document.documentElement.clientWidth / 640,
-            hCoef = document.documentElement.clientHeight / 700,
-            baseSize = 12;
-
-        if (wCoef > hCoef)
-            return Math.round(hCoef * baseSize * 1.5);
-        else
-            return Math.round(wCoef * baseSize * 1.5);
-    }
-
-    // show spinner when App is initializing and init jquery `spinner` plugin
-    function initSpinner(addSpinner, getFontSize) {
-        var nodes = document.querySelectorAll('html, body');
-        var i = 0;
-        for (; i < nodes.length; i++) {
-            nodes[i].style.width = '100%';
-            nodes[i].style.height = '100%';
-            nodes[i].style.margin = '0';
-        }
-
-        App.Data.getSpinnerSize = getFontSize;
-        document.querySelector('body').innerHTML = '<div class="ui-loader-default" style="width: 100%; height: 100%; font-size:' + getFontSize() + 'px !important" id="loader"></div>';
-        var loader = document.querySelector('#loader');
-        addSpinner.call(loader);
-        loader.style.cssText += "background-color: rgba(170, 170, 170, .8); position: absolute;";
-
-        if (App.Data.is_stanford_mode) {
-            $(".ui-spinner").addClass("stanford");
-        }
-
-        return loader;
-    }
-
     function createSpinnerPlugin() {
         // jquery `spinner` plugin
         $.fn.spinner = function(options) {
             var self = this;
             trace({for: 'spinner'}, "$.fn.spinner add");
-            this.each(addSpinner);
+            this.each( MainSpinner.addSpinner );
             if (App.Data.is_stanford_mode) {
                 this.find(".ui-spinner").addClass("stanford");
             }
