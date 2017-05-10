@@ -613,6 +613,32 @@ define(['js/utest/data/Timetable', 'timetable'], function(timetables) {
 
         });
 
+        describe('_get_timetable() for an open EndDate interval', function() {
+            var date = new Date(2014, 0, 22),// Wed Jan 22
+                date2 = new Date(2014, 3, 6), // April 6 sunday
+                date3 = new Date(2014, 1, 2); // Feb 2
+                var timetable6 = deepClone(timetables.timetable6);
+
+            it('empty timetables', function() {
+                expect(model._get_timetable(date)).toBeNull();
+            });
+
+            it('closed', function() {
+                model.set('timetables', timetable6);
+                expect(model._get_timetable(date)).toBe(false);
+            });
+
+            it('always open', function() {
+                model.set('timetables', timetable6);
+                expect(model._get_timetable(date2)).toEqual({});
+            });
+
+            it('timetable is defined', function() {
+                model.set('timetables', timetable6);
+                expect(model._get_timetable(date3)).toEqual(timetable6[1].timetable_data);
+            });
+        });
+
         describe("isHoliday()", function() {
             var date = new Date(2014, 0, 22),
                 dateBase = new Date(date);

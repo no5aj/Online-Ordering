@@ -527,6 +527,7 @@ define(["backbone"], function(Backbone) {
          */
         _get_timetable: function(current_date) {
             var table = this.get('timetables'),
+                parse, from_date_year,
                 current_date_year = current_date.getFullYear();
 
             if ((Array.isArray(table) && table.length == 0) || empty_object(table)) { // check object (empty or not empty)
@@ -534,7 +535,19 @@ define(["backbone"], function(Backbone) {
             } else {
                 for (var i = 0, j = table.length; i < j; i++) {
                     var cur_date = new Date(current_date.getTime()); //#22327, to get ready for table[] is unsorted
-                    // from date (begin)
+                    if ($.trim(table[i].to_date) == '') { //nonperiodic interval with open end date
+                        //The format is "Jan 22, 2018"
+                        parse = $.trim(table[i].from_date).match(/(\w+)\s+(\d+)\,\s(\d{4})/);//returns e.g. ["Jan 22, 2018", "Jan", "22", "2018"]
+                        from_date_month = parse[1];
+                        from_date_day = parse[2];
+                        from_date_year = parse[3];
+                        from_date = new Date(from_date_year, this._get_month_id(from_date_month), from_date_day);
+                        to_date = new Date(2500, 0, 1); //set distant future date
+                        if (cur_date >= from_date) {
+                            return table[i].timetable_data;
+                        }
+                    } else {
+                    // from date (begin), //The format is "Jan, 22"
                     var from_date_month = this._get_month_id($.trim(table[i].from_date.split(",")[0])), // get ID of month in format JS
                         from_date_day = $.trim(table[i].from_date.split(",")[1]),
                         from_date = new Date(current_date_year, from_date_month, from_date_day),
@@ -543,12 +556,12 @@ define(["backbone"], function(Backbone) {
                         to_date_month = this._get_month_id($.trim(table[i].to_date.split(",")[0])), // get ID of month in format JS
                         to_date_day = $.trim(table[i].to_date.split(",")[1]),
                         to_date = new Date(current_date_year, to_date_month, to_date_day);
-                    // to date (end)
-                    from_date > to_date && to_date.setFullYear(to_date.getFullYear() + 1);
-                    from_date > cur_date && cur_date.setFullYear(cur_date.getFullYear() + 1);
-
-                    if (cur_date <= to_date) {
-                        return table[i].timetable_data;
+                        // to date (end)
+                        from_date > to_date && to_date.setFullYear(to_date.getFullYear() + 1);
+                        from_date > cur_date && cur_date.setFullYear(cur_date.getFullYear() + 1);
+                        if (cur_date <= to_date) {
+                            return table[i].timetable_data;
+                        }
                     }
                 }
             }
