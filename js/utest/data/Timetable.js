@@ -235,6 +235,29 @@ define([], function() {
                 "to_date": "Dec, 31",
                 "timetable_data": {}
             }
+        ],
+        "timetable6": [
+            {
+                "from_date": "Apr 1, 2014",
+                "to_date": "",
+                "timetable_data": {}
+            },
+            {
+                "from_date": "Jan 30, 2014",
+                "to_date": "",
+                "timetable_data": {
+                    "wednesday": [
+                        {
+                            "from": "00:00",
+                            "to": "23:59"
+                        },
+                        {
+                            "from": "10:00",
+                            "to": "12:00"
+                        }
+                    ]
+                }
+            }
         ]
     };
 });

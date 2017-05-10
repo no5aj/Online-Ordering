@@ -537,7 +537,7 @@ define(["backbone"], function(Backbone) {
                     var cur_date = new Date(current_date.getTime()); //#22327, to get ready for table[] is unsorted
                     if ($.trim(table[i].to_date) == '') { //nonperiodic interval with open end date
                         //The format is "Jan 22, 2018"
-                        parse = $.trim(table[i].from_date).match(/(\w+)\s(\d+)\,\s(\d{4})/);//returns e.g. ["Jan 22, 2018", "Jan", "22", "2018"]
+                        parse = $.trim(table[i].from_date).match(/(\w+)\s+(\d+)\,\s(\d{4})/);//returns e.g. ["Jan 22, 2018", "Jan", "22", "2018"]
                         from_date_month = parse[1];
                         from_date_day = parse[2];
                         from_date_year = parse[3];
