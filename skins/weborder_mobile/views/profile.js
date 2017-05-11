@@ -157,7 +157,32 @@ define(["profile_view", "giftcard_view", "myorder_view"], function(profile_view)
     var ProfileRewardCardEditionView = App.Views.CoreProfileView.CoreProfileRewardCardEditionView.extend({
         bindings: {
             '.card-number': 'value: number',
-            '.balance-info': 'text: format(_lp_REWARDS_BALANCE_INFO, balance_points, balance_visits, _system_settings_currency_symbol, balance_purchases)'
+            '.balance-info': 'text: balanceInfo'
+        },
+        computeds: {
+            balanceInfo: {
+                deps: ['balance_points', 'balance_visits', 'balance_purchases'],
+                get: function(points, visits, purchases) {
+                    if (points == null && visits == null && purchases == null) {
+                        return '';
+                    }
+                    var count = 0,
+                        str = _loc.REWARDS_BALANCE_INFO_0;
+
+                    if (points != null) {
+                        str += " " + strFormat(_loc.REWARDS_BALANCE_INFO_1, points);
+                        count++;
+                    }
+                    if (visits != null) {
+                        str += (count > 0 ? ", " : " ") + strFormat(_loc.REWARDS_BALANCE_INFO_2, visits);
+                        count++;
+                    }
+                    if (purchases != null) {
+                        str += (count > 0 ? " and " : " ") + strFormat(_loc.REWARDS_BALANCE_INFO_3, App.Settings.currency_symbol, purchases);
+                    }
+                    return str + ".";
+                }
+            }
         },
         events: {
             'click .ctrl': 'unlink'

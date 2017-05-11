@@ -1004,9 +1004,12 @@ App.Views.CoreProfileView.CoreProfileAddressCreateView = App.Views.FactoryView.e
         name: 'profile',
         mod: 'reward_card_balance',
         bindings: {
-            '.purchase-points': 'text: currencyFormat(balance_purchases)',
+            '.purchase-points': 'toggle: not(equal(balance_purchases, null)), text: currencyFormat(balance_purchases)',
             '.item-points': 'text: balance_points',
-            '.visit-points': 'text: balance_visits'
+            '.visit-points': 'text: balance_visits',
+            '.purchase-points-descr': 'toggle: not(equal(balance_purchases, null))',
+            '.item-points-descr': 'toggle: not(equal(balance_points, null))',
+            '.visit-points-descr': 'toggle: not(equal(balance_visits, null))'
         }
     });
 

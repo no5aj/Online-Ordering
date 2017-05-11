@@ -207,7 +207,6 @@
         'REWARDS_VISIT_REWARDS': 'Visit Rewards',
         'REWARDS_PURCHASE_REWARDS': 'Purchase Rewards',
         'REWARDS_BALANCE_HEADER': 'LOYALTY REWARDS',
-        'REWARDS_BALANCE_INFO': 'You\'ve earned $1 Reward Points for order items, $2 Reward Points for store visits and $3$4 Reward Points for store purchases.',
         'REWARDS_BALANCE_PURCHASE_POINTS': 'Your Purchase Points:',
         'REWARDS_BALANCE_ITEM_POINTS': 'You Item Points:',
         'REWARDS_BALANCE_VISIT_POINTS': 'Your Visit Points:',

@@ -3208,3 +3208,17 @@ function trace_restore_log() {
         trace.prev_cache = [];
     }
 }
+
+// Formats one or more variables into a text string:
+// e.g. ('$1 $2 did $3', firstName, lastName, action)
+function strFormat(str) {
+    var params = arguments;
+    return str.replace(/\$\d+/g, function(tag, offset) {
+        var i = tag.substring(1);
+        if (typeof params[i] != 'undefined' && i > 0) {
+            return params[i];
+        } else {
+            return tag;
+        }
+    });
+};
