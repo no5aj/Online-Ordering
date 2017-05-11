@@ -24,6 +24,7 @@ define(['backbone', 'backbone_epoxy', 'backbone_epoxy_handlers', 'backbone_epoxy
     'use strict';
 
     Backbone.Epoxy.binding.allowedParams.params = true; //allows to write in a custom binding additional params like "valueTimeout:valName,params:{timeout:1000}, ..."
+    var id_counter = 0;
 
     App.Views.FactoryView = Backbone.Epoxy.View.extend({
         constructor: function(options) {
@@ -92,9 +93,11 @@ define(['backbone', 'backbone_epoxy', 'backbone_epoxy_handlers', 'backbone_epoxy
             App.Data.devMode && this.$el.attr("x-view", this.options.dbgClassName);
             App.Data.devMode && (this.dbgClassName = this.options.dbgClassName);
             if (App.Data.devMode) {
-                var time = (new Date).getTime();
-                this.$el.attr("x-time", time);
-                App.dbgView[time] = this;
+                var time_id = (new Date).getTime()*100 + id_counter++;
+                if (id_counter >= 100)
+                    id_counter = 0;
+                this.$el.attr("x-id", time_id);
+                App.dbgView[time_id] = this;
             }
         },
         render: function() {
