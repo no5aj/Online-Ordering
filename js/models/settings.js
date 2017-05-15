@@ -449,7 +449,7 @@ define(["backbone", "async"], function(Backbone) {
                         "freedompay":false,
                         "mercury":false,
                         "gift_card":false,
-                        "cash":false,
+                        "cash":false, // This is controlled by 'Accept payment on pickup or delivery for online orders' setting on BE
                         "usaepay":false,
                         "credit_card_button":false,
                         "credit_card_dialog":false,
@@ -694,7 +694,7 @@ define(["backbone", "async"], function(Backbone) {
                 "saved_reward_cards": true,
                 "default_location": { lat: 37.77837116836659, lon: -122.41963882471924 }, //San Francisco
                 "view_page_size": 24,
-                "json_page_limit": 120,
+                "json_page_limit": 480,
                 "sentry_errors_logging": false
             };
 
