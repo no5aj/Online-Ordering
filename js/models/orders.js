@@ -759,6 +759,7 @@ define(["backbone"], function(Backbone) {
                 headers: authorizationHeader,
                 contentType: 'application/json',
                 data: {
+                    establishment: App.Data.settings.get('establishment'),
                     order: order_id
                 },
                 success: function(data) {
