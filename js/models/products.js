@@ -560,6 +560,10 @@ define(["backbone", 'childproducts', 'collection_sort', 'product_sets'], functio
                 attr1enable = this.get('attribute_1_enable'),
                 attr2enable = this.get('attribute_2_enable');
 
+            if (!this.isParent()) {
+                return true;
+            }
+
             return !!((attr1enable && attr1 || !attr1enable) && (attr2enable && attr2 || !attr2enable));
         },
         /**
