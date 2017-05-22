@@ -3222,3 +3222,19 @@ function strFormat(str) {
         }
     });
 };
+
+//It's to trace bugs similar to WOMA-531
+function trace_WOMA_531(from) {
+    try {
+        trace({for: 'pay'}, 'STORE_IS_CLOSED#', from, {pickupTS: App.Data.myorder.checkout.get('pickupTS'),
+            pickupTime: App.Data.myorder.checkout.get('pickupTime'),
+            dining_option: App.Data.myorder.checkout.get('dining_option'),
+            now: App.Data.timetables.base().toString(),
+            nowTS: App.Data.timetables.base().getTime(),
+            timeSelect: $("select.time option:selected").length ? $("select.time option:selected").html() : null
+        });
+    }
+    catch(e) {
+        trace('STORE_IS_CLOSED#', from, 'Log error');
+    }
+}

@@ -1843,6 +1843,7 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
             if(this.preparePickupTime() === 0) {
                 this.trigger('cancelPayment');
                 delete this.paymentInProgress;
+                trace_WOMA_531('create-order');
                 App.Data.errors.alert(MSG.ERROR_STORE_IS_CLOSED); // user notification
                 return;
             }
