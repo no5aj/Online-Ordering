@@ -863,6 +863,7 @@ define(['products', 'js/utest/data/Products', 'js/utest/data/Timetable', 'catego
             beforeEach(function() {
                 model = new App.Models.Product(),
                 attrs = _.clone(data.get_product_attributes);
+                attrs.attribute_type = 1;
 
                 spyOn(model, 'get').and.callFake(function(prop) {
                     return attrs[prop];
@@ -870,6 +871,13 @@ define(['products', 'js/utest/data/Products', 'js/utest/data/Timetable', 'catego
             });
 
             it('attribute1 is enabled and selected, attribute2 is enabled and selected', function() {
+                expect(model.check_selected()).toBe(true);
+            });
+
+            it('attributes are enabled and unselected, but it\'s not a parent product', function() {
+                attrs.attribute_1_selected = null;
+                attrs.attribute_2_selected = null;
+                attrs.attribute_type = 2;
                 expect(model.check_selected()).toBe(true);
             });
 
