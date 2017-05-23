@@ -705,7 +705,7 @@ define(["backbone"], function(Backbone) {
             return Backbone.$.ajax({
                 url: '/weborders/v1/orders/',
                 method: 'GET',
-                headers: authorizationHeader,
+                headers: $.extend(authorizationHeader, {'X-USE-TZ': App.Settings.time_zone }),
                 contentType: 'application/json',
                 data: {
                     establishment: App.Data.settings.get('establishment'),
@@ -756,7 +756,7 @@ define(["backbone"], function(Backbone) {
             return Backbone.$.ajax({
                 url: '/weborders/v1/orders/',
                 method: 'GET',
-                headers: authorizationHeader,
+                headers: $.extend(authorizationHeader, {'X-USE-TZ': App.Settings.time_zone }),
                 contentType: 'application/json',
                 data: {
                     establishment: App.Data.settings.get('establishment'),
