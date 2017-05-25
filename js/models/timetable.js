@@ -339,13 +339,15 @@ define(["backbone"], function(Backbone) {
                 var work_shop = this.checking_work_shop(isDelivery);
 
                 this.set({
-                    options: (isToday && work_shop) ? [asap_text] : ['closed']
+                    options: (isToday && work_shop && this.enable_asap) ? [asap_text] : ['closed']
                 });
 
                 return this.get('options');
             }
 
-            asap && options.push(asap_text);
+            if (asap && this.enable_asap) {
+                options.push(asap_text);
+            }
 
             for (var i = 0; i < times.length; i++) {
                 options.push(t.set_minutes(times[i]).toString());
