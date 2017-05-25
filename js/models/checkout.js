@@ -223,6 +223,8 @@ define(["backbone"], function(Backbone) {
             if(App.skin == App.Skins.RETAIL)
                 return false;
             if(this.get('pickupTS') === null && dining_option !== 'DINING_OPTION_OTHER' && dining_option !== 'DINING_OPTION_ONLINE') {
+
+                trace_WOMA_531('check-order');
                 return {
                     status: 'ERROR',
                     errorMsg: MSG.ERROR_STORE_IS_CLOSED
