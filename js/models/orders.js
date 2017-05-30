@@ -814,6 +814,9 @@ define(["backbone"], function(Backbone) {
                 return orders.filter(function(order) {
                     if (order.dining_option === DINING_OPTION.DINING_OPTION_SHIPPING) {
                         order.items = order.items.filter(function(item) {
+                            if (item.actual_data.is_shipping) {
+                                order.subtotal -= item.price;
+                            }
                             return !item.actual_data.is_shipping;
                         });
                     }

@@ -957,9 +957,10 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
         getProfileAddressesPromises: function() {
             var customer = App.Data.customer,
                 promises = [],
-                addressesDef = Backbone.$.Deferred();
+                addressesDef;
 
             if (customer.get('addresses') && customer.addressesRequest) {
+                addressesDef = Backbone.$.Deferred();
                 customer.addressesRequest.always(addressesDef.resolve.bind(addressesDef));
                 promises.push(addressesDef);
             }
@@ -969,17 +970,19 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
         getProfilePaymentsPromises: function() {
             var customer = App.Data.customer,
                 promises = [],
-                paymentsDef = Backbone.$.Deferred(),
-                giftCardsDef = Backbone.$.Deferred();
+                paymentsDef,
+                giftCardsDef;
 
             // payments are available
             if (customer.payments && customer.paymentsRequest) {
+                paymentsDef = Backbone.$.Deferred();
                 customer.paymentsRequest.always(paymentsDef.resolve.bind(paymentsDef));
                 promises.push(paymentsDef);
             }
 
             // gift cards are available
             if (customer.giftCards && customer.giftCardsRequest) {
+                giftCardsDef = Backbone.$.Deferred();
                 customer.giftCardsRequest.always(giftCardsDef.resolve.bind(giftCardsDef));
                 promises.push(giftCardsDef);
             }
