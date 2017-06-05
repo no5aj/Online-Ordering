@@ -302,6 +302,31 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
                 this.get_modifiers().update_prices(max_price > initial_price ? max_price - initial_price : 0);
             }
         },
+        /*
+         * Checks if product is presented in the App.Data.products for certain category
+         * Try to find it in the known sources
+         * @param {number} id_product
+         * @param {number} id_category
+         * @returns nothing
+         */
+        check_product: function(id_product, id_category) {
+            var products =
+                App.Data.search && App.Data.search.length > 0 ?
+                App.Data.search.at(App.Data.search.length - 1).get('products') :
+                (App.Data.productsSets && App.Data.productsSets.length > 0 ?
+                    App.Data.productsSets.at(App.Data.productsSets.length - 1).get('products') :
+                    null);
+
+            if (products) {
+                products.each(function(itemProd) {
+                   if(itemProd.get('id_category') == id_category &&
+                      App.Data.products[id_category].where({id: itemProd.get('id')}).length == 0 ) {
+                  console.log('adding product to the collection', itemProd);
+                      App.Data.products[id_category].add(itemProd);
+                   }
+                });
+            }
+        },
         /**
          * Initializes the order item and loads product and modifiers .
          * @param {number} id_product - product id
@@ -318,6 +343,7 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
                 product;
 
             product_load.then(function() {
+                self.check_product(id_product, id_category);
                 product = App.Data.products[id_category].get_product(id_product);
                 if (!product) {
                     console.error("Myorder: add_empty, product is not found!", id_category, id_product);
@@ -831,6 +857,7 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
                 App.Collections.ModifierBlocks.init(id_product).then(modifier_load.resolve); // load product modifiers
             });
             return $.when(product_load, modifier_load).then(function() {
+                self.check_product(id_product, id_category);
                 product = App.Data.products[id_category].get_product(id_product);
                 if (!product) {
                     console.error("MyorderCombo: add_empty, product is not found!", id_category, id_product);
