@@ -317,14 +317,11 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
                     App.Data.productsSets.at(App.Data.productsSets.length - 1).get('products') :
                     null);
 
-            if (products) {
-                products.each(function(itemProd) {
-                   if(itemProd.get('id_category') == id_category &&
-                      App.Data.products[id_category].where({id: itemProd.get('id')}).length == 0 ) {
-                  console.log('adding product to the collection', itemProd);
-                      App.Data.products[id_category].add(itemProd);
-                   }
-                });
+            if (App.Data.products[id_category].where({id:id_product}).length == 0) {
+                var product_found = products ? products.where({id:id_product}) : [];
+                if (product_found.length == 1) {
+                    App.Data.products[id_category].add(product_found[0]);
+                }
             }
         },
         /**
