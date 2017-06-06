@@ -311,16 +311,19 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
          */
         check_product: function(id_product, id_category) {
             var products =
-                App.Data.search && App.Data.search.length > 0 ?
+                App.Data.search && App.Data.search ?
                 App.Data.search.at(App.Data.search.length - 1).get('products') :
-                (App.Data.productsSets && App.Data.productsSets.length > 0 ?
+                (App.Data.productsSets && App.Data.productsSets ?
                     App.Data.productsSets.at(App.Data.productsSets.length - 1).get('products') :
                     null);
 
-            if (App.Data.products[id_category].where({id:id_product}).length == 0) {
-                var product_found = products ? products.where({id:id_product}) : [];
-                if (product_found.length == 1) {
-                    App.Data.products[id_category].add(product_found[0]);
+            if (App.Data.products &&
+                App.Data.products[id_category] &&
+                App.Data.products[id_category].findWhere &&
+                !App.Data.products[id_category].findWhere({id:id_product})) {
+                var product_found = products ? products.findWhere({id:id_product}) : null;
+                if (product_found) {
+                    App.Data.products[id_category].add(product_found);
                 }
             }
         },
