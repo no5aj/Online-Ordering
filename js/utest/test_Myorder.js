@@ -298,7 +298,7 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
             dfd.resolve();
 
             beforeEach(function() {
-                App.Data.products[id_category] = new App.Models.Product({
+                App.Data.products[id_category] = new App.Collections.Products({
                     init: function() {},
                     get_product: function() {}
                 });
@@ -3687,7 +3687,7 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
             dfd.resolve();
 
             beforeEach(function() {
-                App.Data.products[id_category] = new App.Models.Product({
+                App.Data.products[id_category] = new App.Collections.Products({
                     init: function() {},
                     get_product: function() {}
                 });

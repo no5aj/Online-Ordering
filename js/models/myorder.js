@@ -319,7 +319,6 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
 
             if (App.Data.products &&
                 App.Data.products[id_category] &&
-                App.Data.products[id_category].findWhere &&
                 !App.Data.products[id_category].findWhere({id:id_product})) {
                 var product_found = products ? products.findWhere({id:id_product}) : null;
                 if (product_found) {
