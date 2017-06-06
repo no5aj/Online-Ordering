@@ -311,9 +311,9 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
          */
         check_product: function(id_product, id_category) {
             var products =
-                App.Data.search && App.Data.search ?
+                App.Data.search && App.Data.search.length > 0 ?
                 App.Data.search.at(App.Data.search.length - 1).get('products') :
-                (App.Data.productsSets && App.Data.productsSets ?
+                (App.Data.productsSets && App.Data.productsSets.length > 0 ?
                     App.Data.productsSets.at(App.Data.productsSets.length - 1).get('products') :
                     null);
 
