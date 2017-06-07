@@ -179,7 +179,7 @@ define(["backbone"], function(Backbone) {
             var start_minutes, end_minutes,
                 extra_time = (isDelivery ? this.delivery_time : this.preparation_time),
                 start_interval = this.start_time + extra_time,
-                end_interval = (extra_time > this.end_time) ? extra_time : this.end_time - extra_time,
+                end_interval = (extra_time > this.end_time) ? 0 : this.end_time - extra_time,
                 options = [];
 
             if (period === "all-the-day") {
