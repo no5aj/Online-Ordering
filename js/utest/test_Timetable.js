@@ -179,7 +179,7 @@ define(['js/utest/data/Timetable', 'timetable'], function(timetables) {
 
             it('from 10:00 to 13:00, delivery option', function() {
                 model.set(set4);
-                expect(model._pickupTimesForPeriod(set4n[0], true)).toEqual([670, 690, 710, 730]);
+                expect(model._pickupTimesForPeriod(set4n[0], true)).toEqual([670, 690, 710, 730, 750, 770]);
                 /**
                  * 10:00 + online_order_start_time_offset + estimated_delivery_time = 11:10
                  * 13:00 - (online_order_end_time_offset - estimated_delivery_time) = 13:10
