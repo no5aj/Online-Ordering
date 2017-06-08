@@ -224,6 +224,7 @@
         'STANFORD_SELECT_PLAN': 'Select a Plan',
         'STANFORD_CARD_RELOAD_ENTER_NUMBER': 'Please enter your Stanford Card Number',
         'SEARCH_RESULTS': 'Search Results For: %s',
+        'PRODUCTS_NOT_FOUND': 'No products found',
         'DESCRIPTION_TITLE': 'Description',
         'DONE_THANK_YOU': 'Thank you, %s!',
         'DONE_ORDER_SUBMITTED': 'Your Order from %s has been Submitted!',

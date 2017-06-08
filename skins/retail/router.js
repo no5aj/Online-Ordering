@@ -682,6 +682,10 @@ define(["main_router"], function(main_router) {
                         return;
                     }
                     self.updateStateWithHash(this); // update hash
+                    if (!App.Data.categories.length) {
+                        App.Data.curProductsSet.get('value').set('status', 'resolved'); // woma-597
+                        App.Data.curProductsSet.trigger('change:value');
+                    }
                     dfd.resolve();
                 });
 
