@@ -36,9 +36,23 @@ define(["products_view"], function(products_view) {
         mod: 'list',
         bindings: {
             '.products-set-title': 'text: name',
-            '.products': 'collection: $collection, itemView: "createItemView"',
+            '.products': 'collection: $collection, itemView: "createItemView", \
+                          updateContent: select( any(length($collection), not(equal(status, "resolved"))), false, products_empty)',
             '.loading': 'toggle: equal(status, "pending")'
         },
+        computeds: {
+            products_empty: {
+                deps: [],
+                get: function() {
+                    return {
+                        name: 'Product',
+                        mod: 'ListNone',
+                        el: $('<li class="product list-none"></li>')
+                    };
+                }
+            }
+        },
+
         createItemView: function(options) {
             var view = App.Views.GeneratorView.create('Product', {
                 mod: 'ListItem',
