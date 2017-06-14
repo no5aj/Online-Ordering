@@ -314,14 +314,16 @@ define(["factory"], function() {
                     var found = false;
                     var look_for = model.get('id');
                     var id;
-                    model.collection.each(function(item) {
-                        if (found || !(id = parseInt(item.get('id'))))  {
-                            return;
+
+                    found = model.collection.some(function(item) {
+                        if (!(id = parseInt(item.get('id'))))  {
+                            return false;
                         }
                         index++;
                         if (id == look_for) {
-                            found = true;
+                            return true;
                         }
+                        return false;
                     });
                     return found ? index: 0;
                 }
