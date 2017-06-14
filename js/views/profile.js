@@ -310,7 +310,20 @@ define(["factory"], function() {
             modelIndex: {
                 deps: ['$model'],
                 get: function(model) {
-                    return model.collection.indexOf(model) + 1;
+                    var index = 0;
+                    var found = false;
+                    var look_for = model.get('id');
+                    var id;
+                    model.collection.each(function(item) {
+                        if (found || !(id = parseInt(item.get('id'))))  {
+                            return;
+                        }
+                        index++;
+                        if (id == look_for) {
+                            found = true;
+                        }
+                    });
+                    return found ? index: 0;
                 }
             },
             /**

@@ -56,7 +56,6 @@ define(['js/utest/data/Settings', 'settings'], function(settings) {
     if (!window._phantom) {
         describe('get_data_warehouse()', function() {
             var sessionStorageBackup, cookieBackup, cookie_getter;
-            var __defineGetter__ = document.__defineGetter__;
 
             beforeEach(function() {
                 sessionStorageBackup = window.sessionStorage;
@@ -69,7 +68,7 @@ define(['js/utest/data/Settings', 'settings'], function(settings) {
 
             afterEach(function() {
                 window.sessionStorage = sessionStorageBackup;
-                __defineGetter__("cookie", cookie_getter);
+                document.__defineGetter__("cookie", cookie_getter);
                 /*Object.defineProperty(document, 'cookie', {
                     get: cookie_getter
                 });*/
@@ -83,7 +82,7 @@ define(['js/utest/data/Settings', 'settings'], function(settings) {
 
             it('none', function() {
                 delete window.sessionStorage;
-                __defineGetter__("cookie", function() { return '';} );
+                document.__defineGetter__("cookie", function() { return '';} );
                 /*Object.defineProperty(document, 'cookie', {
                         get: function() {
                            return '';
