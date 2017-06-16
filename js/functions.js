@@ -3010,7 +3010,7 @@ function raven_send_report(title, options, cb_success) {
 
     $(window).one('ravenSuccess', function(data){
         var event_id = (libs_raven && libs_raven.lastEventId());
-        cb_success & cb_success(event_id);
+        cb_success && cb_success(event_id);
     });
 
     libs_raven && libs_raven.captureMessage(title + "\n" + details,
