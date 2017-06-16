@@ -334,7 +334,11 @@ define(["backbone", "backbone_extensions", "factory"], function(Backbone) {
         },
         pay: function() {
             trace({for: 'pay'}, "Router: processing #pay hash ...", App.Data.get_parameters);
-            App.Data.myorder.submit_order_and_pay(App.Data.myorder.checkout.get('payment_type'), undefined, true);
+            var payment_type = App.Data.myorder.checkout.get('payment_type');
+            if (!payment_type) {
+                return this.navigate('index', true);
+            }
+            App.Data.myorder.submit_order_and_pay(payment_type, undefined, true);
         },
         loadData: function() {
             var load = $.Deferred();
