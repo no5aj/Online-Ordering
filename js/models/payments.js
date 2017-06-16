@@ -173,6 +173,8 @@ define(['backbone'], function(Backbone) {
          */
         setOriginalAttributes: function() {
             this._originalAttributes = _.clone(this.attributes);
+            delete this._originalAttributes.id;
+            delete this._originalAttributes.vault_id;
         },
         /**
          * Returns the difference between original and modified attributes
