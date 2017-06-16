@@ -9,8 +9,10 @@ define(['js/utest/data/Settings', 'settings'], function(settings) {
                 local.settings = s && s.toJSON && JSON.stringify(s.toJSON()) || e;
                 return true;
             }, sys, all, model;
+        var old_sys_settings = App.Data.settings.get('settings_system');
+        settings = deepClone(settings);
 
-            var backupTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+        var backupTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
             jasmine.DEFAULT_TIMEOUT_INTERVAL = 60000; //60sec.
 
         beforeEach(function(done) {
@@ -33,6 +35,10 @@ define(['js/utest/data/Settings', 'settings'], function(settings) {
                 jasmine.DEFAULT_TIMEOUT_INTERVAL = backupTimeout;
             }
             done();
+        });
+
+        afterEach(function() {
+            App.Data.settings.set('settings_system', old_sys_settings, {silent: true});
         });
 
         it('Enviroment', function() {
@@ -334,10 +340,10 @@ define(['js/utest/data/Settings', 'settings'], function(settings) {
             });
 
             it("Delivery", function() {
-                if (!sys.delivery_charge) { //to check if an error with this test will occur in the future
-                    trace("Delivery Charge bug is found !!! --------------------------------------------------------------------");
+                if (typeof(sys.delivery_charge) != "number") { //to check if an error with this test will occur in the future
+                    log("Delivery Charge bug is found !!! ----", sys.delivery_charge, settings.all.settings_system.delivery_charge);
                     App.dbgStackTrace.forEach(function(obj) {
-                        trace(obj);
+                        log(obj);
                     });
                 }
                 expect(typeof(sys.delivery_charge)).toBe("number");

@@ -84,7 +84,8 @@ require(['app', 'utest/data/Settings'], function(app, settings_data) {
         });
 
         MockAjax(settings_data.initializing_tests.settings_skin);
-        settings.set('settings_system', settings_data.all.settings_system);
+        var clone_settings_system = deepClone(settings_data.all.settings_system);
+        settings.set('settings_system', clone_settings_system);
         UnmockAjax();
         settings.set('settings_directory', settings_data.all.settings_directory);
         App.SettingsDirectory = settings.get('settings_directory');

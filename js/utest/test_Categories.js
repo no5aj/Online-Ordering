@@ -28,7 +28,13 @@ define(['js/utest/data/Categories', 'categories'], function(categories) {
         });
 
         it('Create default App.Models.Category', function() {
-            expect(model.toJSON()).toEqual(def);
+            var modelJS = model.toJSON();
+            if (modelJS.image != def.image) {
+                log('Category Test Error found =>');
+                log('skin_img_default = ', get('settings_skin').img_default);
+                log('get_img_default() = ', settings.get_img_default());
+            }
+            expect(modelJS).toEqual(def);
         });
 
     });
