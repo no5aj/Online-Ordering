@@ -54,7 +54,10 @@ define(['payments', 'js/utest/data/Payments', 'js/utest/data/Timetable'], functi
 
             it("`attributes` is object", function() {
                 model._originalAttributes.new_property = 'some value';
-                expect(model.resetAttributes().attributes).toEqual(model._originalAttributes);
+                var obj = $.extend({}, model.resetAttributes().attributes);
+                delete obj.id;
+                delete obj.vault_id;
+                expect(obj).toEqual(model._originalAttributes);
             });
         });
 
