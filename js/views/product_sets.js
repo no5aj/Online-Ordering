@@ -52,10 +52,14 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
             '.customize ': "classes:{hide:any(not(selected), not(is_modifiers))}",
             '.cost': "classes: {hide: not(selected)}",
             '.price': "text: modifiers_sum_frm",
-            '.plus': 'classes: {hide: not(modifiers_sum)}',
+            '.plus': 'classes: {hide: any(not(modifiers_sum), is_combo_saving)}',
             '.input': "classes: {radio: is_radio_type, checkbox: not(is_radio_type)}"
         },
         computeds: {
+            is_combo_saving: function() {
+                var options = arguments.length == 1 ? arguments[0] : this.options;
+                return options.productSet.get('is_combo_saving');
+            },
             is_modifiers: function() {
                 return this.model.get_modifiers().length > 0 || this.model.get_product().get("sold_by_weight");
             },
@@ -69,7 +73,7 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
             modifiers_sum_frm: {
                 get: function() {
                     var sum = this.getBinding("modifiers_sum");
-                    if (sum.toFixed(2) == 0)
+                    if (sum.toFixed(2) == 0 || this.computeds.is_combo_saving(this.options))
                         return 'free';
                     else
                         return round_monetary_currency(sum);
