@@ -135,7 +135,7 @@ require(['app', 'js/utest/data/Settings'], function(app, settings_data) {
 
                     reporter.jasmineDone = function() {
                        jasmine.BlanketReporter.prototype.jasmineDone.apply(this,arguments);
-                       var cover = _blanket.getCovarageTotals()
+                       var cover = _blanket.getCovarageTotals();
                        console.log( "Total coverage: " + ((cover.numberOfFilesCovered * 100) / cover.totalSmts).toFixed(2) + "%" );
                        create_html_report();
                     }
@@ -162,8 +162,6 @@ require(['app', 'js/utest/data/Settings'], function(app, settings_data) {
                 function create_html_report() {
                     var doc_template = '<html> \
                         <head> \
-                            <link rel="shortcut icon" type="image/png" href="js/utest/jasmine/lib/jasmine2/jasmine_favicon.png"> \
-                            <link rel="stylesheet" type="text/css" href="js/utest/jasmine/lib/jasmine2/jasmine.css"> \
                             <style>{{insert_styles}}</style> \
                             <script>{{insert_script}} </script> \
                         </head> \
