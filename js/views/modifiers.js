@@ -394,17 +394,24 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
         mod: 'list',
         render: function() {
             var attributes = this.options.data.attributes,
-                sorts = this.options.data.attributesSort;
+                sorts = this.options.data.attributesSort,
+                sorted = [];
             this.$el.html(this.template({name: this.options.data.name})); // name for paypal
 
-            for(var key in attributes) {
+            for(var i in sorts) {
+                sorted [sorts[i]] = i;
+            }
+
+            for(var i in sorted) {
+                var key = sorted[i];
                 this.addItem({
                     id: key * 1,
                     name: attributes[key],
                     data: this.options.data,
                     sort: sorts[key * 1]
                 });
-            }
+             }
+
             this.listenTo(this.options.data.product, 'change', this.controlCheckboxes, this);
             this.controlCheckboxes();
             return this;
