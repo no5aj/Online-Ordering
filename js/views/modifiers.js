@@ -393,17 +393,12 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
         name: 'modifiers',
         mod: 'list',
         render: function() {
+            App.Views.ListView.prototype.initOrderSort.apply(this, arguments);
             var attributes = this.options.data.attributes,
-                sorts = this.options.data.attributesSort,
-                sorted = [];
+                sorts = this.options.data.attributesSort;
             this.$el.html(this.template({name: this.options.data.name})); // name for paypal
 
-            for(var i in sorts) {
-                sorted [sorts[i]] = i;
-            }
-
-            for(var i in sorted) {
-                var key = sorted[i];
+            for(var key in attributes) {
                 this.addItem({
                     id: key * 1,
                     name: attributes[key],
@@ -424,7 +419,11 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
                 id: data.id,
                 name: data.name
             });
-            this.$('.modifiers-list').append(view.el);
+            view.$el.attr({
+                'value': data.id,
+                'data-sort': data.sort
+            });
+            App.Views.ListView.prototype.addItem.call(this, view, this.$('.modifiers-list'), data.sort);
             this.subViews.push(view);
         },
         controlCheckboxes: function() {
