@@ -5,7 +5,7 @@ require(['app', 'js/utest/data/Settings'], function(app, settings_data) {
 
     app.config.paths['tests_list'] = "js/utest/_tests_list";
     app.config.paths['e2e_list'] = "js/utest/_e2e_list";
-    app.config.paths['blanket'] = "js/utest/jasmine/lib/jasmine2/blanket";
+    app.config.paths['blanket'] = "js/utest/jasmine/lib/jasmine2/blanket_auto";
     app.config.paths['jasmine_blanket'] = "js/utest/jasmine/lib/jasmine2/jasmine-blanket";
     app.config.paths['deep_diff'] = "js/libs/deep-diff";
 
@@ -135,8 +135,9 @@ require(['app', 'js/utest/data/Settings'], function(app, settings_data) {
 
                     reporter.jasmineDone = function() {
                        jasmine.BlanketReporter.prototype.jasmineDone.apply(this,arguments);
-                       var cover = _blanket.getCovarageTotals()
+                       var cover = _blanket.getCovarageTotals();
                        console.log( "Total coverage: " + ((cover.numberOfFilesCovered * 100) / cover.totalSmts).toFixed(2) + "%" );
+                       create_html_report();
                     }
 
                      var reporterCurrentSpec = {
@@ -157,6 +158,56 @@ require(['app', 'js/utest/data/Settings'], function(app, settings_data) {
                         });
                     });
                 });
+
+                function create_html_report() {
+                    var doc_template = '<html> \
+                        <head> \
+                            <link rel="stylesheet" type="text/css" href="blanket.css"> \
+                            <script type="text/javascript" src="blanket.js"> </script> \
+                        </head> \
+                        <body> <div id="blanket-main"> {{insert_report}} </div> </body> \
+                        </html>';
+
+                    var output,
+                        reportHTML = $('#blanket-main').html(),
+                        styles = ".clear_both {clear:both;} .hide {display: none;} #blanket-main {margin:2px;background:#EEE;color:#333;clear:both;font-family:'Helvetica Neue Light', 'HelveticaNeue-Light', 'Helvetica Neue', Calibri, Helvetica, Arial, sans-serif; font-size:17px;} #blanket-main a {color:#333;text-decoration:none;}  #blanket-main a:hover {text-decoration:underline;} .blanket {margin:0;padding:5px;clear:both;border-bottom: 1px solid #FFFFFF;} .bl-error {color:red;}.bl-success {color:#5E7D00;} .bl-file{width:auto;} .bl-cl{float:left;} .blanket div.rs {margin-left:50px; width:150px; float:right} .bl-nb {padding-right:10px;} #blanket-main a.bl-logo {color: #EB1764;cursor: pointer;font-weight: bold;text-decoration: none} .bl-source{ overflow-x:scroll; background-color: #FFFFFF; border: 1px solid #CBCBCB; color: #363636; margin: 25px 20px; width: 80%;} .bl-source div{white-space: pre;font-family: monospace;} .bl-source > div > span:first-child{background-color: #EAEAEA;color: #949494;display: inline-block;padding: 0 10px;text-align: center;width: 30px;} .bl-source .miss{background-color:#e6c3c7} .bl-source span.branchWarning{color:#000;background-color:yellow;} .bl-source span.branchOkay{color:#000;background-color:transparent;}",
+
+                    output = doc_template.replace(/{{insert_report}}/, reportHTML);
+                    if (typeof window.callPhantom === 'function') {
+                        window.callPhantom({ type: 'reportFile', file: 'blanket.css', content: styles });
+                        window.callPhantom({ type: 'reportFile', file: 'blanket.js', content: blanket_toggleSource.toString() });
+                        window.callPhantom({ type: 'reportFile', file: 'index.html', content: output });
+                    }
+
+                    function blanket_toggleSource(id) {
+                        var element = document.getElementById(id);
+                        if(hasClass(element, 'hide')) {
+                            removeClass(element, 'hide');
+                        } else {
+                            addClass(element, 'hide');
+                        }
+
+                        function hasClass(el, className) {
+                          if (el.classList)
+                            return el.classList.contains(className);
+                          else
+                            return !!el.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
+                        }
+                        function addClass(el, className) {
+                          if (el.classList)
+                            el.classList.add(className);
+                          else if (!hasClass(el, className)) el.className += " " + className;
+                        }
+                        function removeClass(el, className) {
+                          if (el.classList)
+                            el.classList.remove(className);
+                          else if (hasClass(el, className)) {
+                            var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
+                            el.className=el.className.replace(reg, ' ');
+                          }
+                        }
+                    }
+                }
             }
         }
     });
