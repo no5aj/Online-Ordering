@@ -357,6 +357,7 @@ define(['backbone', 'captcha'], function(Backbone) {
             Backbone.$.ajax({
                 url: '/weborders/rewards/',
                 type: 'POST',
+                headers: App.Data.customer.getAuthorizationHeader(),
                 data: JSON.stringify({
                     establishmentId: App.Data.settings.get("establishment"),
                     items: items,
