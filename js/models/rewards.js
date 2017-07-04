@@ -336,7 +336,7 @@ define(['backbone', 'captcha'], function(Backbone) {
          * }
          * ```
          */
-        getRewards: function() {
+        getRewards: function(authorizationHeader) {
             var number = this.get('number'),
                 captchaKey = this.get('captchaKey'),
                 captchaValue = this.get('captchaValue'),
@@ -357,7 +357,7 @@ define(['backbone', 'captcha'], function(Backbone) {
             Backbone.$.ajax({
                 url: '/weborders/rewards/',
                 type: 'POST',
-                headers: App.Data.customer.getAuthorizationHeader(),
+                headers: authorizationHeader,
                 data: JSON.stringify({
                     establishmentId: App.Data.settings.get("establishment"),
                     items: items,

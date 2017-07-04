@@ -344,7 +344,7 @@ define(["main_router"], function(main_router) {
            // onGetRewards event occurs when Rewards Card's 'Submit' button is clicked on 'Rewards Card Info' popup
             this.listenTo(App.Data.myorder.rewardsCard, 'onGetRewards', function() {
                 App.Data.mainModel.trigger('loadStarted');
-                App.Data.myorder.rewardsCard.getRewards();
+                App.Data.myorder.rewardsCard.getRewards(App.Data.customer.getAuthorizationHeader());
             });
 
             // onResetData events occurs when user resets reward card
