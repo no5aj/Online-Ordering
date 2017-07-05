@@ -852,7 +852,10 @@ define(["backbone"], function(Backbone) {
                     break;
                 }
 
-                var has_am_pm = (item.from.search(/(am|pm)/i) !== -1);
+                var time_prefix = _loc['TIME_PREFIXES'],
+                    rexp = new RegExp(time_prefix['TIME_AM'] + "|" + time_prefix['TIME_PM'], 'i');
+
+                var has_am_pm = (item.from.search(rexp) !== -1);
 
                 var from = (has_am_pm ? new TimeFrm().load_from_str(item.from).toString('24 hour') : item.from).split(':'),
                     from_h = parseInt(from[0]),

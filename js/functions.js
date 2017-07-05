@@ -782,7 +782,8 @@ TimeFrm.prototype.load_from_str_ft['24 hour'] = function(time_str) {
 //this is for future, not tested yet:
 TimeFrm.prototype.load_from_str_ft['12 hour'] = function(time_str) {
     var time, hour, min, am_pm,
-        hour_from_midnight;
+        hour_from_midnight,
+        time_prefix = _loc['TIME_PREFIXES'];
 
     time = time_str.split(":");
 
@@ -796,12 +797,12 @@ TimeFrm.prototype.load_from_str_ft['12 hour'] = function(time_str) {
         return this;
     }
 
-    am_pm = time[1].match(/^\d{2}\s*(.{2})\s*/)[1];
+    am_pm = time[1].match(/^\d{2}\s*(.*)\s*/)[1];
     am_pm = am_pm.toUpperCase();
 
-    if (am_pm === 'PM') {
+    if (am_pm === time_prefix['TIME_PM'].toUpperCase()) {
         hour_from_midnight = (hour === 12) ? hour : hour + 12;
-    } else if (am_pm === 'AM') {
+    } else if (am_pm === time_prefix['TIME_AM'].toUpperCase()) {
         hour_from_midnight = (hour === 12) ? 0 : hour;
     } else {
         return this;
