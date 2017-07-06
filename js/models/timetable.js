@@ -484,19 +484,37 @@ define(["backbone"], function(Backbone) {
             return weekDays[id_week];
         },
         /**
-         * Gets current time depends on server time.
-         * @param   {Date} current_time - current time.
+         * Shift time in the dependcy of the server time.
+         * @param   {Date} base_time - it's a time without server's shift.
          * @returns {Date}
          */
-        get_current_time: function(current_time) {
-            return new Date(current_time.getTime() + this.get('server_time'));
+        get_server_time: function(base_time) {
+            return new Date(base_time.getTime() + this.get('server_time'));
         },
         /**
          * Gets base time.
          * @returns {Date} base time.
          */
         base: function() {
-            return this.get_current_time(new Date());
+            return this.get_server_time(new Date());
+        },
+        /**
+         * Gets base time - the same time as today but on Monday or Sunday,
+         * depends on locale
+         * it's supposed to be the first day of the week.
+         * @returns {Date} base time of first week day.
+         */
+        get_base_time: function() {
+            var base_time = new Date();
+            var day_of_week = base_time.getDay();
+            // TODO: locale_shift should be based on server's setting Reports -> Week start
+            var locale_shift = navigator.language.substr(0,2) == 'en' ? 0 : 1;
+
+            if (day_of_week > 0) {
+                base_time.setDate(base_time.getDate() - day_of_week + locale_shift);
+            }
+
+            return this.get_server_time(base_time);
         },
         /**
          * current time including preparation time and delivery time
@@ -677,16 +695,17 @@ define(["backbone"], function(Backbone) {
         get_timetable_on_week: function(format_output) {
             format_output = format_output === 1 ? 1 : 0;
             var timetable = {},
-                current_date = this.base(), // need to create new, not link (current_date = today)
+                processing_date = this.get_base_time(), // need to create new, not link (current_date = today)
                 current_day_of_week;
 
             for (var i = 0; i <= 6; i++) {
-                current_day_of_week = weekDays[current_date.getDay()];
-                timetable[current_day_of_week] = this.get_working_hours(new Date(current_date), format_output); // get an array of working hours on a particular day. send copy of date not date referrer
+                current_day_of_week = weekDays[processing_date.getDay()];
+                // get an array of working hours on a particular day. send copy of date not date referrer
+                timetable[current_day_of_week] = this.get_working_hours(new Date(processing_date), format_output);
                 if (timetable[current_day_of_week] === null) {
                     return null;
                 }
-                current_date.setTime(current_date.getTime() + MILLISECONDS_A_DAY);
+                processing_date.setDate(processing_date.getDate() + 1);
             }
             return timetable;
         },
@@ -720,7 +739,7 @@ define(["backbone"], function(Backbone) {
 
             if(timetable_on_week !== null && Object.keys(timetable_on_week).length > 1) {
                 timetable = [];
-                var today = this.base().getDay();
+                var today = this.get_base_time().getDay();
                 for(var i = today; i < today + 7; i++) {
                     var weekDay = this.get_day_of_week(i % 7);
                     timetable.push({
