@@ -504,6 +504,7 @@ define(['js/utest/data/Timetable', 'timetable'], function(timetables) {
             App.Data.settings.get("settings_system").holidays = [];
             App.Data.settings.get("settings_system").server_time = 0;
             App.Settings = App.Data.settings.get('settings_system');
+            App.Settings.week_start = 2;
 
             model = new App.Models.Timetable();
 
@@ -558,23 +559,23 @@ define(['js/utest/data/Timetable', 'timetable'], function(timetables) {
             expect(offset).toHaveBeenCalledWith('param');
         });
 
-        it('get_current_time()', function() {
+        it('get_server_time()', function() {
             var date = new Date(),
                 date2 = new Date(date.getTime() - 1000);
 
-            expect(model.get_current_time(date).getTime()).toBe(date.getTime());
+            expect(model.get_server_time(date).getTime()).toBe(date.getTime());
 
             model.set('server_time', -1000);
-            expect(model.get_current_time(date).getTime()).toBe(date2.getTime());
+            expect(model.get_server_time(date).getTime()).toBe(date2.getTime());
         });
 
         it('base()', function() {
             spyOn(window, 'Date').and.callFake(dateFake);
-            spyOn(model, 'get_current_time');
+            spyOn(model, 'get_server_time');
             model.base();
 
-            expect(model.get_current_time).toHaveBeenCalled();
-            expect(model.get_current_time.calls.mostRecent().args[0].getTime()).toBe(new dateFake().getTime());
+            expect(model.get_server_time).toHaveBeenCalled();
+            expect(model.get_server_time.calls.mostRecent().args[0].getTime()).toBe(new dateFake().getTime());
         });
 
         describe('_get_timetable()', function() {
@@ -809,7 +810,15 @@ define(['js/utest/data/Timetable', 'timetable'], function(timetables) {
                     return table();
                 });
                 dateBase = new Date(date);
-                getTimetable = deepClone(timetables.getTimetable);
+                getTimetable = {
+                    "wednesday":0,
+                    "thursday":1,
+                    "friday":2,
+                    "saturday":3,
+                    "sunday":4,
+                    "monday":5,
+                    "tuesday":6
+                };
                 counter = false;
                 table = function() { return counter; };
             });

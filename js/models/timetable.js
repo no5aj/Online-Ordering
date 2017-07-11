@@ -499,19 +499,18 @@ define(["backbone"], function(Backbone) {
             return this.get_server_time(new Date());
         },
         /**
-         * Gets base time - the same time as today but on Monday or Sunday,
-         * depends on locale
-         * it's supposed to be the first day of the week.
+         * Gets base time - the same time as today but on the first day of the week,
+         * depends on the server's setting 'Reports->week_start'
          * @returns {Date} base time of first week day.
          */
         get_base_time: function() {
             var base_time = new Date();
             var day_of_week = base_time.getDay();
-            // TODO: locale_shift should be based on server's setting Reports -> Week start
-            var locale_shift = navigator.language.substr(0,2) == 'en' ? 0 : 1;
+            // on server: week_start = 0 for Monday
+            var settingShift = (parseInt(App.Settings.week_start) + 1) % 7;
 
             if (day_of_week > 0) {
-                base_time.setDate(base_time.getDate() - day_of_week + locale_shift);
+                base_time.setDate(base_time.getDate() - day_of_week + settingShift);
             }
 
             return this.get_server_time(base_time);
