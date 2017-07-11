@@ -376,7 +376,7 @@ define(['backbone'], function(Backbone) {
                 this.where({selected: true}).forEach(function(payment) {
                     if (model != payment) {
                         payment.set({selected: false});
-                        payment._originalAttributes.selected = false;
+                        payment._originalAttributes && (payment._originalAttributes.selected = false);
                     }
                 });
             }
@@ -384,7 +384,7 @@ define(['backbone'], function(Backbone) {
                 this.where({is_primary: true}).forEach(function(payment) {
                     if (model != payment) {
                         payment.set({is_primary: false});
-                        payment._originalAttributes.is_primary = false;
+                        payment._originalAttributes && (payment._originalAttributes.is_primary = false);
                     }
                 });
             }
