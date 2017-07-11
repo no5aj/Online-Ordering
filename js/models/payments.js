@@ -374,12 +374,18 @@ define(['backbone'], function(Backbone) {
         onAddHandler: function(model) {
             if (model.get('selected')) {
                 this.where({selected: true}).forEach(function(payment) {
-                    model != payment && payment.set({selected: false});
+                    if (model != payment) {
+                        payment.set({selected: false});
+                        payment.originalAttributes.selected = false;
+                    }
                 });
             }
             if (model.get('is_primary')) {
                 this.where({is_primary: true}).forEach(function(payment) {
-                    model != payment && payment.set({is_primary: false});
+                    if (model != payment) {
+                        payment.set({is_primary: false});
+                        payment.originalAttributes.is_primary = false;
+                    }
                 });
             }
         },
