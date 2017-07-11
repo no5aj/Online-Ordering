@@ -59,6 +59,11 @@ define(['products_view'], function(products_view) {
                     init_cache_session: is_combo ? true : false,
                     cache_id: is_combo ? cache_id : undefined, //cache is enabled for combo products during the phase of product customization only
                                                               //the view will be removed from cache after the product is added/updated into the cart.
+                    action_callback: function(status) {
+                        if (status == "matrix_child_upsell") {
+                            App.Data.controllers.get('UpsellProductCRL').addUpsellProduct(clone.get_product());
+                        }
+                    }
                 });
             });
         },

@@ -781,6 +781,9 @@ define(["main_router"], function(main_router) {
                     self.change_page();
 
                     function action() {
+                        if (_order.isParent()) {
+                            _order.get_product().set('has_upsell', false, {silent: true});
+                        }
                         var check = _order.check_order();
 
                         if (check.status === 'OK') {
