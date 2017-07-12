@@ -99,6 +99,15 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
                 });
                 this.$('.product_info').append(this.viewProduct.el);
             }
+            if (App.Settings.special_requests_online && this.instructionsView) {
+                if (this.model.get('product').check_selected() && this.model.get_product().isUpsellProduct()) {
+                    this.instructionsView.$el.hide();
+                }
+                else {
+                    this.instructionsView.$el.show();
+                }
+
+            }
         },
         renderModifiers: function() {
             var model = this.model,
@@ -127,15 +136,15 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
             this.subViews.push(view);
 
             if (!this.options.flags || this.options.flags.indexOf('no_specials') == -1) {
-                view = App.Views.GeneratorView.create('Instructions', {
+                this.instructionsView = App.Views.GeneratorView.create('Instructions', {
                     el: this.$('.product_instructions'),
                     model: model,
                     mod: 'Modifiers'
                 });
-                this.subViews.push(view);
+                this.subViews.push(this.instructionsView);
 
-                if (App.Settings.special_requests_online === false) {
-                    view.$el.hide(); // hide special request if not allowed
+                if (App.Settings.special_requests_online === false || this.model.isParent()) {
+                    this.instructionsView.$el.hide(); // hide special request if not allowed
                 }
             }
         },
@@ -254,12 +263,8 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
         },
         render: function() {
             App.Views.FactoryView.prototype.render.apply(this, arguments);
-            var action_text_label = this.options.action_text_label ? this.options.action_text_label : this.options.action;
-            if (action_text_label === 'add') {
-                this.$('.action_button').html(_loc['MYORDER_ADD_ITEM']);
-            } else {
-                this.$('.action_button').html(_loc['MYORDER_UPDATE_ITEM']);
-            }
+            this.update_action_button_title();
+
             var model = this.model,
                 view, mod,
                 sold_by_weight = this.model.get_product().get("sold_by_weight");
@@ -286,12 +291,22 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
                 }
             }
         },
-        update_child_selected: function() {
-            if (this.model.isParent() && this.model.get_product().isUpsellProduct()) {
-                this.$('.action_button').html(_loc['MYORDER_NEXT']);//WOMA-183
+        update_action_button_title: function() {
+            var action_text_label = this.options.action_text_label ? this.options.action_text_label : this.options.action;
+            if (this.action_text_label === 'add') {
+                this.$('.action_button').html(_loc['MYORDER_ADD_ITEM']);
+            } else {
+                this.$('.action_button').html(_loc['MYORDER_UPDATE_ITEM']);
             }
+        },
+        update_child_selected: function() {
             if (this.check_model()) {
                 this.$('.action_button').removeClass('disabled');
+                if (this.model.isParent() && this.model.get_product().isUpsellProduct()) {
+                    this.$('.action_button').html(_loc['MYORDER_NEXT']);//WOMA-183
+                } else {
+                    this.update_action_button_title();
+                }
             }
             else {
                 this.$('.action_button').addClass('disabled');

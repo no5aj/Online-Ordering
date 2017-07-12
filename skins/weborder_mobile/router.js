@@ -624,6 +624,7 @@ define(["main_router"], function(main_router) {
                 function showProductDetails() {
                     if(!isEditMode) {
                         order = order.clone();
+                        self.listenTo(order.get('product'), 'change:attribute_1_selected change:attribute_2_selected', onAttrsChange);
                     }
 
                     if (options && options.no_combo == true) {
@@ -696,9 +697,22 @@ define(["main_router"], function(main_router) {
                         link: !App.Settings.online_orders ? header.defaults.link : function() {
                             header.addProduct(order).done(function () {
                                 self.listenTo(order, 'change', setHeaderToUpdate);
+                                self.stopListening(order.get('product'), 'change:attribute_1_selected change:attribute_2_selected', onAttrsChange);
                             });
                         }
                     });
+                }
+
+                function onAttrsChange() {
+                    if (order.get('product').check_selected()) {
+                        if (order.isParent() && order.get_product().isUpsellProduct()) {
+                            header.set({ link_title: _loc['HEADER_NEXT'] });
+
+
+                        } else {
+                            header.set({ link_title: _loc['ADD_TO_CART'] });
+                        }
+                    }
                 }
             });
         },

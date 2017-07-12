@@ -66,6 +66,7 @@
         'HEADER_MODIFIERS_PT': 'Modifiers',
         'HEADER_MODIFIERS_BT': 'Cancel',
         'HEADER_MODIFIERS_ADD_FT': 'Add Item',
+        'HEADER_NEXT': 'Next',
         'HEADER_MODIFIERS_EDIT_FT': 'Update',
         'HEADER_MYORDER_PT': 'Your Cart',
         'HEADER_MYORDER_BT': 'Menu',

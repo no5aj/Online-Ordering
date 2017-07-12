@@ -42,15 +42,6 @@ define(["myorder_view"], function(myorder_view) {
                 this.subViews.push(view);
             }
 
-            if (App.Settings.special_requests_online && !this.options.combo_child) {
-                view = App.Views.GeneratorView.create('Instructions', {
-                    el: this.$('.product_instructions'),
-                    model: model,
-                    mod: 'Modifiers'
-                });
-                this.subViews.push(view);
-            }
-
             return this;
         }
     });
