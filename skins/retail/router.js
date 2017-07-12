@@ -178,6 +178,9 @@ define(["main_router"], function(main_router) {
             container.append(mainView.el);
             this.mainView = mainView;
         },
+        utf8_to_b64: function(str) {
+            return window.btoa(unescape(encodeURIComponent(str)));
+        },
         navigationControl: function() {
             // 'change:subCategory' event occurs when any subcategory is clicked
             this.listenTo(App.Data.categorySelection, 'change:subCategory', function(model, value) {
@@ -201,7 +204,7 @@ define(["main_router"], function(main_router) {
                 // to go #index
                 App.Data.header.trigger('onShop');
 
-                var key = btoa(value),
+                var key = this.utf8_to_b64(value),
                     productSet = App.Data.productsSets.get(key),
                     searchModel, productsAttr;
 
@@ -520,7 +523,7 @@ define(["main_router"], function(main_router) {
             } catch(e) {
                 log('Unable to encode state for object ', data);
             }
-            return btoa(enc);
+            return this.utf8_to_b64(enc);
         },
         decodeState: function(data) {
             var state = null;
