@@ -805,6 +805,15 @@ define(['js/utest/data/Timetable', 'timetable'], function(timetables) {
                 spyOn(model,'base').and.callFake(function() {
                     return new Date(dateBase);
                 });
+                spyOn(model,'get_base_time').and.callFake(function() {
+                    var base_time = new Date(date);
+                    // on server: week_start = 0 for Monday, in JS: 0 is Sunday
+                    var settingShift = (parseInt(App.Settings.week_start) + 1) % 7;
+
+                    base_time.setDate(base_time.getDate() - base_time.getDay() + settingShift);
+
+                    return new Date(base_time);
+                });
                 spyOn(model,'get_working_hours').and.callFake(function(date, output) {
                     format_output = output;
                     return table();

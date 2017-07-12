@@ -505,13 +505,10 @@ define(["backbone"], function(Backbone) {
          */
         get_base_time: function() {
             var base_time = new Date();
-            var day_of_week = base_time.getDay();
-            // on server: week_start = 0 for Monday
+            // on server: week_start = 0 for Monday, in JS: 0 is Sunday
             var settingShift = (parseInt(App.Settings.week_start) + 1) % 7;
 
-            if (day_of_week > 0) {
-                base_time.setDate(base_time.getDate() - day_of_week + settingShift);
-            }
+            base_time.setDate(base_time.getDate() - base_time.getDay() + settingShift);
 
             return this.get_server_time(base_time);
         },
