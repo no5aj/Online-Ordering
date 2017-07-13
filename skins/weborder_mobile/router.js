@@ -840,7 +840,7 @@ define(["main_router"], function(main_router) {
                         modelName: 'MyOrder',
                         model: combo_order,
                         mod: 'Matrix',
-                        combo_child: true,
+                        //combo_child: true,
                         cacheId: false
                     };
                     App.Data.mainModel.set({

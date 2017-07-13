@@ -62,7 +62,7 @@ define(["quantity_view"], function(quantity_view) {
                 selectWrapper.removeClass('disabled');
             }
 
-            if (product.isParent()) {
+            if (product.isParent() || (this.model.isParent() && product.isUpsellProduct())) {
                 this.$el.hide();
             } else {
                 this.$el.show();
