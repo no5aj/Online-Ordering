@@ -100,7 +100,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
                 this.$('.product_info').append(this.viewProduct.el);
             }
             if (App.Settings.special_requests_online && this.instructionsView) {
-                if (this.model.get('product').check_selected() && this.model.get_product().isUpsellProduct()) {
+                if (this.model.isMatrixChildProductUpsell()) {
                     this.instructionsView.$el.hide();
                 }
                 else {
@@ -302,7 +302,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
         update_child_selected: function() {
             if (this.check_model()) {
                 this.$('.action_button').removeClass('disabled');
-                if (this.model.isParent() && this.model.get_product().isUpsellProduct()) {
+                if (this.model.isMatrixChildProductUpsell()) {
                     this.$('.action_button').html(_loc['MYORDER_NEXT']);//WOMA-183
                 } else {
                     this.update_action_button_title();
@@ -323,7 +323,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
             return this.model.check_order(opt);
         },
         action: function (event) {
-             if (this.model.isParent() && this.model.get_product().isUpsellProduct()) {
+             if (this.model.isMatrixChildProductUpsell()) {
                 //WOMA-183 The case where Upsell product is selected as a child of Inventory Matrix product
                 $('#popup .cancel').trigger('click', ['matrix_child_upsell']);
                 return;

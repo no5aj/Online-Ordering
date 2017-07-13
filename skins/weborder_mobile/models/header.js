@@ -103,7 +103,7 @@ define(["backbone"], function(Backbone) {
                 addProductCb = this.get('addProductCb'),
                 def = Backbone.$.Deferred();
 
-            if (orderItem.isParent() && orderItem.get_product().isUpsellProduct()) {
+            if (orderItem.isMatrixChildProductUpsell()) {
                 //WOMA-183 The case where Upsell product is selected as a child of Inventory Matrix product
                 var id_category = orderItem.get_product().get('id_category'),
                     id = orderItem.get_product().get('id');

@@ -705,7 +705,7 @@ define(["main_router"], function(main_router) {
 
                 function onAttrsChange() {
                     if (order.get('product').check_selected()) {
-                        if (order.isParent() && order.get_product().isUpsellProduct()) {
+                        if (order.isMatrixChildProductUpsell()) {
                             header.set({ link_title: _loc['HEADER_NEXT'] });
                         } else {
                             header.set({ link_title: _loc['ADD_TO_CART'] });

@@ -41,8 +41,7 @@ define(["quantity_view"], function(quantity_view) {
                 stock_amount = product.get('stock_amount'),
                 disallowNegativeInventory = App.Data.settings.get('settings_system').cannot_order_with_empty_inventory;
 
-            if (stock_amount === 1 || product.isParent() || isComboWithWeightProduct ||
-                (this.model.isParent() && product.isUpsellProduct())) {
+            if (stock_amount === 1 || product.isParent() || isComboWithWeightProduct || this.model.isMatrixChildProductUpsell()) {
                 this.$('.quantity_edit_input').addClass('disabled').prop('disabled', true);
                 disallowNegativeInventory && this.model.set('quantity', 1); // bug 13494
             } else {
