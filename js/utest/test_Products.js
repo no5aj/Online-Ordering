@@ -713,11 +713,12 @@ define(['products', 'js/utest/data/Products', 'js/utest/data/Timetable', 'catego
         });
 
         describe('set_child_products(children)', function() {
-            var model, child, initInventory, childrenArray;
+            var model, child, initInventory, childrenArray, id_category;
 
             beforeEach(function() {
-                model = new App.Models.Product();
-                // child = new App.Collections.ChildProducts;
+                id_category = data.get_child_products.data[0].product.id_category;
+                model = new App.Models.Product({id_category: id_category});
+                App.Data.products[id_category] = new App.Collections.Products();
 
                 childrenArray = deepClone(data.get_child_products).data;
 
@@ -730,13 +731,13 @@ define(['products', 'js/utest/data/Products', 'js/utest/data/Timetable', 'catego
                 });
 
                 spyOn(model, 'listenTo');
-                // spyOn(child, 'add_child');
 
                 initInventory = App.Settings.cannot_order_with_empty_inventory;
             });
 
             afterEach(function() {
                 App.Settings.cannot_order_with_empty_inventory = initInventory;
+                App.Data.products[id_category] = undefined;
             });
 
             it('`children` is not array', function() {

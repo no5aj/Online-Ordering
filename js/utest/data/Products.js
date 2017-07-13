@@ -379,9 +379,54 @@ define([], function() {
             "data": [{
                 "product": {
                     "name": 'Test',
+                    "id":101,
+                    "id_category":1002,
                     "price": 10,
                     "stock_amount": 5
-                }
+                },
+                "modifiers": [
+                      {
+                        "id":110,
+                        "modifier_class_id":110,
+                        "modifiers":[
+                          {
+                            "sort":1,
+                            "sku":"",
+                            "cost":"0.0000",
+                            "name":"Toasted Roll",
+                            "barcode":"",
+                            "active":true,
+                            "price":0,
+                            "selected":false,
+                            "is_quick":false,
+                            "id":1303
+                          },
+                          {
+                            "sort":2,
+                            "sku":"",
+                            "name":"Pressed Roll",
+                            "active":true,
+                            "price":0,
+                            "selected":false,
+                            "id":1304
+                          }],
+                        "name":"6\" Bread Optional Changes",
+                      },
+                      {
+                        "id":103,
+                        "modifier_class_id":103,
+                        "modifiers":[
+                          {
+                            "sort":1,
+                            "sku":"",
+                            "name":"Extra Steak",
+                            "active":true,
+                            "price":2.99,
+                            "selected":false,
+                            "id":1208
+                          }],
+                        "name":"Extra Meat",
+                    }]
             }]
         },
         "modelId_item_without_compositeId": {
