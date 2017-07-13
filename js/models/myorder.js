@@ -567,6 +567,18 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
             return this.get('product').get('attribute_type');
         },
         /**
+         * @returns {boolean} true if it's a parent Inventory Matrix product, false otherwise.
+         */
+        isParent: function() {
+            return this.get('product').isParent();
+        },
+        /**
+         * @returns {boolean} true if a child product selected in Inventory Matrix is Upsell product, false otherwise.
+         */
+        isMatrixChildProductUpsell: function() {
+            return this.isParent() && this.get('product').check_selected() && this.get_product().isUpsellProduct();
+        },
+        /**
          * @returns {Object} List of attributes if `product` is parent. Otherwise, returns empty object `{}`.
          */
         get_attributes_list: function() {

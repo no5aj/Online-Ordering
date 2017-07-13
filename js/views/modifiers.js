@@ -620,7 +620,7 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
                 attribute_1_enable = this.product.get('attribute_1_enable'),
                 attribute_2_enable = this.product.get('attribute_2_enable');
 
-            if (this.product.check_selected()) {
+            if (this.product.check_selected() && !this.product.get_product().isUpsellProduct()) {
                 this.subViews.splice(attribute_1_enable + attribute_2_enable,2).map(function(el) {
                     el.remove();
                 });

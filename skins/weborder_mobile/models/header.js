@@ -103,6 +103,14 @@ define(["backbone"], function(Backbone) {
                 addProductCb = this.get('addProductCb'),
                 def = Backbone.$.Deferred();
 
+            if (orderItem.isMatrixChildProductUpsell()) {
+                //WOMA-183 The case where Upsell product is selected as a child of Inventory Matrix product
+                var id_category = orderItem.get_product().get('id_category'),
+                    id = orderItem.get_product().get('id');
+                App.Data.router.navigate("upsell_product/" + id_category + "/" + id, true);
+                return def.resolve();
+            }
+
             if (check.status === 'OK') {
                 // no need to check a 'is_gift' for stanford reload item
                 if(App.Data.is_stanford_mode && orderItem.get('stanford_card_number') && orderItem.get('planId')) {

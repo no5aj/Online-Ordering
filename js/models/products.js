@@ -516,7 +516,8 @@ define(["backbone", 'childproducts', 'collection_sort', 'product_sets'], functio
 
             var child = new App.Collections.ChildProducts(),
                 inventory = App.Settings.cannot_order_with_empty_inventory,
-                self = this;
+                self = this,
+                newProduct, newModifiers;
 
             this.set('child_products', child);
 
@@ -541,6 +542,12 @@ define(["backbone", 'childproducts', 'collection_sort', 'product_sets'], functio
                 }
 
                 child.add_child(item);
+
+                newProduct = new App.Models.Product(item.product);
+                newModifiers = new App.Collections.ModifierBlocks().addJSON(item.modifiers);
+                App.Data.products[self.get('id_category')].add(newProduct);
+                if (!App.Data.modifiers[newProduct.get('id')])
+                    App.Data.modifiers[newProduct.get('id')] = newModifiers;
             });
         },
         /**

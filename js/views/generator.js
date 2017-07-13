@@ -59,7 +59,18 @@ define(['backbone'], function(Backbone) {
                 if (!root || !root[ViewClass + options.mod + 'View']) {
                     console.error("Can't find the view class: " + "App.Views." + ViewClass + 'View.' + options.dbgClassName);
                 }
-                view = new App.Views[ViewClass + 'View'][ViewClass + options.mod + 'View'](options);
+                var viewClass = App.Views[ViewClass + 'View'][ViewClass + options.mod + 'View'];
+                if (App.Data.devMode) {
+                    var core_root = App.Views['Core' + ViewClass + 'View'];
+                    if (core_root) {
+                        var coreClass = core_root['Core' + options.dbgClassName];
+                        if (viewClass == coreClass) {
+                            options.dbgClassName = 'Core' + options.dbgClassName;
+                        }
+                    }
+                }
+
+                view = new viewClass(options);
                 if(App.Views.Generator.enableCache && id) {
                     cache[id] = view;
                     //App.Data.devMode && view.$el.attr('x-cache-id', id);

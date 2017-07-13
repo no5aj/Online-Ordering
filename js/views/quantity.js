@@ -78,7 +78,7 @@ define(["backbone", "factory"], function(Backbone) {
                 this.model.set('quantity', 1);
             }
 
-            if (stock_amount === 1 || product.isParent() || isComboWithWeightProduct || this.getBinding('no_qty_arrows')) {
+            if (stock_amount === 1 || product.isParent() || isComboWithWeightProduct || this.getBinding('no_qty_arrows') || this.model.isMatrixChildProductUpsell()) {
                 this.$('.decrease').addClass('disabled');
                 this.$('.increase').addClass('disabled');
             } else {
