@@ -2061,16 +2061,15 @@ var MonerisPaymentProcessor = {
 
         if (pay_get_parameter) {
             var returnCode = Number(get_parameters.response_code);
+            if (!get_parameters[MONERIS_PARAMS.TRANSACTION_ID]) {
+                wrong_config();
+                return payment_info;
+            }
             if(pay_get_parameter === 'true' && returnCode < MONERIS_RETURN_CODE.DECLINE) {
                 // Check transaction_id. It can be missed in case of wrong Moneris Configuration.
                 if (get_parameters[MONERIS_PARAMS.TRANSACTION_ID]) {
                     payment_info.transaction_id = get_parameters[MONERIS_PARAMS.TRANSACTION_ID];
                     payment_info.response_order_id = get_parameters[MONERIS_PARAMS.RESPONSE_ORDER_ID];
-                } else {
-                    setTimeout(function() {
-                        App.Data.errors.alert(MONERIS_WRONG_CONFIGURATION, true);
-                    }, 1000);
-                    throw new Error('Wrong Moneris Configuration: transaction id is missed');
                 }
             } else {
                 payment_info.errorMsg = MONERIS_RETURN_MESSAGE[returnCode];
@@ -2078,6 +2077,12 @@ var MonerisPaymentProcessor = {
                     payment_info.errorMsg = MONERIS_RETURN_MESSAGE_DEFAULT;
                 }
             }
+        }
+        function wrong_config() {
+            setTimeout(function() {
+                App.Data.errors.alert(MONERIS_WRONG_CONFIGURATION, false);
+            }, 1000);
+            payment_info.errorMsg = 'Wrong Moneris Configuration: transaction id is missed';
         }
         return payment_info;
     }
