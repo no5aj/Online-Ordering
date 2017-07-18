@@ -50,7 +50,7 @@ define(["myorder_view"], function(myorder_view) {
             this.dh_initialize();
             return this;
         }
-      })
+      });
     };
 
     function DynamicHeightHelper(_base_proto) {
@@ -97,7 +97,7 @@ define(["myorder_view"], function(myorder_view) {
             clearInterval(this.interval);
             _base_proto.remove.apply(this, arguments);
         }
-      }
+      };
     }
 
     var DynamicHeightHelper_Combo = DynamicHeightHelper(CoreViews.CoreMyOrderMatrixComboView.prototype);
@@ -114,7 +114,7 @@ define(["myorder_view"], function(myorder_view) {
             this.dh_initialize();
             return this;
         }
-      })
+      });
     };
 
     var MyOrderMatrixUpsellRootView = _MyOrderMatrixUpsellRootView( CoreViews.CoreMyOrderMatrixView )
@@ -156,7 +156,7 @@ define(["myorder_view"], function(myorder_view) {
             });
             this.subViews.push(view);
         }
-      })
+      });
     };
 
     var MyOrderMatrix_UpsellRootFirst_FooterView = App.Views.CoreMyOrderView.CoreMyOrderMatrixFooterView.extend({

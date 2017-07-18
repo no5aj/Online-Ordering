@@ -187,7 +187,7 @@ define(["backbone"], function(Backbone) {
          */
         updateSum: function(multiplier) {
             var freeAmount = this.get('free_amount'),
-                maxPriceAmount = this.get('max_price_amount')
+                maxPriceAmount = this.get('max_price_amount'),
                 price = 0;
 
             // `max_price_amount` overrides `free_amount` and `price` if it's applied.
@@ -242,7 +242,7 @@ define(["backbone"], function(Backbone) {
             if (price > max_price ) {
                 this.set('max_price_amount', max_price);//modifier price with feature max price 6137
             } else {
-                this.unset('max_price_amount');
+                this.set('max_price_amount', undefined);
             }
             return max_price > price ? max_price - price : 0;
         },
@@ -727,7 +727,7 @@ define(["backbone"], function(Backbone) {
                 needAdd = model.get('selected'),
                 changed = false;
             var model_selected = selected.find(function(id){
-                    return id == model.get('id')
+                    return id == model.get('id');
                 }),
                 index = selected.indexOf(model_selected);
 
@@ -919,7 +919,7 @@ define(["backbone"], function(Backbone) {
          */
         reorder: function() {
             return this.get('modifiers').reorder(this.get('amount_free'), this.get('amount_free_is_dollars'));
-        },
+        }
     });
 
     /**
@@ -1291,7 +1291,7 @@ define(["backbone"], function(Backbone) {
             return this.reduce(function(changes, modifierBlock) {
                 return changes.concat(modifierBlock.reorder());
             }, []);
-        },
+        }
     });
 
     /**

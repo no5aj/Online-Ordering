@@ -551,7 +551,7 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
                                 modifierClass = modifier.get('name'),
                                 msg = tmpl[1].replace('%d', Amount).replace('%s', '&lsquo;' + modifierClass + '&rsquo;');
                             return msg;
-                        }).join(', ')
+                        }).join(', ');
                     }()
                 };
             }
@@ -817,7 +817,7 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
         */
         App.Models.Myorder.prototype.mdf = function(mdf_class_index, mdf_index) {
             return this.get('modifiers').models[mdf_class_index].get('modifiers').models[mdf_index].toJSON();
-        }
+        };
     }
 
     /**
@@ -1032,7 +1032,7 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
                                 psetName = model.get('name'),
                                 msg = tmpl[1].trim().replace('%d', exactAmount).replace('%s', '&lsquo;' + psetName + '&rsquo;');
                             return msg;
-                        }).join(', ')
+                        }).join(', ');
                     }()
                 };
             }
@@ -1200,7 +1200,7 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
         */
         App.Models.MyorderCombo.prototype.combo_child = function(product_set_index, product_index) {
             return this.get('product').get('product_sets').models[product_set_index].get('order_products').models[product_index];
-        }
+        };
     }
 
     /**
@@ -2113,7 +2113,7 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
                 order.paymentInfo = {
                     type: params.type,
                     cardInfo: {planId: params.planId}
-                }
+                };
             }
 
             var myorder_json = JSON.stringify(order);
@@ -2905,6 +2905,6 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
         */
         App.Collections.Myorders.prototype.combo_child = function(product_index, product_set_index, child_index) {
             return this.models[product_index].combo_child(product_set_index, child_index);
-        }
+        };
     }
 });
