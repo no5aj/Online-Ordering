@@ -2121,6 +2121,7 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
                 type: "POST",
                 url: App.Data.settings.get("host") + "/weborders/cart_totals/",
                 data: myorder_json,
+                headers: App.Data.customer.getAuthorizationHeader(),
                 dataType: "json",
                 success: function(data) {
                     if (!data || !data.status) {

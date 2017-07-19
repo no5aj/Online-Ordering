@@ -1933,6 +1933,9 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
                    ajaxSpy = spyOn($, 'ajax').and.callFake(ajaxMock);
                 else
                    ajaxSpy = spyOn($, 'ajax').and.callThrough();
+                App.Data.customer.getAuthorizationHeader = function() {
+                    return {Authorization: "Bearer X12pohVof78uEhZ25XXvRp5EAYsSi1dcCRnMiNXQjECzFw8f6qUpXugzBLtz"};
+                };
                 spyOn(model, 'preparePickupTime');
                 spyOn(model, 'trigger');
             });
@@ -1961,6 +1964,7 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
                     type: "POST",
                     url: App.Data.settings.get("host") + "/weborders/cart_totals/",
                     data: jasmine.any(String),
+                    headers: App.Data.customer.getAuthorizationHeader(),
                     dataType: 'json',
                     success: jasmine.any(Function),
                     error: jasmine.any(Function),
@@ -1998,6 +2002,10 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
                     ajaxSpy.and.callFake(function(e) {
                         e.success(data);
                     });
+
+                    App.Data.customer.getAuthorizationHeader = function() {
+                        return {Authorization: "Bearer X12pohVof78uEhZ25XXvRp5EAYsSi1dcCRnMiNXQjECzFw8f6qUpXugzBLtz"};
+                    };
                 })
 
                 it('data.status doesn\'t exist or empty', function() {
@@ -2124,6 +2132,9 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
                 });
                 App.Data.customer._check_delivery_fields = function() {return []};
                 App.Data.customer.get_shipping_services = function() {};
+                App.Data.customer.getAuthorizationHeader = function() {
+                    return {Authorization: "Bearer X12pohVof78uEhZ25XXvRp5EAYsSi1dcCRnMiNXQjECzFw8f6qUpXugzBLtz"};
+                };
 
                 var cb = jasmine.createSpy('cb'),
                     shippingOptions = null;
