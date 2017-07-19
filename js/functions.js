@@ -2010,12 +2010,14 @@ var MONERIS_RETURN_MESSAGE = {
     57: "Lost or stolen card",
     58: "Card use limited",
     59: "Restricted Card",
-    60: "No Chequing account"
+    60: "No Chequing account",
+    86: "Amount is over maximum",
+    914: "Cancelled by cardholder"
 };
 MONERIS_RETURN_MESSAGE_DEFAULT = "Unknown error";
 
 var MONERIS_WRONG_CONFIGURATION = "Error in Merchant's Moneris Account configuration: transaction id is not present in pre-authorization response.";
-    MONERIS_WRONG_CONFIGURATION += " Please make sure that 'Directpost Configuration' > 'Configure Response Fields' > 'Return the txn_number' is enabled.";
+    MONERIS_WRONG_CONFIGURATION += " Please make sure that 'Hosted Paypage/Directpost Configuration' > 'Configure Response Fields' > 'Return the txn_number' is enabled.";
 
 var MONERIS_PARAMS = {
     PAY: 'rvarPay',
@@ -2050,18 +2052,24 @@ var MonerisPaymentProcessor = {
         return qStr;
     },
     showCreditCardDialog: function() {
-        return true;
+        return App.Settings.payment_processor.moneris_type == "hpp" ? false : true;
     },
-    processPayment: function(myorder, payment_info, pay_get_parameter) {
+    processPayment: function(myorder, payment_info, cur_pay_state) {
         var get_parameters = App.Data.get_parameters;
 
         //redefine it, Moneris allow to pass custom args only having rvar prefix
         pay_get_parameter = get_parameters[MONERIS_PARAMS.PAY];
         delete get_parameters[MONERIS_PARAMS.PAY];
 
+        if (!pay_get_parameter && cur_pay_state == 'false') {
+            //It's a case where user press Back browser's button at the hosted paypage
+            payment_info.errorMsg = MONERIS_RETURN_MESSAGE_DEFAULT;
+            return payment_info;
+        }
+
         if (pay_get_parameter) {
             var returnCode = Number(get_parameters.response_code);
-            if (!get_parameters[MONERIS_PARAMS.TRANSACTION_ID]) {
+            if (typeof get_parameters[MONERIS_PARAMS.TRANSACTION_ID] == undefined) {
                 wrong_config();
                 return payment_info;
             }
