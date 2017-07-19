@@ -1927,6 +1927,9 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
 
         describe('_get_cart_totals(params)', function() {
             var data, checkout, rewardsCard, ajaxSpy;
+            var authHeader = {
+                Authorization: "Bearer X12pohVof78uEhZ25XXvRp5EAYsSi1dcCRnMiNXQjECzFw8f6qUpXugzBLtz"
+            };
 
             beforeEach(function() {
                 if (typeof ajaxMock == 'function')
@@ -1934,7 +1937,7 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
                 else
                    ajaxSpy = spyOn($, 'ajax').and.callThrough();
                 App.Data.customer.getAuthorizationHeader = function() {
-                    return {Authorization: "Bearer X12pohVof78uEhZ25XXvRp5EAYsSi1dcCRnMiNXQjECzFw8f6qUpXugzBLtz"};
+                    return authHeader;
                 };
                 spyOn(model, 'preparePickupTime');
                 spyOn(model, 'trigger');
@@ -2129,7 +2132,7 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
                 App.Data.customer._check_delivery_fields = function() {return []};
                 App.Data.customer.get_shipping_services = function() {};
                 App.Data.customer.getAuthorizationHeader = function() {
-                    return {Authorization: "Bearer X12pohVof78uEhZ25XXvRp5EAYsSi1dcCRnMiNXQjECzFw8f6qUpXugzBLtz"};
+                    return authHeader;
                 };
 
                 var cb = jasmine.createSpy('cb'),
