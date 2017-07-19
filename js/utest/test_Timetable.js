@@ -536,13 +536,6 @@ define(['js/utest/data/Timetable', 'timetable'], function(timetables) {
             expect(model.toJSON()).toEqual(def);
         });
 
-        it('_get_month_id()', function() {
-            var res = month.filter(function(element, i) {
-                return model._get_month_id(element) !== i;
-            });
-            expect(res.length).toBe(0);
-        });
-
         it('get_day_of_week()', function() {
             var res = weekDays.filter(function(element, i) {
                 return model.get_day_of_week(i) !== element;
