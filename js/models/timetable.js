@@ -543,41 +543,23 @@ define(["backbone"], function(Backbone) {
          */
         _get_timetable: function(current_date) {
             var table = this.get('timetables'),
-                parse, from_date_year,
-                current_date_year = current_date.getFullYear();
+                parse, from_date, to_date, cur_date;
 
             if ((Array.isArray(table) && table.length == 0) || empty_object(table)) { // check object (empty or not empty)
                 return null;
-            } else {
-                for (var i = 0, j = table.length; i < j; i++) {
-                    var cur_date = new Date(current_date.getTime()); //#22327, to get ready for table[] is unsorted
-                    if ($.trim(table[i].to_date) == '') { //nonperiodic interval with open end date
-                        //The format is "Jan 22, 2018"
-                        parse = $.trim(table[i].from_date).match(/(\w+)\s+(\d+)\,\s(\d{4})/);//returns e.g. ["Jan 22, 2018", "Jan", "22", "2018"]
-                        from_date_month = parse[1];
-                        from_date_day = parse[2];
-                        from_date_year = parse[3];
-                        from_date = new Date(from_date_year, this._get_month_id(from_date_month), from_date_day);
-                        to_date = new Date(2500, 0, 1); //set distant future date
-                        if (cur_date >= from_date) {
-                            return table[i].timetable_data;
-                        }
-                    } else {
-                    // from date (begin), //The format is "Jan, 22"
-                    var from_date_month = this._get_month_id($.trim(table[i].from_date.split(",")[0])), // get ID of month in format JS
-                        from_date_day = $.trim(table[i].from_date.split(",")[1]),
-                        from_date = new Date(current_date_year, from_date_month, from_date_day),
-                    // from date (end)
-                    // to date (begin)
-                        to_date_month = this._get_month_id($.trim(table[i].to_date.split(",")[0])), // get ID of month in format JS
-                        to_date_day = $.trim(table[i].to_date.split(",")[1]),
-                        to_date = new Date(current_date_year, to_date_month, to_date_day);
-                        // to date (end)
-                        from_date > to_date && to_date.setFullYear(to_date.getFullYear() + 1);
-                        from_date > cur_date && cur_date.setFullYear(cur_date.getFullYear() + 1);
-                        if (cur_date <= to_date) {
-                            return table[i].timetable_data;
-                        }
+            }
+
+            for (var i = 0, j = table.length; i < j; i++) {
+                cur_date = new Date(current_date.getTime()); //#22327, to get ready for table[] is unsorted
+                from_date = new Date(table[i].from_date);
+                if ($.trim(table[i].to_date) == '') { //nonperiodic interval with open end date
+                    if (cur_date >= from_date) {
+                        return table[i].timetable_data;
+                    }
+                } else {
+                    to_date = new Date(table[i].to_date);
+                    if (from_date <= cur_date && cur_date <= to_date) {
+                        return table[i].timetable_data;
                     }
                 }
             }
@@ -633,37 +615,35 @@ define(["backbone"], function(Backbone) {
                 return false;
             }
 
-            if (timetable !== false) {
-                if (timetable === null) {
-                    return null;
-                } else if (!empty_object(timetable)) { // check object (empty or not empty)
-                    var current_day_timetable = timetable[weekDays[current_date.getDay()]],
-                        time_format = this.get('time_format');
-                    if (current_day_timetable) {
-                        if (!format_output) {
-                            var timetable_in_format = [];
-                            for (var i = 0; i < current_day_timetable.length; i++) {
-                                var time = current_day_timetable[i],
-                                    time_from = new TimeFrm(time.from.split(":")[0] * 1, time.from.split(":")[1] * 1, time_format).toString(),
-                                    time_to = new TimeFrm(time.to.split(":")[0] * 1, time.to.split(":")[1] * 1, time_format).toString();
-
-                                timetable_in_format.push({
-                                    from: time_from, // output of time in requirement format
-                                    to: time_to // output of time in requirement format
-                                });
-                            }
-                            return timetable_in_format;
-                        } else {
-                            return current_day_timetable;
-                        }
-                    } else {
-                        return false;
-                    }
-                } else {
-                    return true;
-                }
+            if (timetable === false || timetable === null) {
+                return timetable;
             }
-            return false;
+
+            if (empty_object(timetable)) { // check object (empty or not empty)
+                return true;
+            }
+
+            var current_day_timetable = timetable[weekDays[current_date.getDay()]],
+                time_format = this.get('time_format');
+            if (!current_day_timetable) {
+                return false;
+            }
+            if (format_output) {
+                return current_day_timetable;
+            }
+
+            var timetable_in_format = [];
+            for (var i = 0; i < current_day_timetable.length; i++) {
+                var time = current_day_timetable[i],
+                    time_from = new TimeFrm(time.from.split(":")[0] * 1, time.from.split(":")[1] * 1, time_format).toString(),
+                    time_to = new TimeFrm(time.to.split(":")[0] * 1, time.to.split(":")[1] * 1, time_format).toString();
+
+                timetable_in_format.push({
+                    from: time_from, // output of time in requirement format
+                    to: time_to // output of time in requirement format
+                });
+            }
+            return timetable_in_format;
         },
         /**
          * Gets timetable on the week from the current day.
