@@ -39,18 +39,18 @@ define([], function() {
         },
         "timetable": [
             {
-                "from_date": "Jan, 1",
-                "to_date": "Jan, 1",
+                "from_date": "Jan 1, 2014",
+                "to_date": "Jan 1, 2014",
                 "timetable_data": {}
             },
             {
-                "from_date": "Feb, 1",
-                "to_date": "Feb, 3",
+                "from_date": "Feb 1, 2014",
+                "to_date": "Feb 3, 2014",
                 "timetable_data": {}
             },
             {
-                "from_date": "Apr, 1",
-                "to_date": "Apr, 23",
+                "from_date": "Apr 1, 2014",
+                "to_date": "Apr 23, 2014",
                 "timetable_data": {
                     "monday": [
                         {
@@ -117,8 +117,8 @@ define([], function() {
         ],
         "timetable2": [
             {
-                "from_date": "Dec, 20",
-                "to_date": "Jan, 20",
+                "from_date": "Dec 20, 2013",
+                "to_date": "Jan 20, 2014",
                 "timetable_data": {
                     "monday": [
                         {
@@ -175,15 +175,15 @@ define([], function() {
         ],
         "timetable3": [
             {
-                "from_date": "Dec, 20",
-                "to_date": "Jan, 20",
+                "from_date": "Dec 20, 2013",
+                "to_date": "Jan 20, 2014",
                 "timetable_data": {}
             }
         ],
         "timetable4": [
             {
-                "from_date": "Jan, 1",
-                "to_date": "Jan, 5",
+                "from_date": "Jan 1, 2014",
+                "to_date": "Jan 5, 2014",
                 "timetable_data": {
                     "wednesday" : [{
                         "from": "00:00",
@@ -200,13 +200,13 @@ define([], function() {
                 }
             },
             {
-                "from_date": "Feb, 1",
-                "to_date": "Feb, 3",
+                "from_date": "Feb 1, 2014",
+                "to_date": "Feb 3, 2014",
                 "timetable_data": {}
             },
             {
-                "from_date": "Feb, 10",
-                "to_date": "Feb, 14",
+                "from_date": "Feb 10, 2014",
+                "to_date": "Feb 14, 2014",
                 "timetable_data": {
                     "monday": [
                         {
@@ -231,8 +231,8 @@ define([], function() {
         ],
         "timetable5": [
             {
-                "from_date": "Jan, 1",
-                "to_date": "Dec, 31",
+                "from_date": "Jan 1, 2014",
+                "to_date": "Dec 31, 2014",
                 "timetable_data": {}
             }
         ],

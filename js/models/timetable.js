@@ -462,19 +462,6 @@ define(["backbone"], function(Backbone) {
             (hours = this.getHoursOnWeek()) && this.set('hours', hours);
         },
         /**
-         * Converts short name of the month to its numeric representation.
-         * @param   {string} month_text - short month name. Possible values: Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec.
-         * @returns {number} an integer between 0 and 11. 0 corresponds to January, 1 to February, and so on.
-         * The same format as value returned by Date.prototype.getMonth().
-         */
-        _get_month_id: function(month_text) {
-            for (var i = 0; i < EN_ARRAY_MONTH.length; i++) {
-                if (month_text === EN_ARRAY_MONTH[i].substr(0, 3)) {
-                    return i;
-                }
-            }
-        },
-        /**
          * Converts numeric representation of the day of the week to its name.
          * @param   {number} id_week - an integer corresponding to the day of the week: 0 for Sunday, 1 for Monday, 2 for Tuesday, and so on.
          * The same format as value returned by Date.prototype.getDay().
