@@ -2002,10 +2002,6 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
                     ajaxSpy.and.callFake(function(e) {
                         e.success(data);
                     });
-
-                    App.Data.customer.getAuthorizationHeader = function() {
-                        return {Authorization: "Bearer X12pohVof78uEhZ25XXvRp5EAYsSi1dcCRnMiNXQjECzFw8f6qUpXugzBLtz"};
-                    };
                 })
 
                 it('data.status doesn\'t exist or empty', function() {
