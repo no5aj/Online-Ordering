@@ -293,7 +293,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
         },
         update_action_button_title: function() {
             var action_text_label = this.options.action_text_label ? this.options.action_text_label : this.options.action;
-            if (this.action_text_label === 'add') {
+            if (action_text_label === 'add') {
                 this.$('.action_button').html(_loc['MYORDER_ADD_ITEM']);
             } else {
                 this.$('.action_button').html(_loc['MYORDER_UPDATE_ITEM']);
