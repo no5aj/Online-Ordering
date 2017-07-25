@@ -56,9 +56,18 @@ define(["factory", "giftcard_view"], function(factory) {
             this.updateCartTotals();
             App.Views.CoreGiftCardView.CoreGiftCardMainView.prototype.remove.apply(this, arguments);
         },
-        showErrorMsg: function(msg) {
+        showErrorMsg: function(msg, error) {
             this.model.trigger("onResetData");
-            App.Data.errors.alert(msg);
+            if (error == 'PIN_REQUIRED_MODE') {
+                App.Data.errors.alert(msg, false, false, {
+                    customView: new (App.Views.FactoryView.extend({
+                        name: "account_code",
+                        mod: "info"
+                    }))
+                });
+            } else {
+               App.Data.errors.alert(msg);
+            }
         },
         updateCartTotals: function(model, planId) {
             var myorder = this.options.myorder;

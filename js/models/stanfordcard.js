@@ -261,10 +261,10 @@ define(["backbone", "captcha"], function(Backbone) {
                     // {status: 'OK', data: []} - card number doesn't exist
                     // {status: 'ERROR', errorMsg: '...'} - invalid captcha
                     if (data.status == 'NEED_VALIDATION') {
-                        self.trigger('onStanfordCardError', _loc.STANFORD_NEED_PIN_VALIDATION);
+                        self.trigger('onStanfordCardError', _loc.STANFORD_NEED_PIN_VALIDATION, 'PIN_REQUIRED_MODE');
                         return;
                     } else if (data.status == 'NOTVALID') {
-                        self.trigger('onStanfordCardError', _loc.STANFORD_PIN_VALIDATION_ERROR);
+                        self.trigger('onStanfordCardError', _loc.STANFORD_PIN_VALIDATION_ERROR, 'PIN_REQUIRED_MODE');
                         return;
                     }
 

@@ -173,6 +173,7 @@
         'STANFORD_ACCOUNT_CODE': 'Account Code (if it exists)',
         'STANFORD_NEED_PIN_VALIDATION': 'Your card requires validation of the account code. Please, enter your account code and try again.',
         'STANFORD_PIN_VALIDATION_ERROR': 'Account Code is not valid',
+        'STANFORD_ACCOUNT_CODE_INFO': 'The following URL can be used to retrieve your account code',
         'STANFORD_BALANCE': 'Balance:',
         'STANFORD_STUDENT_QUESTION': 'Are you a Stanford Student?',
         'STANFORD_STUDENT_INSTRUCTIONS': 'You must bring your Stanford ID when you pick up your order.',
