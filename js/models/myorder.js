@@ -2145,6 +2145,11 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
                             reportErrorFrm(MSG[data.status]);
                             myorder.update_cart_totals();//get discounts & totals w/o discount_code
                             break;
+                        case 'INCORRECT_PRODUCT_PRICE':
+                            var response = data.responseJSON;
+                            reportErrorFrm(MSG.ERROR_PRICE_CHANGED.replace('%product', response.name).replace('%price', response.price));
+                            myorder.price_changed(response);
+                            break;
                         default:
                             if (!data.errorMsg) data.errorMsg = MSG.ERROR_NO_MSG_FROM_SERVER;
                             data.errorMsg = MSG.ERROR_OCCURRED + ' ' + data.errorMsg;
@@ -2186,6 +2191,41 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
                     App.Data.errors.alert(message);
                 }
             }
+        },
+        /* Removes item(s) from the order,
+         * for which the price had been changed during the session
+         * and updates price for related product
+         *
+         * @param {Object} json - contains name & new price of one product
+         * TODO: id of product should be returned from server
+         * TODO: a full list of products with changed prices (contained in order)
+         * should be returned from server at once
+         */
+        price_changed: function(data) {
+            var products = [];
+            // clear item(s) inside order
+            App.Data.myorder.filter( function(el) {
+                return (el.get_product().get('name') == data.name) ? el : null;
+            }).map( function(item_found) {
+                var product = item_found.get_product();
+                products.push( {id: product.get('id'), category: product.get('id_category')});
+                App.Data.myorder.remove(item_found);
+            });
+
+            // set new price(s) for product(s) in products and in search
+            _.each(products, function(product) {
+                App.Data.products[product.category] &&
+                App.Data.products[product.category].findWhere({id: product.id}).set('price', data.price);
+
+                App.Data.search &&
+                App.Data.search.each( function(el) {
+                    el.get('products').each( function(item) {
+                        if (item.get('id') == product.id && item.get('id_category') == product.category) {
+                            item.set('price', data.price);
+                        }
+                    });
+                });
+            });
         },
         /**
          * Updates cart totals. This method is used as handler of cart totals request.
@@ -2631,6 +2671,12 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
                         reportErrorFrm(data.errorMsg + " " + MSG.PRODUCTS_VALID_TIME + "<br/>" + format_timetables(data.responseJSON["timetables"], ",<br/>"));
                         break;
                     case "CVV_REQUIRED_CANCELED":
+                        break;
+                    case 'INCORRECT_PRODUCT_PRICE':
+                        var response = data.responseJSON;
+                        reportErrorFrm(MSG.ERROR_PRICE_CHANGED.replace('%product', response.name).replace('%price', response.price));
+                        myorder.price_changed(response);
+                        myorder.update_cart_totals();
                         break;
                     default:
                         PaymentProcessor.handlePaymentRequestFailure(payment_type, data);

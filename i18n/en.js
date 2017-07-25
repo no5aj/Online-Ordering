@@ -421,6 +421,7 @@
             'ERROR_RECENT_LOAD': 'Unable to get a list of recent orders.',
             'ERROR_PRODUCTS_LOAD': 'Unable to get the list products of menu from backend. Now the page is reloaded.',
             'ERROR_STORES_LOAD': 'Unable to get the list of stores.',
+            'ERROR_PRICE_CHANGED': 'Price for product "%product" was changed to %price during the session.<br>We are sorry about your inconvenience.<br>Please add it to the cart once more.',
             'DELIVERY_ITEM': 'Delivery Charge',
             'BAG_CHARGE_ITEM': 'Bag Charge',
             'AUTOAPPLY_FEE_ITEM': 'AutoApply Fee',

@@ -29,6 +29,10 @@ define(["backbone", "factory", "generator", "list"], function(Backbone) {
     App.Views.CoreProductView.CoreProductListItemView = App.Views.ItemView.extend({
         name: 'product',
         mod: 'list_item',
+        initialize: function() {
+            App.Views.ItemView.prototype.initialize.apply(this, arguments);
+            this.listenTo(this.model, 'change:price', this.render, this);
+        },
         bindings: {
             ':el': 'classes: {hide: not(active)}',
             '.product_list_item': "attr:{'data-id':compositeId}"
