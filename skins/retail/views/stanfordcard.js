@@ -35,17 +35,12 @@ define(["factory", "stanfordcard_view"], function(factory, stanfordcard_view) {
             '.btn-submit': 'submit'
         },
         initialize: function() {
-            this.listenTo(this.model, 'onStanfordCardError', this.showErrorMsg, this);
             App.Views.CoreStanfordCardView.CoreStanfordCardMainView.prototype.initialize.apply(this, arguments);
         },
         submit: function() {
             var myorder = this.options.myorder;
             myorder.trigger('showSpinner');
             this.model.getPlans().then(myorder.trigger.bind(myorder, 'hideSpinner'));
-        },
-        showErrorMsg: function(msg) {
-            this.model.trigger("onResetData");
-            App.Data.errors.alert(msg);
         }
     });
 

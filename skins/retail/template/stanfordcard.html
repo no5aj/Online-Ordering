@@ -8,6 +8,12 @@
             </label>
         </div>
     </div>
+    <div class="item account_code inline-block">
+        <div class="label optional-text"><%= _lp.STANFORD_ACCOUNT_CODE %></div>
+        <div class="ctrl-box">
+            <input type="text" class="account_code_input input ctrl-input size2">
+        </div>
+    </div>
     <div class="recaptcha_view inline-block"></div>
     <div class="btn-submit btn stanford-verify inline-block text-center" tabindex="0"><%= _lp.STANFORD_VERIFY %></div>
 </script>
@@ -30,6 +36,8 @@
 <script type="text/template" id="stanfordcard_popup-template">
     <div class="label required optional-text"><%= _lp.STANFORD_CARD_RELOAD_ENTER_NUMBER %></div>
     <input type="text" class="number-input input">
+    <div class="label optional-text"><%= _lp.STANFORD_ACCOUNT_CODE %></div>
+    <input type="text" class="account_code_input input">
     <div class="recaptcha_view"></div>
 </script>
 

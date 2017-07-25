@@ -32,7 +32,8 @@ define(["factory", "giftcard_view"], function(factory) {
             '.number-input': 'value: number, events:["keyup", "blur", "touchend"], attr: {readonly: validated}, restrictInput: "0123456789", kbdSwitcher: "numeric", pattern: /^(\\d{0,15})$/',
             '.cancel-input': 'toggle: validated',
             '.captcha_container': 'classes: {hide: validated}',
-            '.card_title': 'text:select(validated, _lp_STANFORDCARD_TITLE_INFO, _lp_STANFORDCARD_TITLE)'
+            '.card_title': 'text:select(validated, _lp_STANFORDCARD_TITLE_INFO, _lp_STANFORDCARD_TITLE)',
+            '.account_code_input': 'value: account_code, events:["keyup", "blur", "touchend"], attr: {readonly: validated}, restrictInput: "0123456789", kbdSwitcher: "numeric", pattern: /^(\\d{0,15})$/',
         }),
         events: {
             'click .cancel-input': 'reset'
@@ -40,6 +41,7 @@ define(["factory", "giftcard_view"], function(factory) {
         initialize: function() {
             App.Views.CoreGiftCardView.CoreGiftCardMainView.prototype.initialize.apply(this, arguments);
             this.listenTo(this.model, 'change:planId', this.updateCartTotals, this);
+            this.listenTo(this.model, 'onStanfordCardError', this.showErrorMsg, this);
             this.updateCartTotals(this.model, this.model.get('planId'));
         },
         reset: function() {
@@ -53,6 +55,10 @@ define(["factory", "giftcard_view"], function(factory) {
         remove: function() {
             this.updateCartTotals();
             App.Views.CoreGiftCardView.CoreGiftCardMainView.prototype.remove.apply(this, arguments);
+        },
+        showErrorMsg: function(msg) {
+            this.model.trigger("onResetData");
+            App.Data.errors.alert(msg);
         },
         updateCartTotals: function(model, planId) {
             var myorder = this.options.myorder;
@@ -91,7 +97,7 @@ define(["factory", "giftcard_view"], function(factory) {
         name: 'stanfordcard',
         mod: 'plans',
         bindings: {
-            ':el': 'toggle: plansLength',
+            ':el': 'toggle: all(plansLength, validated)',
             '.list': 'collection: $collection'
         },
         computeds: {

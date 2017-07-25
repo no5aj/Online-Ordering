@@ -7,7 +7,12 @@
                 <input type="button" class="ctrl cancel-input hide">
             </label>
         </div>
-
+    </div>
+    <div class="item account_code">
+        <div class="label optional-text"><%= _lp.STANFORD_ACCOUNT_CODE %></div>
+        <div class="ctrl-box">
+            <input type="text" class="account_code_input input ctrl-input size2">
+        </div>
     </div>
     <div class="recaptcha_view item"></div>
     <div class="btn-submit btn item text-center" tabindex="0"><%= _lp.STANFORD_VERIFY %></div>
@@ -44,6 +49,10 @@
     <div class="row">
         <div class="label required optional-text"><%= _lp.GIFTCARD_NUMBER %></div>
         <input type="text" class="number-input input">
+    </div>
+    <div class="row">
+        <div class="label optional-text"><%= _lp.STANFORD_ACCOUNT_CODE %></div>
+        <input type="text" class="account_code_input input">
     </div>
     <div class="recaptcha_view row"></div>
     <div class="btn btn-half border-box fl-left btn-cancel text-center btn-secondary" tabindex="0"><%= _lp.CANCEL %></div>
