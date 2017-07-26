@@ -30,6 +30,7 @@ define([], function() {
             'plans': null,
             'planId': null,
             'captchaValue': '',
+            'account_code' : '',
             'captchaImage': '',
             'captchaKey': undefined,
             'validated': false,
@@ -59,6 +60,12 @@ define([], function() {
         'RESPONSE_3': {
             'status': 'ERROR',
             'errorMsg': 'Invalid Captcha'
+        },
+        'RESPONSE_4': {
+            'status': 'NEED_VALIDATION'
+        },
+        'RESPONSE_5': {
+            'status': 'NOTVALID'
         }
     };
 });
