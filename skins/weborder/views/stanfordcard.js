@@ -47,6 +47,16 @@ define(["factory", "stanfordcard_view"], function(factory, stanfordcard_view) {
     var StanfordCardPopupView = StanfordCardMainView.extend({
         name: 'stanfordcard',
         mod: 'popup',
+        render: function() {
+            StanfordCardMainView.prototype.render.apply(this, arguments);
+            var view = new (App.Views.FactoryView.extend({
+                        name: "account_code",
+                        mod: "info",
+                        className: 'row'
+                    }));
+            this.$('.added_content').append(view.el);
+            this.subViews.push(view);
+        },
         events: {
             'click .btn-cancel': 'cancel'
         },
