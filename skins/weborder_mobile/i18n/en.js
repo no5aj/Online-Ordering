@@ -243,7 +243,7 @@
         'STANFORD_RELOAD_INFO2': "Please specify the plan you'd like to add value to",
         'STANFORD_CARD_NUMBER': "Stanford Card #",
         'STANFORD_ACCOUNT_CODE': 'Account Code (if it exists)',
-        'STANFORD_NEED_PIN_VALIDATION': 'Your card requires validation of the account code. Please, enter your account code and try again.',
+        'STANFORD_NEED_PIN_VALIDATION': 'Your card requires validation of an Account Code. Please, enter the account code and try again.',
         'STANFORD_PIN_VALIDATION_ERROR': 'Account Code is not valid',
         'STANFORD_ACCOUNT_CODE_INFO': 'The following URL can be used to retrieve your account code',
         'CHANGE_ESTABLISHMENT': 'Change to a different store?',
