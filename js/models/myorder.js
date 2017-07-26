@@ -2202,14 +2202,13 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
          * should be returned from server at once
          */
         price_changed: function(data) {
-            var products = [];
             // clear item(s) inside order
-            App.Data.myorder.filter( function(el) {
+            var products = App.Data.myorder.filter( function(el) {
                 return (el.get_product().get('name') == data.name) ? el : null;
             }).map( function(item_found) {
-                var product = item_found.get_product();
-                products.push( {id: product.get('id'), category: product.get('id_category')});
                 App.Data.myorder.remove(item_found);
+                var product = item_found.get_product();
+                return {id: product.get('id'), category: product.get('id_category')};
             });
 
             // set new price(s) for product(s) in products and in search

@@ -2191,6 +2191,52 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
             });
         });
 
+        describe('price_changed()', function() {
+            var id_category = 10,
+                id_product = 5,
+                dfd = $.Deferred(),
+                obj = {
+                    get_child_products: function() {},
+                    get_product: function() {}
+                };
+
+            dfd.resolve();
+
+            beforeEach(function() {
+                App.Data.products[id_category] = new App.Collections.Products({
+                    init: function() {},
+                    get_product: function() {}
+                });
+
+                /*
+                    Here one product (2 products?) and one search result should be created
+                */
+
+//                App.Data.modifiers[id_product] = new Backbone.Model();
+
+//                spyOn(App.Data.products[id_category], 'get').and.returnValue(obj);
+//                spyOn(App.Data.products[id_category], 'get_product').and.returnValue(obj);
+//                spyOn(App.Collections.ModifierBlocks, 'init_quick_modifiers').and.returnValue(dfd);
+//                spyOn(App.Collections.Products, 'init').and.returnValue(dfd);
+//                spyOn(obj, 'get_child_products').and.returnValue(dfd);
+//                spyOn(obj, 'get_product');
+//                spyOn($, 'when').and.returnValue(dfd);
+//                spyOn(model, 'get_modelsum').and.returnValue(1);
+//                spyOn(model, 'get_initial_price').and.returnValue(2);
+//                spyOn(model, 'set');
+//                spyOn(model, 'update_prices');
+//                spyOn(model, 'get').and.returnValue(obj);
+            });
+
+            it('price was changed', function() {
+                model.price_changed({
+                    name: 'Pizza',
+                    price: 10
+                });
+            });
+
+        });
+
         describe('process_cart_totals()', function() {
             var orders, json,
             orders_combo = deepClone(data.orders_combo),
