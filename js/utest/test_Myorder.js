@@ -2192,47 +2192,51 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
         });
 
         describe('price_changed()', function() {
-            var id_category = 10,
-                id_product = 5,
-                dfd = $.Deferred(),
-                obj = {
-                    get_child_products: function() {},
-                    get_product: function() {}
-                };
-
-            dfd.resolve();
+            var id_category = 123,
+                id_product = 1,
+                product = new App.Models.Product({
+                    name: 'Pizza',
+                    id: 5,
+                    id_category: id_category,
+                    price: 12,
+                    is_combo: true
+                }),
+                product2 = new App.Models.Product({
+                    name: 'Pizza 2',
+                    id: 22,
+                    id_category: id_category,
+                    price: 33,
+                    is_combo: true
+                });
 
             beforeEach(function() {
                 App.Data.products[id_category] = new App.Collections.Products({
                     init: function() {},
                     get_product: function() {}
                 });
+                App.Data.modifiers[id_product] = new Backbone.Model();
 
-                /*
-                    Here one product (2 products?) and one search result should be created
-                */
+                App.Data.products[id_category].add(product);
+                App.Data.products[id_category].add(product2);
 
-//                App.Data.modifiers[id_product] = new Backbone.Model();
+                var obj1 = new App.Models.Myorder({product: product}),
+                    obj2 = new App.Models.Myorder({product: product2});
 
-//                spyOn(App.Data.products[id_category], 'get').and.returnValue(obj);
-//                spyOn(App.Data.products[id_category], 'get_product').and.returnValue(obj);
-//                spyOn(App.Collections.ModifierBlocks, 'init_quick_modifiers').and.returnValue(dfd);
-//                spyOn(App.Collections.Products, 'init').and.returnValue(dfd);
-//                spyOn(obj, 'get_child_products').and.returnValue(dfd);
-//                spyOn(obj, 'get_product');
-//                spyOn($, 'when').and.returnValue(dfd);
-//                spyOn(model, 'get_modelsum').and.returnValue(1);
-//                spyOn(model, 'get_initial_price').and.returnValue(2);
-//                spyOn(model, 'set');
-//                spyOn(model, 'update_prices');
-//                spyOn(model, 'get').and.returnValue(obj);
+
+                model.add([obj1, obj2], {silent: true});
+
+                App.Data.myorder = model;
+
             });
 
-            it('price was changed', function() {
+            it('product price was changed', function() {
+                var ini_length = model.length;
                 model.price_changed({
                     name: 'Pizza',
                     price: 10
                 });
+                expect(product.get('price')).toBe(10);
+                expect(model.length).toBe(ini_length - 1);
             });
 
         });
