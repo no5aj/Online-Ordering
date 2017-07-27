@@ -1,4 +1,4 @@
-define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'], function(data, productsData) {
+define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products', 'js/models/search'], function(data, productsData) {
 
     describe("App.Models.Myorder", function() {
         var model, change, special;
@@ -2055,6 +2055,23 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
                     expect(model.update_cart_totals).toHaveBeenCalled();
                 });
 
+
+                it('data.status is `INCORRECT_PRODUCT_PRICE`', function() {
+                    spyOn(model, 'price_changed');
+                    data = {
+                        status: 'INCORRECT_PRODUCT_PRICE',
+                        responseJSON: {
+                            name: 'Pizza',
+                            price: 25
+                        }
+                    };
+                    model._get_cart_totals({});
+
+                    expect(App.Data.errors.alert.calls.mostRecent().args[0].substr(0, 10).indexOf(MSG.ERROR_PRICE_CHANGED.substr(0, 10)) > -1).toBe(true);
+                    expect(model.price_changed).toHaveBeenCalled();
+
+                });
+
                 it('data.status is something else, data.errorMsg exists', function() {
                     data = {
                         status: 'some status',
@@ -2193,8 +2210,8 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
 
         describe('price_changed()', function() {
             var id_category = 123,
-                id_product = 1,
-                product = new App.Models.Product({
+                id_product = 1;
+            var product = new App.Models.Product({
                     name: 'Pizza',
                     id: 5,
                     id_category: id_category,
@@ -2207,7 +2224,18 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
                     id_category: id_category,
                     price: 33,
                     is_combo: true
+                }),
+                product3 = new App.Models.Product({
+                    name: 'Pizza',
+                    id: 5,
+                    id_category: id_category,
+                    price: 14,
+                    is_combo: true
                 });
+            var old_products = App.Data.products[id_category],
+                old_modifiers = App.Data.modifiers[id_product],
+                old_order = App.Data.myorder,
+                old_search = App.Data.search;
 
             beforeEach(function() {
                 App.Data.products[id_category] = new App.Collections.Products({
@@ -2222,11 +2250,20 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
                 var obj1 = new App.Models.Myorder({product: product}),
                     obj2 = new App.Models.Myorder({product: product2});
 
-
                 model.add([obj1, obj2], {silent: true});
-
                 App.Data.myorder = model;
 
+                App.Data.search = new App.Collections.Search();
+                var model_search = new App.Models.Search();
+                model_search.get('products').add(product3);
+                App.Data.search.models.push(model_search);
+            });
+
+            afterEach(function() {
+                App.Data.products[id_category] = old_products,
+                App.Data.modifiers[id_product] = old_modifiers,
+                App.Data.myorder = old_order,
+                App.Data.search = old_search;
             });
 
             it('product price was changed', function() {
@@ -2237,8 +2274,8 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
                 });
                 expect(product.get('price')).toBe(10);
                 expect(model.length).toBe(ini_length - 1);
+                expect(App.Data.search.models[0].get('products').at(0).get('price')).toBe(10);
             });
-
         });
 
         describe('process_cart_totals()', function() {
