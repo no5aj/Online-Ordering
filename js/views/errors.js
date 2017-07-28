@@ -92,7 +92,7 @@ define(['backbone', 'factory'], function(Backbone) {
                 this.hideAlertMessage(2); // hide user notification
                 this.render();
                 !options.typeIcon && this.$('#popup_content').removeClass('info warning');
-                this.$('#popup_message').addClass('custom-view').empty().append(options.customView.el);
+                this.$('#popup_message').addClass('custom-view').append(options.customView.el);
 
             } else {
                 this.$('#popup_message').removeClass('custom-view');

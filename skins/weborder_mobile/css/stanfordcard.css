@@ -44,3 +44,10 @@
 .stanford-card-plans .row {
     display: block;
 }
+
+.account_code_info {
+    margin-top: -0.7em;
+    margin-bottom: 1.5em;
+    text-align: center;
+    opacity: 0.8;
+}

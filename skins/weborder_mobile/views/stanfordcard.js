@@ -32,7 +32,15 @@
         })
     });
 
+    var StanfordCardMainView = App.Views.CoreStanfordCardView.CoreStanfordCardMainView.extend({
+        showErrorMsg: function(msg, error) {
+            this.model.trigger("onResetData");
+            App.Data.errors.alert(msg);
+        },
+    });
+
     return new (require('factory'))(stanfordcard_view.initViews.bind(stanfordcard_view), function() {
         App.Views.StanfordCardView.StanfordCardPlansView = StanfordCardPlansView;
+        App.Views.StanfordCardView.StanfordCardMainView = StanfordCardMainView;
     });
 });

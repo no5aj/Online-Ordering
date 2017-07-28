@@ -7,10 +7,26 @@
                 <input type="button" class="ctrl cancel-input hide">
             </label>
         </div>
-
+    </div>
+    <div class="item account_code">
+        <div class="label optional-text"><%= _lp.STANFORD_ACCOUNT_CODE %></div>
+        <div class="ctrl-box">
+            <input type="text" class="account_code_input input ctrl-input size2">
+        </div>
     </div>
     <div class="recaptcha_view item"></div>
     <div class="btn-submit btn item text-center" tabindex="0"><%= _lp.STANFORD_VERIFY %></div>
+</script>
+
+<script type="text/template" id="account_code_info-template">
+    <div class="account_code_info font-size2">
+        <div><%= _lp.STANFORD_ACCOUNT_CODE_INFO %></div>
+        <div>
+           <a href="<%= MSG.STANFORD_ACCOUNT_CODE_LINK %>" class="primary-text link" target="_blank">
+               <%= MSG.STANFORD_ACCOUNT_CODE_LINK %>
+           </a>
+        </div>
+    </div>
 </script>
 
 <script type="text/template" id="stanfordcard_plans-template">
@@ -45,6 +61,11 @@
         <div class="label required optional-text"><%= _lp.GIFTCARD_NUMBER %></div>
         <input type="text" class="number-input input">
     </div>
+    <div class="row">
+        <div class="label optional-text"><%= _lp.STANFORD_ACCOUNT_CODE %></div>
+        <input type="text" class="account_code_input input">
+    </div>
+    <div class="added_content"></div>
     <div class="recaptcha_view row"></div>
     <div class="btn btn-half border-box fl-left btn-cancel text-center btn-secondary" tabindex="0"><%= _lp.CANCEL %></div>
     <div class="btn btn-half border-box fl-left btn-submit text-center" tabindex="0"><%= _lp.CONFIRM_SUBMIT %></div>
