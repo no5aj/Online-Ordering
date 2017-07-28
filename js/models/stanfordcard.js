@@ -165,6 +165,7 @@ define(["backbone", "captcha"], function(Backbone) {
             plans: null,
             planId: null,
             validated: false,
+            account_code: '',
             needToAskStudentStatus: true
         }),
         /**
@@ -211,6 +212,7 @@ define(["backbone", "captcha"], function(Backbone) {
                 captchaImage: this.defaults.captchaImage,
                 planId: this.defaults.planId,
                 validated: this.defaults.validated,
+                account_code: this.defaults.account_code,
                 needToAskStudentStatus: this.defaults.needToAskStudentStatus
             });
             this.get('plans').reset();
@@ -249,13 +251,23 @@ define(["backbone", "captcha"], function(Backbone) {
                     establishment: est,
                     number: data.number,
                     captchaValue: data.captchaValue,
+                    account_code: data.account_code ? data.account_code : undefined
                 }),
                 dataType: 'json',
                 success: function(data) {
                     // expect response that may have following formats:
+                    // {status: 'NEED_VALIDATION', data:[...]} - card requires validation of the Account Code
                     // {status: 'OK', data:[...]} - card number exists
                     // {status: 'OK', data: []} - card number doesn't exist
                     // {status: 'ERROR', errorMsg: '...'} - invalid captcha
+                    if (data.status == 'NEED_VALIDATION') {
+                        self.trigger('onStanfordCardError', _loc.STANFORD_NEED_PIN_VALIDATION, 'PIN_REQUIRED_MODE');
+                        return;
+                    } else if (data.status == 'NOTVALID') {
+                        self.trigger('onStanfordCardError', _loc.STANFORD_PIN_VALIDATION_ERROR, 'PIN_REQUIRED_MODE');
+                        return;
+                    }
+
                     if(!Array.isArray(data.data)) {
                         self.trigger('onStanfordCardError', data.errorMsg);
                     } else if(!data.data.length) {

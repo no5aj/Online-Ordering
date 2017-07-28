@@ -23,7 +23,7 @@
 define(["factory", "stanfordcard_view"], function(factory, stanfordcard_view) {
     'use strict';
 
-    var CoreStanfordCardMainView = App.Views.CoreStanfordCardView.CoreStanfordCardMainView.extend({
+    var StanfordCardMainView = App.Views.CoreStanfordCardView.CoreStanfordCardMainView.extend({
         bindings: {
             '.btn-submit': 'classes: {disabled: any(not(number), not(captchaValue)), hide: validated}',
             '.ctrl-wrapper': 'toggle: validated'
@@ -35,23 +35,28 @@ define(["factory", "stanfordcard_view"], function(factory, stanfordcard_view) {
             '.btn-submit': 'submit'
         },
         initialize: function() {
-            this.listenTo(this.model, 'onStanfordCardError', this.showErrorMsg, this);
             App.Views.CoreStanfordCardView.CoreStanfordCardMainView.prototype.initialize.apply(this, arguments);
         },
         submit: function() {
             var myorder = this.options.myorder;
             myorder.trigger('showSpinner');
             this.model.getPlans().then(myorder.trigger.bind(myorder, 'hideSpinner'));
-        },
-        showErrorMsg: function(msg) {
-            this.model.trigger("onResetData");
-            App.Data.errors.alert(msg);
         }
     });
 
-    var StanfordCardPopupView = CoreStanfordCardMainView.extend({
+    var StanfordCardPopupView = StanfordCardMainView.extend({
         name: 'stanfordcard',
         mod: 'popup',
+        render: function() {
+            StanfordCardMainView.prototype.render.apply(this, arguments);
+            var view = new (App.Views.FactoryView.extend({
+                        name: "account_code",
+                        mod: "info",
+                        className: 'row'
+                    }));
+            this.$('.added_content').append(view.el);
+            this.subViews.push(view);
+        },
         events: {
             'click .btn-cancel': 'cancel'
         },
@@ -90,7 +95,7 @@ define(["factory", "stanfordcard_view"], function(factory, stanfordcard_view) {
     });
 
     return new (require('factory'))(stanfordcard_view.initViews.bind(stanfordcard_view), function() {
-        App.Views.StanfordCardView.StanfordCardMainView = CoreStanfordCardMainView;
+        App.Views.StanfordCardView.StanfordCardMainView = StanfordCardMainView;
         App.Views.StanfordCardView.StanfordCardPopupView = StanfordCardPopupView;
         App.Views.StanfordCardView.StanfordCardPlanView = StanfordCardPlanView;
         App.Views.StanfordCardView.StanfordCardPlansView = StanfordCardPlansView;

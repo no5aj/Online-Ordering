@@ -7,10 +7,10 @@ define(['stanfordcard', 'js/utest/data/StanfordCard'], function(stanfordcard, da
         beforeEach(function() {
             App.Data.myorder.total = {
                 get_grand: function() {
-                    return data.TOTAL_AMOUNT;         
+                    return data.TOTAL_AMOUNT;
                 }
             };
-            App.Data.stanfordCard = new Backbone.Model({plans: new Backbone.Collection()});            
+            App.Data.stanfordCard = new Backbone.Model({plans: new Backbone.Collection()});
             plan = new App.Models.StanfordCardPlan();
         });
 
@@ -151,7 +151,7 @@ define(['stanfordcard', 'js/utest/data/StanfordCard'], function(stanfordcard, da
                 //expect(card.set).toHaveBeenCalledWith('plans', plans);
                 //To research , these functions perform very slowly:
                 expect(card.listenTo).toHaveBeenCalledWith(plans, 'change:selected', card.updatePlanId, card);
-                expect(card.listenTo).toHaveBeenCalledWith(card, 'change:validated', card.doNotAskStudentStatus, card);                
+                expect(card.listenTo).toHaveBeenCalledWith(card, 'change:validated', card.doNotAskStudentStatus, card);
             }
         });
 
@@ -183,7 +183,7 @@ define(['stanfordcard', 'js/utest/data/StanfordCard'], function(stanfordcard, da
             it('no plan is selected', function() {
                 selected = undefined;
                 card.updatePlanId();
-                
+
                 expect(card.getSelectedPlan).toHaveBeenCalled();
                 expect(card.selectFirstAvailablePlan).toHaveBeenCalled();
                 expect(card.set).toHaveBeenCalledWith('planId', null);
@@ -253,7 +253,7 @@ define(['stanfordcard', 'js/utest/data/StanfordCard'], function(stanfordcard, da
 
                 spyOn(card, 'selectFirstAvailablePlan').and.callFake(function() {
                     return;
-                });               
+                });
 
                 spyOn(card.get('plans'), 'reset').and.callFake(function() {
                     return Backbone.Collection.prototype.reset.apply(card.get('plans'), arguments);
@@ -339,6 +339,29 @@ define(['stanfordcard', 'js/utest/data/StanfordCard'], function(stanfordcard, da
                 expect(Backbone.$.ajax).toHaveBeenCalled();
                 expect(result.state()).toBe('resolved');
                 expect(card.trigger).toHaveBeenCalledWith('onStanfordCardError', ajaxData.errorMsg);
+            });
+
+            it('request is done, data.status is "NEED_VALIDATION"', function() {
+                ajaxData = _.clone(data.RESPONSE_4);
+                card.set('account_code', '123');
+                card.getPlans();
+                ajax.resolve();
+
+                checkAjaxParams();
+                expect(Backbone.$.ajax).toHaveBeenCalled();
+                expect(result.state()).toBe('resolved');
+                expect(card.trigger).toHaveBeenCalledWith('onStanfordCardError', _loc.STANFORD_NEED_PIN_VALIDATION, 'PIN_REQUIRED_MODE');
+            });
+
+            it('request is done, data.status is "NOTVALID"', function() {
+                ajaxData = _.clone(data.RESPONSE_5);
+                card.getPlans();
+                ajax.resolve();
+
+                checkAjaxParams();
+                expect(Backbone.$.ajax).toHaveBeenCalled();
+                expect(result.state()).toBe('resolved');
+                expect(card.trigger).toHaveBeenCalledWith('onStanfordCardError', _loc.STANFORD_PIN_VALIDATION_ERROR, 'PIN_REQUIRED_MODE');
             });
 
             function abortAjaxRequest() {
