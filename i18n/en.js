@@ -502,7 +502,8 @@
             'ERROR_DURING_TOKENIZATION': 'Error during tokenization',
             'ERROR_CAN_NOT_LOAD_THE_GOOGLE_MAPS_SERVICE': 'Can\'t load the google maps service. The page will be reloaded.',
             'ERROR_CAN_NOT_LINK_CARD_TO_PROFILE': 'Can\'t link the card to a user profile.',
-            'CARD_SAVE': 'Save the card for future payments?'
+            'CARD_SAVE': 'Save the card for future payments?',
+            'STANFORD_ACCOUNT_CODE_LINK': 'https://rdeappdev.stanford.edu/MyAccountCode'
         },
         'DINING_OPTION_NAME': {
             'DINING_OPTION_TOGO': 'Take Out',

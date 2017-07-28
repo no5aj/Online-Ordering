@@ -81,7 +81,8 @@ define(['backbone', 'backbone_epoxy', 'backbone_epoxy_handlers', 'backbone_epoxy
                     var template = template_helper(this.name, this.mod),
                         baseParams = {
                             _settings: App.Settings,
-                            _lp: _loc
+                            _lp: _loc,
+                            MSG: MSG
                         };
                     params = params instanceof Object ? _.extend(baseParams, params) : baseParams;
                     return template(params);
