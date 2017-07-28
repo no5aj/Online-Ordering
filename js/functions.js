@@ -2011,6 +2011,7 @@ var MONERIS_RETURN_MESSAGE = {
     59: "Restricted Card",
     60: "No Chequing account",
     86: "Amount is over maximum",
+    481: "CREDIT CARD - Decline",
     914: "Cancelled by cardholder"
 };
 MONERIS_RETURN_MESSAGE_DEFAULT = "Unknown error";
