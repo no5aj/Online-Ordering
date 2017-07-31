@@ -2084,6 +2084,7 @@ var MonerisPaymentProcessor = {
                 if (!payment_info.errorMsg) {
                     payment_info.errorMsg = MONERIS_RETURN_MESSAGE_DEFAULT;
                 }
+                PaymentProcessor.removePaymentData();
             }
         }
         function wrong_config() {
