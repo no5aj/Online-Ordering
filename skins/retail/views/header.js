@@ -71,7 +71,8 @@ define(["backbone", "factory"], function(Backbone) {
             'click .about': 'onAbout',
             'click .map': 'onMap',
             'click .cart-box.link': 'onCart',
-            'click .promotions-link': 'onPromotions'
+            'click .promotions-link': 'onPromotions',
+            'click .hlink-root': 'onRootJump'
         },
         onEnterListeners: {
             '.shop': 'onMenu',
@@ -96,6 +97,9 @@ define(["backbone", "factory"], function(Backbone) {
         },
         onPromotions: function() {
             this.model.trigger('onPromotions');
+        },
+        onRootJump: function() {
+            App.Routers.MainRouter.prototype.navigate('index', true);
         }
     });
 
