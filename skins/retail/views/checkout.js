@@ -28,8 +28,8 @@ define(["checkout_view"], function(checkout_view) {
         mod: 'page',
         bindings: {
             '.step-1': 'classes: {active: equal(ui_step, 1), "to-step-1": any(equal(ui_step, 2), equal(ui_step, 3))}',
-            '.step-2': 'classes: {active: equal(ui_step, 2), "to-step-2": equal(ui_step, 3)}',
-            '.step-3': 'classes: {active: equal(ui_step, 3)}',
+            '.step-2': 'classes: {active: equal(ui_step, 2), "to-step-2": any(equal(ui_step, 1), equal(ui_step, 3))}',
+            '.step-3': 'classes: {active: equal(ui_step, 3), "to-step-3": equal(ui_step, 2)}',
             '.view-1': 'toggle: equal(ui_step, 1)',
             '.view-2': 'toggle: equal(ui_step, 2)',
             '.view-3': 'toggle: equal(ui_step, 3)',
