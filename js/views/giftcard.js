@@ -30,7 +30,7 @@ define(["backbone", "factory"], function(Backbone) {
         initialize: function() {
             App.Views.FactoryView.prototype.initialize.apply(this, arguments);
 
-            var view = App.Views.GeneratorView.create('CoreRecaptcha', {
+            var view = this.createView('CoreRecaptcha', {
                     model: this.model,
                     mod: 'Main'});
             this.$('.recaptcha_view').append(view.el);

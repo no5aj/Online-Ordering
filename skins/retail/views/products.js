@@ -54,7 +54,7 @@ define(["products_view"], function(products_view) {
         },
 
         createItemView: function(options) {
-            var view = App.Views.GeneratorView.create('Product', {
+            var view = this.createView('Product', {
                 mod: 'ListItem',
                 model: options.model
             }, options.model.get("compositeId"));

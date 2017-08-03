@@ -384,7 +384,7 @@ define(['backbone', 'backbone_epoxy'], function(Backbone) {
             this.suspendDependencyGraph();
 
             // create subview
-            var view = App.Views.GeneratorView.create(value.name, value, value.viewId),
+            var view = this.view.createView(value.name, value, value.viewId),
                 removeMethod = value.viewId ? 'removeFromDOMTree' : 'remove',
                 existingView = subViews[value.subViewIndex];
 

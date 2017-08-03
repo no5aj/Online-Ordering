@@ -92,7 +92,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
             var index = this.subViews.indexOf(this.viewProduct);
             if (index !== -1) {
                 this.viewProduct.remove();
-                this.subViews[index] = this.viewProduct = App.Views.GeneratorView.create('Product', {
+                this.subViews[index] = this.viewProduct = this.createView('Product', {
                     modelName: 'Product',
                     model: this.model,
                     mod: 'Modifiers'
@@ -118,14 +118,14 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
                 case 2:
                     var el = $('<div></div>');
                     this.$('.modifiers_info').append(el);
-                    view =  App.Views.GeneratorView.create('ModifiersClasses', {
+                    view =  this.createView('ModifiersClasses', {
                         el: el,
                         model: model,
                         mod: 'List'
                     });
                     break;
                 case 1:
-                    view =  App.Views.GeneratorView.create('ModifiersClasses', {
+                    view =  this.createView('ModifiersClasses', {
                         el: this.$('.product_attribute_info'),
                         model: model,
                         mod: 'Matrixes',
@@ -136,7 +136,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
             this.subViews.push(view);
 
             if (!this.options.flags || this.options.flags.indexOf('no_specials') == -1) {
-                this.instructionsView = App.Views.GeneratorView.create('Instructions', {
+                this.instructionsView = this.createView('Instructions', {
                     el: this.$('.product_instructions'),
                     model: model,
                     mod: 'Modifiers'
@@ -164,7 +164,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
                 viewOptions['className'] = 'gift-card-box btn-secondary';
             }
 
-            this.viewProduct = App.Views.GeneratorView.create('Product', viewOptions);
+            this.viewProduct = this.createView('Product', viewOptions);
             this.$('.product_info').append(this.viewProduct.el);
             this.subViews.push(this.viewProduct);
         },
@@ -172,7 +172,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
             var model = this.model,
                 product = this.model.get("product");
 
-            var view = App.Views.GeneratorView.create('MyOrder', {
+            var view = this.createView('MyOrder', {
                 el: this.$(".product_info_footer"),
                 model: this.model,
                 mod: this.options.combo_child ? 'MatrixComboItemFooter' : 'MatrixFooter',
@@ -205,7 +205,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
 
             var el = $('<div class="product_sets"></div>');
                 this.$('.modifiers_info').append(el);
-                productSets = App.Views.GeneratorView.create('ProductSets', {
+                productSets = this.createView('ProductSets', {
                     el: el,
                     model: this.model,
                     collection: product.get('product_sets'),
@@ -216,7 +216,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
         },
         renderProduct: function() {
             var model = this.model;
-            this.viewProduct = App.Views.GeneratorView.create('Product', {
+            this.viewProduct = this.createView('Product', {
                 modelName: 'Product',
                 model: model,
                 mod: model.isComboProduct() ? 'ModifiersCombo' : 'ModifiersUpsell',
@@ -229,7 +229,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
             var model = this.model,
                 product = this.model.get("product");
 
-            var view = App.Views.GeneratorView.create('MyOrder', {
+            var view = this.createView('MyOrder', {
                 el: this.$(".product_info_footer"),
                 model: this.model,
                 mod: model.isComboProduct() ? 'MatrixFooterCombo' : 'MatrixFooterUpsell',
@@ -272,7 +272,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
             if (sold_by_weight || !this.options.flags || this.options.flags.indexOf('no_quantity') == -1) {
                 mod = this.get_quantity_mod();
 
-                view = App.Views.GeneratorView.create('Quantity', {
+                view = this.createView('Quantity', {
                     el: this.$('.quantity_info'),
                     model: model,
                     mod: mod
@@ -375,7 +375,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
         render: function() {
             App.Views.CoreMyOrderView.CoreMyOrderMatrixFooterView.prototype.render.apply(this, arguments);
 
-            var view = App.Views.GeneratorView.create('Product', {
+            var view = this.createView('Product', {
                 el: this.$('.product_price'),
                 model: this.model,
                 mod: 'Price'
@@ -464,7 +464,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
 
             this.renderModifiers();
 
-            view = App.Views.GeneratorView.create('MyOrder', {
+            view = self.createView('MyOrder', {
                 el: $('<li></li>'),
                 mod: 'ProductDiscount',
                 model: this.model
@@ -558,7 +558,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
             }
 
             if (!this.model.isChildProduct()) {
-                view = App.Views.GeneratorView.create('MyOrder', {
+                view = self.createView('MyOrder', {
                     el: this.$('.combo_products_place'),
                     mod: 'ComboList',
                     collection: this.model.get('product').get('product_sets').get_selected_products()
@@ -567,7 +567,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
             }
 
             if (!this.model.isChildProduct()) {
-                view = App.Views.GeneratorView.create('MyOrder', {
+                view = self.createView('MyOrder', {
                     el: $('<li></li>'),
                     mod: 'ProductDiscount',
                     model: this.model
@@ -601,7 +601,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
             var self = this, view;
             CoreMyOrderItemComboView.prototype.render.apply(this, arguments);
 
-            view = App.Views.GeneratorView.create('MyOrder', {
+            view = self.createView('MyOrder', {
                 el: this.$('.upsell_root_product_place'),
                 mod: 'ItemUpsellRoot',
                 model: this.model,
@@ -690,7 +690,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
             this.$('.myorder').append(view.el);
 
             if (this.subViews.indexOf(this.discountItemView) == -1 && this.collection.discount && !this.discountItemView ) {
-                var view = App.Views.GeneratorView.create('MyOrder', {
+                var view = this.createView('MyOrder', {
                     mod: 'Discount',
                     model: this.options.saved_discount ? this.options.saved_discount : this.collection.discount,
                     el: $('<li></li>')
@@ -716,7 +716,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
         name: 'myorder',
         mod: 'combo_list',
         addItem: function(model) {
-            var view = App.Views.GeneratorView.create('MyOrder', {
+            var view = this.createView('MyOrder', {
                 mod: 'ItemCombo',
                 model: model,
                 el: $('<li></li>'),
@@ -790,13 +790,13 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
             var stanford = this.model.get('stanfordCard'),
                 stanfordCard, stanfordPlans;
 
-            stanfordCard = App.Views.GeneratorView.create('StanfordCard', {
+            stanfordCard = this.createView('StanfordCard', {
                 el: this.$('.card-wrapper'),
                 mod: 'Reload',
                 model: this.model.get('stanfordCard')
             });
 
-            stanfordPlans = App.Views.GeneratorView.create('StanfordCard', {
+            stanfordPlans = this.createView('StanfordCard', {
                 el: this.$('.plans'),
                 mod: 'Plans',
                 collection: stanford.get('plans')

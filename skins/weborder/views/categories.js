@@ -133,7 +133,7 @@ define(["generator", "list", "categories_view"], function() {
         addItem: function(model) {
             if (this.parent_categories.indexOf(model.get('parent_name')) === -1) {
                 this.parent_categories.push(model.get('parent_name'));
-                var view = App.Views.GeneratorView.create('Categories', {
+                var view = this.createView('Categories', {
                     el: $('<li></li>'),
                     mod: 'SliderItem',
                     model: model,
@@ -284,7 +284,7 @@ define(["generator", "list", "categories_view"], function() {
         },
         add_table: function() {
             var model = this.model,
-                view = App.Views.GeneratorView.create('Product', {
+                view = this.createView('Product', {
                     mod: 'List',
                     collection: this.collection,
                     root_cache_id: this.options.root_cache_id
@@ -308,7 +308,7 @@ define(["generator", "list", "categories_view"], function() {
             this.initData();
         },
         addItem: function(products, category) {
-            var view = App.Views.GeneratorView.create('Categories', {
+            var view = this.createView('Categories', {
                 el: $('<li></li>'),
                 mod: 'ProductsItem',
                 collection: products,
@@ -352,7 +352,7 @@ define(["generator", "list", "categories_view"], function() {
             ".categories_products_wrapper": "classes:{full_size: less(pageModel_page_count,2)}"
         },
         initViews: function() {
-            var view = App.Views.GeneratorView.create('Pages', {
+            var view = this.createView('Pages', {
                 mod: 'Main',
                 model: this.pageModel,
                 className: "pages_control_wrapper"
@@ -377,7 +377,7 @@ define(["generator", "list", "categories_view"], function() {
             self.trigger('loadStarted');
             self.pageModel.disableControls();
             dfd.always(function() {
-                var view = App.Views.GeneratorView.create('Categories', {
+                var view = self.createView('Categories', {
                     el: $("<ul class='categories_table'></ul>"),
                     mod: 'Products',
                     products_bunch: App.Data.products_bunches[parent_id],
@@ -426,7 +426,7 @@ define(["generator", "list", "categories_view"], function() {
             self.trigger('loadStarted');
             self.pageModel.disableControls();
             dfd.always(function() {
-                var view = App.Views.GeneratorView.create('Categories', {
+                var view = self.createView('Categories', {
                     el: $("<ul class='categories_table'></ul>"),
                     mod: 'SearchResults',
                     model: search, //Model: Search or undefined

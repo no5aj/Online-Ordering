@@ -1,4 +1,4 @@
-﻿/*
+﻿﻿/*
  * Revel Systems Online Ordering Application
  *
  *  Copyright (C) 2014 by Revel Systems
@@ -127,7 +127,7 @@ define(["done_view", "generator"], function(done_view) {
 
             this.subViews[0] && this.subViews[0].removeFromDOMTree();
             if (this.model.get('header')) {
-                this.subViews[0] = App.Views.GeneratorView.create(data.modelName, data, cacheId );
+                this.subViews[0] = this.createView(data.modelName, data, cacheId );
                 $header.append(this.subViews[0].el);
                 $header.removeClass('hidden');
                 this.setContentPadding();
@@ -137,7 +137,7 @@ define(["done_view", "generator"], function(done_view) {
             var data = _.defaults(this.model.get('footer'), this.footer_defaults());
             this.subViews[1] && this.subViews[1].remove();
             if (this.model.get('footer')) {
-                this.subViews[1] = App.Views.GeneratorView.create(data.modelName, data);
+                this.subViews[1] = this.createView(data.modelName, data);
                 this.$('#footer').append(this.subViews[1].el);
                 this.setContentPadding();
             }
@@ -145,7 +145,7 @@ define(["done_view", "generator"], function(done_view) {
         profile_change: function() {
             var data = _.defaults(this.model.get('profile'), this.profile_defaults());
             this.subViews[2] && this.subViews[2].removeFromDOMTree();
-            this.subViews[2] = App.Views.GeneratorView.create(data.modelName, data);
+            this.subViews[2] = this.createView(data.modelName, data);
         },
         header_defaults: function() {
             return {
@@ -196,7 +196,7 @@ define(["done_view", "generator"], function(done_view) {
 
             var isViewCached = !!App.Views.GeneratorView.findViewCached(data.modelName, data, cacheId);
 
-            var subView = App.Views.GeneratorView.create(data.modelName, data, cacheId);
+            var subView = this.createView(data.modelName, data, cacheId);
             if(this.subViews.length > 3)
                 this.subViews.push(subView);
             else
