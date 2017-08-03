@@ -232,6 +232,12 @@
         return dismatches.length > 0 ? false : true;
     }
 
+     if (App.Data.devMode) {
+        Backbone.View.prototype.stackTrace = function () {
+            console.log(this._stack);
+        }
+    }
+
     Backbone.Collection.prototype.deepCompare = function(dest, subPath) {
         !subPath && (subPath = "> ");
         var dismatches = [], destModel, model;

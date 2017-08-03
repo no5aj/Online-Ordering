@@ -54,7 +54,7 @@ define(["products_view"], function(products_view) {
         },
 
         createItemView: function(options) {
-            var view = this.createView('Product', {
+            var view = options.collectionView.createView('Product', {
                 mod: 'ListItem',
                 model: options.model
             }, options.model.get("compositeId"));
