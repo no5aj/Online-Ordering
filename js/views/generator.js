@@ -70,6 +70,10 @@ define(['backbone'], function(Backbone) {
                     }
                 }
 
+                if (App.Data.devMode) {
+                    options._parents = this._parents;
+                }
+
                 view = new viewClass(options);
                 if(App.Views.Generator.enableCache && id) {
                     cache[id] = view;

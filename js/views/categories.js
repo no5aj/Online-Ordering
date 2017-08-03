@@ -60,7 +60,7 @@ define(["list", "generator"], function(list_view) {
             return this;
         },
         addItem: function(model) {
-            var view = App.Views.GeneratorView.create('Categories', {
+            var view = this.createView('Categories', {
                 el: $('<li></li>'),
                 mod: 'Item',
                 model: model

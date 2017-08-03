@@ -88,6 +88,18 @@ define(['backbone', 'backbone_epoxy', 'backbone_epoxy_handlers', 'backbone_epoxy
                     return template(params);
                 };
             }
+
+            if (App.Data.devMode) {
+                this._parents = [];
+
+                 if (this.options._parents) {
+                     this._parents = this.options._parents.slice();
+                 }
+                 if (this.getType) {
+                     this._parents.unshift(this.getType());
+                 }
+            }
+
             this.render();
             this.applyBindings();
             App.Data.devMode && this.$el.attr("x-tmpl", this.name + "_" + this.mod + "-template");
@@ -99,6 +111,7 @@ define(['backbone', 'backbone_epoxy', 'backbone_epoxy_handlers', 'backbone_epoxy
                     id_counter = 0;
                 this.$el.attr("x-id", time_id);
                 App.dbgView[time_id] = this;
+                App.dbgView[time_id]._stack = (new Error).stack;
             }
         },
         render: function() {

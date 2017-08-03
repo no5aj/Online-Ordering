@@ -73,7 +73,7 @@ define(["checkout_view"], function(checkout_view) {
         },
         updateAddress: function(checkout, value) {
             if (value === 'DINING_OPTION_DELIVERY' || value === 'DINING_OPTION_SHIPPING' || value === 'DINING_OPTION_CATERING') {
-                var address = App.Views.GeneratorView.create('Checkout', {
+                var address = this.createView('Checkout', {
                     mod: 'Address',
                     customer: this.options.customer,
                     checkout: this.options.checkout
@@ -138,7 +138,7 @@ define(["checkout_view"], function(checkout_view) {
         render: function() {
             App.Views.CoreCheckoutView.CoreCheckoutAddressView.prototype.render.apply(this, arguments);
 
-            var addressSelection = App.Views.GeneratorView.create('Checkout', {
+            var addressSelection = this.createView('Checkout', {
                 mod: 'AddressSelection',
                 checkout: this.options.checkout,
                 customer: this.options.customer,

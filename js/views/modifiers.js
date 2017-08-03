@@ -377,7 +377,7 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
             return this;
         },
         addItem: function(model) {
-            var view = App.Views.GeneratorView.create('Modifiers', {
+            var view = this.createView('Modifiers', {
                 el: $('<li class="modifier"></li>'),
                 mod: 'Item',
                 model: model,
@@ -412,7 +412,7 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
             return this;
         },
         addItem: function(data) {
-            var view = App.Views.GeneratorView.create('Modifiers', {
+            var view = this.createView('Modifiers', {
                 el: $('<li class="modifier"></li>'),
                 mod: 'Matrix',
                 data: data.data,
@@ -473,7 +473,7 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
 
             this.$el.html(this.template(model));
 
-            var view = App.Views.GeneratorView.create('Modifiers', {
+            var view = this.createView('Modifiers', {
                 el: this.$('.modifier_class_list'),
                 mod: 'List',
                 collection: this.model.get('modifiers'),
@@ -526,7 +526,7 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
 
             this.$el.html(this.template(data));
 
-            var view = App.Views.GeneratorView.create('Modifiers', {
+            var view = this.createView('Modifiers', {
                 el: this.$('.modifier_class_list'),
                 mod: 'Matrixes',
                 data: this.options.data
@@ -553,7 +553,7 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
         },
         addItem: function(model) {
             if(model.get('admin_modifier') && model.get('admin_mod_key') === SPECIAL && !App.Data.settings.get('settings_system').special_requests_online) return;
-            var view = App.Views.GeneratorView.create('ModifiersClasses', {
+            var view = this.createView('ModifiersClasses', {
                 el: $('<div class="modifier_class_wrapper"></div>'),
                 mod: 'Item',
                 model: model
@@ -605,7 +605,7 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
             return this;
         },
         addItem: function(data) {
-            var view = App.Views.GeneratorView.create('ModifiersClasses', {
+            var view = this.createView('ModifiersClasses', {
                 el: $('<div class="modifier_class_wrapper"></div>'),
                 mod: 'Matrix',
                 data: data
@@ -624,7 +624,7 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
                 this.subViews.splice(attribute_1_enable + attribute_2_enable,2).map(function(el) {
                     el.remove();
                 });
-                var viewModifiers = App.Views.GeneratorView.create('ModifiersClasses', {
+                var viewModifiers = this.createView('ModifiersClasses', {
                     model: this.model,
                     mod: 'List'
                 });
@@ -647,7 +647,7 @@ define(["backbone", "factory", 'generator', 'list'], function(Backbone) {
                 modifiersEl = this.options.modifiersEl;
             if (!this.options.flags || this.options.flags.indexOf('no_specials') == -1) {
                 if (App.Settings.special_requests_online !== false) {
-                    view = App.Views.GeneratorView.create('Instructions', {
+                    view = this.createView('Instructions', {
                         el: $('.product_instructions', modifiersEl),
                         model: this.model,
                         mod: 'Modifiers'

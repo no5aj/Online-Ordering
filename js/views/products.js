@@ -78,7 +78,7 @@ define(["backbone", "factory", "generator", "list"], function(Backbone) {
                 self.addItem(item);
             });
             if (!this.collection.length) {
-                var view = App.Views.GeneratorView.create('Product', {
+                var view = self.createView('Product', {
                     el: $('<li class="product list-none"></li>'),
                     mod: 'ListNone'
                 });
@@ -96,7 +96,7 @@ define(["backbone", "factory", "generator", "list"], function(Backbone) {
                 noDesc = settings.hide_products_description,
                 view,
                 root_cache_id = this.options.root_cache_id ? this.options.root_cache_id : "";
-            view = App.Views.GeneratorView.create('Product', {
+            view = this.createView('Product', {
                 el: $('<li class="product"></li>'),
                 mod: 'ListItem',
                 model: model

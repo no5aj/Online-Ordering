@@ -1,4 +1,4 @@
-﻿/*
+﻿﻿/*
  * Revel Systems Online Ordering Application
  *
  *  Copyright (C) 2014 by Revel Systems
@@ -205,7 +205,7 @@ define(["done_view", "generator"], function(done_view) {
             if (removeClass)
                 delete data.className;
 
-            var subView = App.Views.GeneratorView.create(data.modelName, data, id);
+            var subView = this.createView(data.modelName, data, id);
             this.subViews.push(subView); // subViews length always > 4
 
             return subView.el;

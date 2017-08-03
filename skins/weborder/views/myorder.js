@@ -137,7 +137,7 @@ define(["myorder_view"], function(myorder_view) {
                 hide_timetable: true
             };
 
-            this.viewProduct = App.Views.GeneratorView.create('Product', viewOptions);
+            this.viewProduct = this.createView('Product', viewOptions);
             this.$('.product_info').append(this.viewProduct.el);
             this.subViews.push(this.viewProduct);
         },
@@ -145,7 +145,7 @@ define(["myorder_view"], function(myorder_view) {
             var model = this.model,
                 product = this.model.get("product");
 
-            var view = App.Views.GeneratorView.create('MyOrder', {
+            var view = this.createView('MyOrder', {
                 el: this.$(".product_info_footer"),
                 model: this.model,
                 mod: 'Matrix_UpsellRootFirst_Footer',
@@ -187,7 +187,7 @@ define(["myorder_view"], function(myorder_view) {
         render: function() {
             App.Views.CoreMyOrderView.CoreMyOrderMatrixFooterView.prototype.render.apply(this, arguments);
 
-            var view = App.Views.GeneratorView.create('Product', {
+            var view = this.createView('Product', {
                 el: this.$('.product_price'),
                 model: this.model,
                 mod: 'Price'
@@ -279,7 +279,7 @@ define(["myorder_view"], function(myorder_view) {
         render: function() {
             App.Views.CoreMyOrderView.CoreMyOrderMatrixFooterView.prototype.render.apply(this, arguments);
 
-            var view = App.Views.GeneratorView.create('Product', {
+            var view = this.createView('Product', {
                 el: this.$('.product_price'),
                 model: this.model,
                 mod: 'Price'
