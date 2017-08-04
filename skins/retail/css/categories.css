@@ -48,19 +48,6 @@
     padding-left: 11px;
 }
 
-.subtree-icon::before {
-    content: '\f078';
-    font-family: 'FontAwesome';
-    font-size: 8px;
-    display: block;
-    width: 8px;
-    margin-top: 4px;
-}
-
-.categories-tree .collapsed > .subtree-icon::before {
-    content: '\f054';
-}
-
 .categories-tree .has-subtree.collapsed > .subtree {
     display: none;
 }

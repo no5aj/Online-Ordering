@@ -759,3 +759,33 @@ input[type="radio"]:checked + .radio::before,
         background-position: 50%
     }
 }
+
+.left-sidebar-title {
+    width: 189px;
+    height: 40px;
+}
+
+.left-sidebar-content {
+    position: absolute;
+    left: 0;
+    top: 40px;
+    bottom: 0;
+    right: 0px;        
+    overflow: auto;
+}
+
+.subtree-icon::before {
+    content: '\f078';
+    font-family: 'FontAwesome';
+    font-size: 8px;
+    display: block;
+    width: 8px;
+    margin-top: 4px;
+}
+
+.categories-tree .collapsed > .subtree-icon::before,
+.left-sidebar-title.collapsed .subtree-icon::before,
+.filters-title.collapsed .subtree-icon::before
+{
+    content: '\f054';
+}
