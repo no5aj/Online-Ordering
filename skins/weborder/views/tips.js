@@ -103,6 +103,17 @@ define(["tips_view"], function(tips_view) {
                     return total ? (sum / total * 100) : 0;
                 },
                 set: function(value) {
+                    //keep focus on value 'Other' if percent value is not selected
+                    var tipOption = this.$('.percents')[0].children;
+
+                    if(!this.model.get('amount')) {
+                        tipOption[0].setAttribute('selected', true)}
+
+                    //bug - if other option value matches percent value, other option becomes unavailable to be chosen
+                    if(this.model.get('amount')) {
+                        this.model.set('sum', 0)
+                    }
+
                     value = Number(value);
 
                     if (!value) {
