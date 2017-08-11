@@ -51,7 +51,8 @@ define(["tips_view"], function(tips_view) {
             _percents: {
                 deps: ['percents'],
                 get: function(percents) {
-                    var percents = [{label: _loc.TIPS_OTHER, value: '0'}],
+                    var val = this.getBinding('sum');
+                    var percents = [{label: _loc.TIPS_OTHER, value: val}],
                         _percents = this.model.get('percents');
                     Array.isArray(_percents) && _percents.forEach(function(percent) {
                         percents.push({label: percent + '%', value: percent});
@@ -103,16 +104,6 @@ define(["tips_view"], function(tips_view) {
                     return total ? (sum / total * 100) : 0;
                 },
                 set: function(value) {
-                    //keep focus on value 'Other' if percent value is not selected
-                    var tipOption = this.$('.percents')[0].children;
-
-                    if(!this.model.get('amount')) {
-                        tipOption[0].setAttribute('selected', true)}
-
-                    //bug - if other option value matches percent value, other option becomes unavailable to be chosen
-                    if(this.model.get('amount')) {
-                        this.model.set('sum', 0)
-                    }
 
                     value = Number(value);
 
@@ -125,6 +116,19 @@ define(["tips_view"], function(tips_view) {
                             amount: true,
                             percent: value
                         });
+                    }
+
+                    //keep focus on value 'Other' if percent value is not selected
+                    var tipOptions = this.$('.percents')[0].children;
+                    var tipOptionOther = _.filter(tipOptions, function(option) {
+                        return option.label === _loc.TIPS_OTHER;
+                    });
+
+                    if(this.model.get('amount')) {
+                        //bug - if other option value matches percent value, other option becomes unavailable to be chosen
+                        this.model.set('sum', 0);
+                    } else {
+                        tipOptionOther[0].setAttribute('selected', true);
                     }
 
                     this.model.trigger('change');
