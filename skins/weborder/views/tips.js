@@ -104,7 +104,6 @@ define(["tips_view"], function(tips_view) {
                     return total ? (sum / total * 100) : 0;
                 },
                 set: function(value) {
-
                     value = Number(value);
 
                     if (!value) {
@@ -124,7 +123,7 @@ define(["tips_view"], function(tips_view) {
                         return option.label === _loc.TIPS_OTHER;
                     });
 
-                    if(this.model.get('amount')) {
+                    if (this.model.get('amount')) {
                         //bug - if other option value matches percent value, other option becomes unavailable to be chosen
                         this.model.set('sum', 0);
                     } else {
