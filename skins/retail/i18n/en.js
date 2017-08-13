@@ -214,7 +214,7 @@
         'REWARDS_PURCHASE_REWARDS': 'Purchase Rewards',
         'REWARDS_BALANCE_HEADER': 'LOYALTY REWARDS',
         'REWARDS_BALANCE_PURCHASE_POINTS': 'Your Purchase Points:',
-        'REWARDS_BALANCE_ITEM_POINTS': 'You Item Points:',
+        'REWARDS_BALANCE_ITEM_POINTS': 'Your Item Points:',
         'REWARDS_BALANCE_VISIT_POINTS': 'Your Visit Points:',
         'STANFORD_RELOAD_INFO1': "Please specify the Card # and the amount you'd like to add",
         'STANFORD_RELOAD_INFO2': "Please specify the plan you'd like to add value to",
