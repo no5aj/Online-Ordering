@@ -2471,7 +2471,13 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
             order_info.notes = checkout.notes;
             if (checkout.dining_option == "DINING_OPTION_OTHER")  {
                 order_info.notes.length && (order_info.notes += "\n");
-                order_info.notes += _loc.DELIVERY_INFO + ": " + this.getOtherDiningOptionCallName();
+                var otherDiningOption = this.getOtherDiningOptionCallName();
+                if (otherDiningOption != '') {
+                    order_info.notes += _loc.DELIVERY_INFO + ": " + otherDiningOption;
+                }
+            }
+            if (!order_info.notes.length) {
+                delete order_info.notes;
             }
             order_info.asap = checkout.isPickupASAP;
             order_info.discount = this.discount.get("id") ? this.discount.toJSON() : undefined;
