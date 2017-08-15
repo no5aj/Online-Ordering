@@ -98,9 +98,9 @@ define(["./tree", "./filters"], function(tree_view, filters_view) {
             }
         },
         events: {
-            'click .left-sidebar-title': 'onClick'
+            'click .left-sidebar-title': 'toggleViewState'
         },
-        onClick: function(ev) {
+        toggleViewState: function(ev) {
             this.options.sidebarTitle.toggleState();
         },
         render: function() {

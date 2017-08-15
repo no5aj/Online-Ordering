@@ -58,9 +58,9 @@ define(["./tree"], function(tree_view) {
             }
         },
         events: {
-          'click .tree-title.filter-title': 'onClick'
+          'click .tree-title.filter-title': 'toggleViewState'
         },
-        onClick: function(event) {
+        toggleViewState: function(event) {
             event.stopPropagation();
             var $ui = this.getBinding('$ui');
             $ui.set('collapsed', !$ui.get('collapsed'));
@@ -85,12 +85,12 @@ define(["./tree"], function(tree_view) {
             }
         },
         events: {
-            'click .tree-title.filters-title': 'onClick'
+            'click .tree-title.filters-title': 'toggleViewState'
         },
         onEnterListeners: {
-            '.tree-title.filters-title': 'onClick'
+            '.tree-title.filters-title': 'toggleViewState'
         },
-        onClick: function(event) {
+        toggleViewState: function(event) {
             event.stopPropagation();
             this.options.sidebarTitle.toggleState('filter');
         },

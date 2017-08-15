@@ -127,7 +127,7 @@ define(["main_router"], function(main_router) {
                         barType: 'category',
                     },
                     toggleState: function(type) {
-                        type = (type ? type : this.get('barType'));// App.Data.sidebarTitle
+                        type = (type ? type : this.get('barType'));
                         this.set('collapsed.' + type,
                             !this.get('collapsed.' + type));
                     },
