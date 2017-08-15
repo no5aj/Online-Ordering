@@ -2476,9 +2476,6 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
                     order_info.notes += _loc.DELIVERY_INFO + ": " + otherDiningOption;
                 }
             }
-            if (!order_info.notes.length) {
-                delete order_info.notes;
-            }
             order_info.asap = checkout.isPickupASAP;
             order_info.discount = this.discount.get("id") ? this.discount.toJSON() : undefined;
 
