@@ -119,6 +119,33 @@ define(["main_router"], function(main_router) {
                     searchLine: App.Data.searchLine
                 });
 
+                App.Models.sidebarTitleModel = Backbone.Model.extend({
+                    defaults: {
+                        title: _loc.CATEGORIES_TITLE,
+                        'collapsed.category': false,
+                        'collapsed.filter' : false,
+                        barType: 'category',
+                    },
+                    toggleState: function(type) {
+                        type = (type ? type : this.get('barType'));
+                        this.set('collapsed.' + type,
+                            !this.get('collapsed.' + type));
+                    },
+                    setState: function(type) {
+                        if (type != 'category' && type != 'filter') {
+                            return;
+                        }
+                        var title = {
+                            category: _loc.CATEGORIES_TITLE,
+                            filter: _loc.FILTERS_TITLE
+                        };
+
+                        this.set('barType', type);
+                        this.set('title', title[type]);
+                    }
+                });
+                App.Data.sidebarTitle = new App.Models.sidebarTitleModel();
+
                 // init App.Data.sortItems
                 this.initSortItems();
 
@@ -706,7 +733,8 @@ define(["main_router"], function(main_router) {
                             categoriesTree: App.Data.categoriesTree,
                             curProductsSet: App.Data.curProductsSet,
                             categorySelection: App.Data.categorySelection,
-                            className: 'left-sidebar primary-border'
+                            className: 'left-sidebar primary-border',
+                            sidebarTitle: App.Data.sidebarTitle
                         },
                         {
                             modelName: 'Product',

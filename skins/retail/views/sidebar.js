@@ -43,6 +43,8 @@ define(["./tree", "./filters"], function(tree_view, filters_view) {
             }, this);
         },
         bindings: {
+            '.left-sidebar-title': 'classes: {collapsed: sidebarDataCollapsed}',
+            '.left-sidebar-title .header-text': 'text: sidebarTitle',
             '.categories': 'updateContent: categories',
             '.filters': 'updateContent: filtersSet, toggle: ui_has_filters, classes: {animated: ui_has_filters, fadeInSlide: ui_has_filters}'
         },
@@ -54,36 +56,73 @@ define(["./tree", "./filters"], function(tree_view, filters_view) {
             }
         },
         computeds: {
+            sidebarTitle: {
+                deps: ['$sidebarTitle'],
+                get: function(sidebarTitle) {
+                    return sidebarTitle.get('title');
+                }
+            },
+            sidebarDataCollapsed: {
+                deps: ['$sidebarTitle'],
+                get: function(sidebarTitle) {
+                    return sidebarTitle.get('collapsed.' + sidebarTitle.get('barType'));
+                }
+            },
             categories: {
-                deps: ['$categoriesTree', '$searchLine'],
-                get: function(categoriesTree, searchLine) {
+                deps: ['$categoriesTree', '$searchLine', '$sidebarTitle'],
+                get: function(categoriesTree, searchLine, sidebarTitle) {
                     return {
                         name: 'Tree',
                         mod: 'Categories',
                         className: 'categories-tree primary-border',
                         collection: categoriesTree,
                         viewId: 0,
-                        subViewIndex: 0
+                        subViewIndex: 0,
+                        sidebarTitle: sidebarTitle
                     };
                 }
             },
             filtersSet: {
-                deps: ['curProductsSet_value'],
-                get: function(productsSet) {
+                deps: ['curProductsSet_value', '$sidebarTitle'],
+                get: function(productsSet, sidebarTitle) {
                     return {
                         name: 'Filter',
                         mod: 'Set',
                         model: productsSet,
                         collection: productsSet.get('filters'),
                         viewId: productsSet.id,
-                        subViewIndex: 1
+                        subViewIndex: 1,
+                        sidebarTitle: sidebarTitle
                     };
                 }
             }
+        },
+        events: {
+            'click .left-sidebar-title': 'toggleViewState'
+        },
+        toggleViewState: function(ev) {
+            this.options.sidebarTitle.toggleState();
+        },
+        render: function() {
+            App.Views.FactoryView.prototype.render.apply(this);
+            var scrollThreshold = -35;
+            var self = this;
+
+            setTimeout(function() {
+                $('.left-sidebar-content').scroll(function(ev) {
+                    var scrollPosition =
+                            ev.originalEvent.currentTarget.scrollHeight -
+                            ev.originalEvent.currentTarget.scrollTop -
+                            $('.filters').height();
+
+                    self.options.sidebarTitle.setState(scrollPosition > scrollThreshold ? 'category' : 'filter');
+                });
+            }, 0);
         }
     });
 
-    return new (require('factory'))(tree_view.initViews.bind(tree_view), filters_view.initViews.bind(filters_view), function() {
+    return new (require('factory'))(tree_view.initViews.bind(tree_view), filters_view.initViews.bind(filters_view),
+        function() {
         App.Views.SidebarView = {};
         App.Views.SidebarView.SidebarMainView = SidebarMainView;
     });

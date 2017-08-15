@@ -48,16 +48,9 @@ define(["./tree"], function(tree_view) {
         initialize: function() {
             this.collection = this.model.get('filterItems');
             App.Views.TreeView.TreeCategoriesView.prototype.initialize.apply(this, arguments);
-        }
-    });
-
-    var FilterSetView = App.Views.FactoryView.extend({
-        name: 'filter',
-        mod: 'set',
-        itemView: FilterItemsView,
+        },
         bindings: {
-            '.filters-list': 'collection: $collection, itemView: "itemView", toggle: not(ui_collapsed)',
-            '.tree-title': 'toggle: length($collection)'
+            '.tree-title': 'classes: {collapsed: ui_collapsed}'
         },
         bindingSources: {
             ui: function() {
@@ -65,15 +58,45 @@ define(["./tree"], function(tree_view) {
             }
         },
         events: {
-            'click .tree-title': 'onClick'
+          'click .tree-title.filter-title': 'toggleViewState'
         },
-        onEnterListeners: {
-            '.tree-title': 'onClick'
-        },
-        onClick: function(event) {
+        toggleViewState: function(event) {
             event.stopPropagation();
             var $ui = this.getBinding('$ui');
             $ui.set('collapsed', !$ui.get('collapsed'));
+        }
+    });
+
+    var FilterSetView = App.Views.FactoryView.extend({
+        name: 'filter',
+        mod: 'set',
+        itemView: FilterItemsView,
+        initialize: function() {
+            App.Views.FactoryView.prototype.initialize.apply(this, arguments);
+            this.listenTo(this.options.sidebarTitle, 'change:collapsed.filter', this.titleChanged);
+        },
+        bindings: {
+            '.filters-list': 'collection: $collection, itemView: "itemView", toggle: not(ui_collapsed)',
+            '.tree-title': 'toggle: length($collection), classes: {collapsed: ui_collapsed}'
+        },
+        bindingSources: {
+            ui: function() {
+                return new Backbone.Model({collapsed: this.sidebarTitle.get('collapsed.filter')});
+            }
+        },
+        events: {
+            'click .tree-title.filters-title': 'toggleViewState'
+        },
+        onEnterListeners: {
+            '.tree-title.filters-title': 'toggleViewState'
+        },
+        toggleViewState: function(event) {
+            event.stopPropagation();
+            this.options.sidebarTitle.toggleState('filter');
+        },
+        titleChanged: function(val) {
+            var $ui = this.getBinding('$ui');
+            $ui.set('collapsed', this.options.sidebarTitle.get('collapsed.filter'));
         }
     });
 
