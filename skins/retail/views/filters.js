@@ -48,6 +48,22 @@ define(["./tree"], function(tree_view) {
         initialize: function() {
             this.collection = this.model.get('filterItems');
             App.Views.TreeView.TreeCategoriesView.prototype.initialize.apply(this, arguments);
+        },
+        bindings: {
+            '.tree-title': 'classes: {collapsed: ui_collapsed}'
+        },
+        bindingSources: {
+            ui: function() {
+                return new Backbone.Model({collapsed: false});
+            }
+        },
+        events: {
+          'click .tree-title.filter-title': 'onClick'
+        },
+        onClick: function(event) {
+            event.stopPropagation();
+            var $ui = this.getBinding('$ui');
+            $ui.set('collapsed', !$ui.get('collapsed'));
         }
     });
 
@@ -69,17 +85,14 @@ define(["./tree"], function(tree_view) {
             }
         },
         events: {
-            'click .tree-title': 'onClick'
+            'click .tree-title.filters-title': 'onClick'
         },
         onEnterListeners: {
-            '.tree-title': 'onClick'
+            '.tree-title.filters-title': 'onClick'
         },
         onClick: function(event) {
             event.stopPropagation();
-            this.options.sidebarTitle.set(
-                'collapsed.filter',
-                !this.options.sidebarTitle.get('collapsed.filter')
-            );
+            this.options.sidebarTitle.toggleState('filter');
         },
         titleChanged: function(val) {
             var $ui = this.getBinding('$ui');

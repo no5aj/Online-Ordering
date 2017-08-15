@@ -101,20 +101,21 @@ define(["./tree", "./filters"], function(tree_view, filters_view) {
             'click .left-sidebar-title': 'onClick'
         },
         onClick: function(ev) {
-            this.options.sidebarTitle.get('onClick')();
+            this.options.sidebarTitle.toggleState();
         },
         render: function() {
             App.Views.FactoryView.prototype.render.apply(this);
             var scrollThreshold = -35;
+            var self = this;
 
             setTimeout(function() {
                 $('.left-sidebar-content').scroll(function(ev) {
-                    var scrollState =
+                    var scrollPosition =
                             ev.originalEvent.currentTarget.scrollHeight -
                             ev.originalEvent.currentTarget.scrollTop -
                             $('.filters').height();
 
-                    App.Data.sidebarTitle.get('setState')(scrollState > scrollThreshold ? 'category' : 'filter');
+                    self.options.sidebarTitle.setState(scrollPosition > scrollThreshold ? 'category' : 'filter');
                 });
             }, 0);
         }

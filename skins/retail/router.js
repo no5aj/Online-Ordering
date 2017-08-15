@@ -119,6 +119,33 @@ define(["main_router"], function(main_router) {
                     searchLine: App.Data.searchLine
                 });
 
+                App.Models.sidebarTitleModel = Backbone.Model.extend({
+                    defaults: {
+                        title: _loc.CATEGORIES_TITLE,
+                        'collapsed.category': false,
+                        'collapsed.filter' : false,
+                        barType: 'category',
+                    },
+                    toggleState: function(type) {
+                        type = (type ? type : this.get('barType'));// App.Data.sidebarTitle
+                        this.set('collapsed.' + type,
+                            !this.get('collapsed.' + type));
+                    },
+                    setState: function(type) {
+                        if (type != 'category' && type != 'filter') {
+                            return;
+                        }
+                        var title = {
+                            category: _loc.CATEGORIES_TITLE,
+                            filter: _loc.FILTERS_TITLE
+                        };
+
+                        this.set('barType', type);
+                        this.set('title', title[type]);
+                    }
+                });
+                App.Data.sidebarTitle = new App.Models.sidebarTitleModel();
+
                 // init App.Data.sortItems
                 this.initSortItems();
 
@@ -695,29 +722,6 @@ define(["main_router"], function(main_router) {
                 App.Data.header.set('menu_index', 0);
                 App.Data.mainModel.set('mod', 'Main');
                 App.Data.cart.set('visible', false);
-                App.Data.sidebarTitle = new Backbone.Model({
-                    title: _loc.CATEGORIES_TITLE,
-                    'collapsed.category': false,
-                    'collapsed.filter' : false,
-                    barType: 'category',
-                    onClick: function() {
-                        var type = App.Data.sidebarTitle.get('barType');
-                        App.Data.sidebarTitle.set('collapsed.' + type,
-                            !App.Data.sidebarTitle.get('collapsed.' + type));
-                    },
-                    setState: function(type) {
-                        if (type != 'category' && type != 'filter') {
-                            return;
-                        }
-                        var title = {
-                            category: _loc.CATEGORIES_TITLE,
-                            filter: _loc.FILTERS_TITLE
-                        };
-
-                        App.Data.sidebarTitle.set('barType', type);
-                        App.Data.sidebarTitle.set('title', title[type]);
-                    }
-                });
 
                 App.Data.mainModel.set({
                     header: headers.main,

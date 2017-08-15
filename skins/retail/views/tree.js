@@ -57,7 +57,6 @@ define(["factory"], function() {
         name: 'tree',
         mod: 'categories',
         itemView: TreeCategoryView,
-//        collapsed: false,
         initialize: function() {
             App.Views.FactoryView.prototype.initialize.apply(this, arguments);
             this.listenTo(this.options.sidebarTitle, 'change:collapsed.category', this.titleChanged);
@@ -70,19 +69,6 @@ define(["factory"], function() {
             ui: function() {
                 return new Backbone.Model({collapsed: this.sidebarTitle.get('collapsed.category')});
             }
-        },
-        events: {
-            'click .tree-title': 'onClick'
-        },
-        onEnterListeners: {
-            '.tree-title': 'onClick'
-        },
-        onClick: function(event) {
-            event.stopPropagation();
-            this.options.sidebarTitle.set(
-                'collapsed.category',
-                !this.options.sidebarTitle.get('collapsed.category')
-            );
         },
         titleChanged: function(val) {
             var $ui =  this.getBinding('$ui');
