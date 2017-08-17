@@ -105,6 +105,7 @@ define(["factory", "giftcard_view"], function(factory) {
     App.Views.CoreStanfordCardView.CoreStanfordCardPlansView = App.Views.FactoryView.extend({
         name: 'stanfordcard',
         mod: 'plans',
+        initialize: function() { return this },
         bindings: {
             ':el': 'toggle: all(plansLength, validated)',
             '.list': 'collection: $collection'
