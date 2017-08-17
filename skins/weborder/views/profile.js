@@ -109,7 +109,7 @@ define(["profile_view"], function(profile_view) {
                     var data = [];
                     collection.each(function(model) {
                         model = model.toJSON();
-                        model.remainingBalance > 0 && data.push({
+                        model.remainingBalance >= 0 && data.push({
                             label: model.cardNumber + ' - ' + label_balance + ': ' + currency + round_monetary_currency(model.remainingBalance),
                             value: model.cardNumber
                         });
