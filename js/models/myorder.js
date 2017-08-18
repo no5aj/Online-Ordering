@@ -1378,6 +1378,12 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
          * @default null
          */
         paymentResponse: null,
+        /*
+         * indicates if the price of any product was changed during the session
+         * @type {boolean}
+         * @default false
+         */
+        priceChanged: false,
         /**
          * Initializes the collection.
          */
@@ -2210,11 +2216,19 @@ define(["backbone", 'total', 'checkout', 'products', 'rewards', 'stanfordcard'],
                 var product = item_found.get_product();
                 return {id: product.get('id'), category: product.get('id_category')};
             });
+            this.priceChanged = true;
 
             // set new price(s) for product(s) in products and in search
             _.each(products, function(product) {
                 App.Data.products[product.category] &&
                 App.Data.products[product.category].findWhere({id: product.id}).set('price', data.price);
+
+                if (product.category == 0) {
+                    for (var cat in App.Data.products) {
+                        var el = App.Data.products[cat].findWhere({id: product.id});
+                        el && el.set('price', data.price);
+                    }
+                }
 
                 App.Data.search &&
                 App.Data.search.each( function(el) {
