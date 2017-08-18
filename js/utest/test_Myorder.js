@@ -2519,6 +2519,9 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
             var ajax, total, checkout, card, rewardsCard, customer, payment_process,
                 dfd = new Backbone.$.Deferred(),
                 customer;
+            var authHeader = {
+                Authorization: "Bearer X12pohVof78uEhZ25XXvRp5EAYsSi1dcCRnMiNXQjECzFw8f6qUpXugzBLtz"
+            };
 
             beforeEach(function() {
                 dfd = new Backbone.$.Deferred();
@@ -2528,6 +2531,9 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
 
                     return dfd;
                 });
+                App.Data.customer.getAuthorizationHeader = function() {
+                    return authHeader;
+                };
                 this.mobile = $.mobile;
                 $.mobile = {
                     loading: function() {}
@@ -2618,7 +2624,10 @@ define(['js/utest/data/Myorder', 'js/utest/data/Products', 'myorder', 'products'
                     get_customer_name: jasmine.createSpy().and.returnValue('customer name'),
                     isDefaultShippingAddress: function() {},
                     isAuthorized: jasmine.createSpy(),
-                    doPayWithToken: jasmine.createSpy().and.returnValue(dfd)
+                    doPayWithToken: jasmine.createSpy().and.returnValue(dfd),
+                    getAuthorizationHeader: function() {
+                        return authHeader;
+                    }
                 };
 
                 //spyOn(App.Models.Myorder.prototype, 'getCustomerData').and.returnValue({call_name: 'customer call name'});
