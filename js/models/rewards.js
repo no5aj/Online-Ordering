@@ -451,6 +451,7 @@ define(['backbone', 'captcha'], function(Backbone) {
             this.set({
                 number: rewardCard.get('number')
             });
+            this.resetData();
         },
         /**
          * Checks `cardNumber`, `captchaValue` values.
