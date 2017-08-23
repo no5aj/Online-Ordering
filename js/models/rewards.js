@@ -430,7 +430,7 @@ define(['backbone', 'captcha'], function(Backbone) {
             this.set(defaults);
             this.get('rewards').reset(); // reset rewards collection
             this.get('rewards').trigger('update');
-            if (window.location.hash != '#confirm' && window.location.hash != '#pay') {
+            if (window.location.hash != '#confirm' && window.location.hash != '#pay') { // WOMA-848
                 this.trigger('onResetData');
             }
         },
