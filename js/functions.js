@@ -55,6 +55,13 @@ ERROR.WEBSTORAGES_ARE_DISABLED = 'Web storages are disabled or not supported in 
 ERROR.LOAD_LANGUAGE_PACK = 'Unable to load a language pack. Now the page is reloaded.';
 ERROR.CANT_GET_WEBORDER_SETTINGS = 'Can\'t load weborder settings from a backend server';
 MSG.ESTABLISHMENTS_ERROR_NOSTORE = 'No store is available for the specified brand';
+ERROR.CANT_GET_PAGE = 'Page doesn\'t exist or some error occured. \n' +
+    'Go back to previous page.';
+ERROR.INTERNAL_SERVER_ERROR = '500 Internal Server Error';
+ERROR.BAD_GATEWAY_ERROR = 'The server is currently unreachable. \n' +
+    'The server may be down, or there may be a network problem. \n' +
+    'Try again later.';
+ERROR.SERVER_MAINTENANCE_ERROR = 'The server is temporary busy or under maintenance, try again later!';
 
 var PAYMENT_TYPE = {
     PAYPAL_MOBILE: 1,

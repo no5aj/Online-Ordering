@@ -842,6 +842,18 @@ define(["backbone", "facebook", "js_cookie", "page_visibility", "giftcard", "ord
                 case 423:
                     this.trigger('onNotActivatedUser', getResponse());
                     break;
+                case 404:
+                    App.Data.errors.alert(ERROR.CANT_GET_PAGE);
+                    break;
+                case 500:
+                    App.Data.errors.alert(ERROR.INTERNAL_SERVER_ERROR);
+                    break;
+                case 502:
+                    App.Data.errors.alert(ERROR.BAD_GATEWAY_ERROR);
+                    break;
+                case 503:
+                    App.Data.errors.alert(ERROR.SERVER_MAINTENANCE_ERROR);
+                    break;
                 default:
                     emitDefaultEvent.call(this);
             }
