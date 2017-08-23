@@ -430,7 +430,9 @@ define(['backbone', 'captcha'], function(Backbone) {
             this.set(defaults);
             this.get('rewards').reset(); // reset rewards collection
             this.get('rewards').trigger('update');
-            this.trigger('onResetData');
+            if (window.location.hash != '#confirm' && window.location.hash != '#pay') { // WOMA-848
+                this.trigger('onResetData');
+            }
         },
         /**
          * Resets all attributes to default values except `number` attribute.
