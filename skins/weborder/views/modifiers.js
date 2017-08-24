@@ -32,11 +32,14 @@ define(["modifiers_view"], function(modifiers_view) {
 
     var ModifiersClassesListView = App.Views.CoreModifiersClassesView.CoreModifiersClassesListView.extend({
         bindings: {
-            '.modifier_classes': 'classes: {"border-none": not(length(modifiers))}'
+            '.modifier_classes': 'classes: {"border-none": not(length(modifiers)), "hide": isGift}'
         },
         computeds: {
             modifiers: function() {
                 return this.model.get_modifiers() || [];
+            },
+            isGift: function() {
+              return this.options.model.get_product().get('is_gift');
             }
         },
         addItem: function() {
