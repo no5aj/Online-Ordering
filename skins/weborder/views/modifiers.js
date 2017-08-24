@@ -39,7 +39,7 @@ define(["modifiers_view"], function(modifiers_view) {
                 return this.model.get_modifiers() || [];
             },
             isGift: function() {
-              return this.options.model.get_product().get('is_gift');
+              return this.model.get_product().get('is_gift');
             }
         },
         addItem: function() {

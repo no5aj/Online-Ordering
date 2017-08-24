@@ -432,7 +432,7 @@ define(["backbone", "stanfordcard_view", "factory", "generator"], function(Backb
             this.listenTo(this.model.get_product(), 'change', this.update);
             this.update();
         },
-        stop: function() { //called by FactotyView while the view detached from DOM
+        stop: function() { //called by FactoryView while the view detached from DOM
             //it's for save time for useless processing:
             this.stopListening();
         },

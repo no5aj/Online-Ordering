@@ -24,6 +24,14 @@ define(["myorder_view"], function(myorder_view) {
     'use strict';
 
     var MyOrderMatrixView = App.Views.CoreMyOrderView.CoreMyOrderMatrixView.extend({
+        bindings: {
+            '.modifier_classes': 'classes: {"hide": isGift}'
+        },
+        computeds: {
+           isGift: function() {
+              return this.model.get_product().get('is_gift');
+            }
+        },
         render: function() {
             App.Views.CoreMyOrderView.CoreMyOrderMatrixView.prototype.render.apply(this, arguments);
 
