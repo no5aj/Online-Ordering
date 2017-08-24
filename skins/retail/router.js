@@ -1233,7 +1233,9 @@ define(["main_router"], function(main_router) {
                 productSet.set('name', name);
                 productSet.set('ids', ids);
             }
-            App.Data.curProductsSet.set('value', productSet);
+            (App.Data.curProductsSet.get('value') != productSet) ?
+                App.Data.curProductsSet.set('value', productSet) :
+                App.Data.curProductsSet.trigger('change:value');
         },
         /**
          * Creates App.Data.sortItem collection.
