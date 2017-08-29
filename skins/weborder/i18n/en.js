@@ -213,7 +213,7 @@
         'REWARDS_PURCHASE_REWARDS': 'Purchase Rewards',
         'REWARDS_BALANCE_HEADER': 'LOYALTY REWARDS',
         'REWARDS_BALANCE_PURCHASE_POINTS': 'Your Purchase Points:',
-        'REWARDS_BALANCE_ITEM_POINTS': 'You Item Points:',
+        'REWARDS_BALANCE_ITEM_POINTS': 'Your Item Points:',
         'REWARDS_BALANCE_VISIT_POINTS': 'Your Visit Points:',
         'SEARCH_ENTER_STRING': 'Search',
         'PRODUCTS_NOT_FOUND': 'No products found',
