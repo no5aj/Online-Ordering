@@ -1080,6 +1080,7 @@ function pickupToString(date) {
     switch (skin) {
         case 'weborder':
         case 'weborder_mobile':
+        default:
             result = d.toString().replace(/([a-z]+) ([a-z]+) (\d{1,2}) .+/i,'$2 $3, ').concat(time.toString());
     }
 
